@@ -51,23 +51,25 @@
   .gc-search { display: flex; align-items: center; gap: 4px; }
   .gc-search-select { font-size: 13px; border: 1px solid var(--border); border-radius: var(--r-sm) 0 0 var(--r-sm); padding: 3px 8px; height: 30px; background: var(--surface-light); color: var(--text-secondary); appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24'%3E%3Cpath fill='%23888' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 4px center; padding-right: 20px; }
   .gc-search-input { border: 1px solid var(--border); border-left: none; height: 30px; padding: 0 10px; font-size: 13px; width: 240px; outline: none; }
-  .gc-search-btn { background: var(--surface-light); border: 1px solid var(--border); border-left: none; height: 30px; width: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 0 var(--r-sm) var(--r-sm) 0; font-size: 14px; color: #1E5F7E; }
+  .gc-search-btn { background: var(--surface-light); border: 1px solid var(--border); border-left: none; height: 30px; width: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 0 var(--r-sm) var(--r-sm) 0; font-size: 14px; color: #315E7B; }
   .gc-advsearch { font-size: 13px; border: 1px solid var(--border); border-radius: var(--r-sm); padding: 4px 10px; height: 30px; background: var(--surface-light); cursor: pointer; color: var(--text-secondary); margin-left: 6px; }
   .gc-nav-user { margin-left: auto; font-size: 13px; color: var(--text-secondary); text-align: right; line-height: 1.4; }
   .gc-nav-user a { color: var(--link); text-decoration: none; }
   .gc-nav-icons { display: flex; gap: 8px; align-items: center; margin-left: 12px; }
-  .gc-nav-icon-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: #1E5F7E; font-size: 17px; cursor: pointer; border-radius: var(--r-sm); position: relative; }
-  .gc-nav-icon-btn .material-icons { font-size: 22px; color: #1E5F7E; }
+  .gc-nav-icon-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: #315E7B; font-size: 17px; cursor: pointer; border-radius: var(--r-sm); position: relative; }
+  .gc-nav-icon-btn .material-icons { font-size: 22px; color: #315E7B; }
   .gc-nav-icon-btn:hover { background: var(--surface-light); }
   .gc-nav-badge { position: absolute; top: 1px; right: 1px; width: 16px; height: 16px; background: #E53935; color: white; border-radius: 50%; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
 
   .gc-nav-bottom { background: var(--surface-header); display: flex; align-items: center; gap: 0; padding: 0; height: 44px; border-bottom: 1px solid var(--border); overflow-x: auto; }
   .gc-nav-bottom-left { display: flex; align-items: center; height: 100%; border-right: 1px solid var(--border-light); padding: 0 8px; gap: 2px; }
-  .gc-shortcut { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 0 10px; height: 100%; font-size: 10px; color: var(--text-secondary); cursor: pointer; border-right: 1px solid var(--border-light); white-space: nowrap; }
+  .gc-shortcut { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 0 10px; height: 100%; font-size: 10px; color: #315E7B; cursor: pointer; border-right: 1px solid var(--border-light); white-space: nowrap; }
+  .gc-shortcut .material-icons { color: #315E7B; }
   .gc-shortcut:hover { background: var(--teal-light); color: var(--teal-dark); }
   .gc-shortcut-icon { font-size: 16px; line-height: 1; }
   .gc-toolbar { display: flex; align-items: center; height: 100%; margin-left: auto; }
-  .gc-tool { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 0 9px; height: 100%; font-size: 10px; color: var(--text-secondary); cursor: pointer; white-space: nowrap; border-left: 1px solid var(--border-light); }
+  .gc-tool { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 0 9px; height: 100%; font-size: 10px; color: #315E7B; cursor: pointer; white-space: nowrap; border-left: 1px solid var(--border-light); }
+  .gc-tool .material-icons { color: #315E7B; }
   .gc-tool:hover { background: var(--teal-light); color: var(--teal-dark); }
   .gc-tool-dropdown { position: relative; }
   .gc-tool-menu { display: none; position: fixed; top: auto; right: auto; background: var(--white); border: 1px solid var(--border); border-radius: var(--r-md); box-shadow: 0 4px 16px rgba(0,0,0,0.15); z-index: 9999; min-width: 440px; padding: 0; }
@@ -78,7 +80,7 @@
   .gc-tool-menu-item:hover { background: var(--surface-light); color: var(--teal); }
 
   /* Member switcher dropdown */
-  .member-switcher { position: relative; }
+  .member-switcher { position: relative; flex-direction: row !important; gap: 4px !important; }
   .member-switcher-menu { display:none; position:fixed; background:var(--white); border:1px solid var(--border); border-radius:var(--r-md); box-shadow:0 4px 20px rgba(0,0,0,0.18); z-index:9999; min-width:280px; overflow:hidden; }
   .member-switcher-menu.open { display:block; }
   .member-switcher-menu-title { font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; padding:10px 14px 6px; border-bottom:1px solid var(--border-light); }
@@ -107,18 +109,22 @@
   .gc-tool-icon { font-size: 14px; }
 
   /* ── Member banner ── */
-  .gc-member-banner { background: var(--white); border: 1px solid var(--border); border-top: none; padding: 6px 12px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-primary); }
-  .gc-banner-alert { background: #FFF3CD; border: 1px solid #FFCA28; border-radius: var(--r-sm); padding: 2px 8px; font-size: 11px; font-weight: 700; color: #7B5800; display: flex; align-items: center; gap: 4px; }
-  .gc-banner-name { font-weight: 700; font-size: 13px; }
+  .gc-member-banner { background: var(--white); border: 1px solid var(--border); border-top: none; padding: 8px 16px; display: flex; align-items: center; gap: 12px; font-size: 13px; color: #333; border-radius: 0 0 var(--r-sm) var(--r-sm); }
+  .gc-banner-alert { display: flex; align-items: center; gap: 4px; }
+  .gc-banner-name { font-weight: 700; font-size: 14px; color: #1a1a1a; }
   .gc-banner-check { color: var(--teal); font-size: 14px; }
   .gc-banner-edit { color: var(--link); font-size: 12px; cursor: pointer; margin-left: 4px; text-decoration: none; }
+  .gc-banner-dob { color: #555; font-size: 13px; }
+  .gc-banner-expand { margin-left: auto; cursor: pointer; color: #315E7B; }
 
   /* ── Left sidebar nav (collapsed, icon-only, per-item hover tooltip) ── */
   .gc-left-nav { width: 44px; min-width: 44px; background: var(--white); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 4px 0; overflow: visible; position: relative; z-index: 50; }
   .gc-left-item { display: flex; align-items: center; justify-content: center; padding: 10px 0; font-size: 11px; color: var(--text-secondary); cursor: pointer; border-left: 3px solid transparent; line-height: 1.2; user-select: none; position: relative; }
   .gc-left-item:hover { background: var(--surface-light); color: var(--teal); }
   .gc-left-item.active { background: var(--teal-light); color: var(--teal-dark); border-left-color: var(--teal); font-weight: 700; }
-  .gc-left-icon { font-size: 20px; line-height: 1; }
+  .gc-left-icon { font-size: 22px; line-height: 1; }
+  .gc-left-icon .material-icons { color: #315E7B; font-size: 22px; }
+  .gc-left-item.active .gc-left-icon .material-icons { color: var(--teal-dark); }
   .gc-left-label { position: absolute; left: 100%; top: 50%; transform: translateY(-50%); background: var(--white); border: 1px solid var(--border); border-left: none; border-radius: 0 var(--r-sm) var(--r-sm) 0; padding: 6px 14px 6px 10px; font-size: 12px; font-weight: 600; color: var(--teal); white-space: nowrap; box-shadow: 2px 1px 6px rgba(0,0,0,0.1); opacity: 0; pointer-events: none; transition: opacity 0.12s ease; z-index: 60; }
   .gc-left-item:hover .gc-left-label { opacity: 1; pointer-events: auto; }
 
@@ -270,10 +276,59 @@
   .cal-event-card .cal-event-actions { display: flex; gap: 6px; margin-top: 6px; padding-left: 18px; }
   .cal-event-card .cal-event-actions .material-icons { font-size: 18px; color: var(--text-muted); cursor: pointer; border: 1px solid var(--border); border-radius: 50%; padding: 3px; }
   .cal-event-card .cal-event-actions .material-icons:hover { color: var(--teal); border-color: var(--teal); }
+  .cal-event-card .cal-event-actions .cal-perform-btn { position: relative; }
+  .cal-event-card .cal-event-actions .cal-perform-btn::after { content: 'Perform Activity'; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; font-size: 10px; font-family: var(--font); font-weight: 600; padding: 4px 8px; border-radius: 3px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.15s; }
+  .cal-event-card .cal-event-actions .cal-perform-btn:hover::after { opacity: 1; }
   .cal-event-card .cal-event-close { position: absolute; top: 4px; right: 6px; font-size: 16px; color: var(--text-muted); cursor: pointer; }
   .cal-event-card .cal-event-close:hover { color: var(--text-primary); }
   .cal-event-compact { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--teal-dark); border-radius: var(--r-sm); padding: 6px 10px; margin: 4px 4px 4px 0; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--teal-dark); display: flex; align-items: center; gap: 6px; max-width: 320px; }
   .cal-event-compact .material-icons { font-size: 16px; color: var(--teal); }
+
+  /* ── HRA Review Page ── */
+  #hraReviewPage { display:none; background:var(--white); }
+  .hra-header { background:var(--white); border:1px solid var(--border); padding:10px 16px; font-size:13px; font-weight:700; }
+  .hra-script-bar { display:flex; align-items:center; gap:20px; padding:6px 16px; border-bottom:1px solid var(--border); font-size:12px; }
+  .hra-warning { color:#C62828; font-size:11px; font-style:italic; padding:4px 16px; }
+  .hra-body { display:flex; gap:0; min-height:calc(100vh - 200px); }
+  .hra-questions { flex:1; padding:16px; overflow-y:auto; max-height:calc(100vh - 160px); }
+  .hra-sidebar { width:280px; border-left:1px solid var(--border); padding:0; flex-shrink:0; }
+  .hra-sidebar-section { border-bottom:1px solid var(--border); }
+  .hra-sidebar-title { font-size:13px; font-weight:700; padding:10px 14px; background:var(--surface-light); border-bottom:1px solid var(--border); }
+  .hra-sidebar-body { padding:10px 14px; font-size:11px; }
+  .hra-q { border:1px solid var(--border); border-radius:0; margin-bottom:10px; overflow:hidden; }
+  .hra-q-header { display:flex; align-items:flex-start; gap:8px; padding:10px 14px; cursor:pointer; background:#c5deb8; border-left:4px solid #6a9e3a; }
+  .hra-q-icon { width:24px; height:24px; border-radius:50%; background:#F0C040; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:10px; font-weight:700; color:#fff; }
+  .hra-q-icon.answered { background:#F0A050; }
+  .hra-q-num { font-size:12px; font-weight:700; color:var(--text-primary); min-width:16px; }
+  .hra-q-text { font-size:12px; color:var(--text-primary); line-height:1.5; }
+  .hra-q-body { padding:0 14px 14px 46px; display:block; }
+  .hra-q.collapsed .hra-q-body { display:none; }
+  .hra-q-options { border:1px solid var(--border); border-top:3px solid #4a90c4; border-radius:0; margin-bottom:6px; }
+  .hra-q-option { display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:13px; border-bottom:1px solid var(--border); }
+  .hra-q-option:last-child { border-bottom:none; }
+  .hra-q-option input[type="radio"] { accent-color:#315E7B; width:17px; height:17px; flex-shrink:0; }
+  .hra-q-ogi { display:inline-flex; align-items:center; justify-content:center; width:28px; height:18px; border-radius:9px; background:#F0A050; color:#fff; font-size:9px; font-weight:700; flex-shrink:0; }
+  .hra-care-notes { color:#0000EE; font-size:13px; font-weight:700; cursor:pointer; margin-top:8px; }
+  .hra-actions { display:flex; justify-content:center; gap:4px; padding:16px; }
+  .hra-actions button { padding:0 18px; height:32px; font-size:12px; font-weight:600; font-family:var(--font); cursor:pointer; border-radius:var(--r-sm); }
+
+  /* ── Remote Control Panel ── */
+  .rc-fab { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
+  .rc-toggle { width: 44px; height: 44px; border-radius: 50%; background: #315E7B; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 12px rgba(0,0,0,0.25); transition: transform 0.2s, background 0.2s; }
+  .rc-toggle:hover { background: #264a63; transform: scale(1.08); }
+  .rc-toggle .material-icons { font-size: 22px; transition: transform 0.3s; }
+  .rc-fab.open .rc-toggle .material-icons { transform: rotate(90deg); }
+  .rc-panel { position: absolute; bottom: 54px; right: 0; width: 260px; background: #1a1a1a; border-radius: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.35); overflow: hidden; transform: scale(0.9) translateY(10px); opacity: 0; pointer-events: none; transition: transform 0.2s ease, opacity 0.15s ease; transform-origin: bottom right; }
+  .rc-fab.open .rc-panel { transform: scale(1) translateY(0); opacity: 1; pointer-events: auto; }
+  .rc-header { padding: 12px 16px 8px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #888; border-bottom: 1px solid #333; }
+  .rc-item { display: flex; align-items: center; gap: 10px; padding: 11px 16px; cursor: pointer; color: #ddd; font-size: 12px; font-weight: 600; transition: background 0.12s; border-bottom: 1px solid #2a2a2a; }
+  .rc-item:last-child { border-bottom: none; }
+  .rc-item:hover { background: #2a2a2a; color: #fff; }
+  .rc-item .material-icons { font-size: 17px; color: #888; }
+  .rc-item:hover .material-icons { color: #E53935; }
+  .rc-item-count { margin-left: auto; background: #333; color: #aaa; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 9px; min-width: 20px; text-align: center; }
+  .rc-flash { animation: rc-flash-anim 0.4s ease; }
+  @keyframes rc-flash-anim { 0% { background: #E53935; color: #fff; } 100% { background: transparent; } }
 
   /* ── Footer ── */
   .gc-footer { background: var(--white); border-top: 1px solid var(--border); padding: 4px 14px; display: flex; align-items: center; justify-content: space-between; font-size: 10px; color: var(--text-muted); }
@@ -524,7 +579,7 @@
         <span class="material-icons" style="font-size:14px;cursor:pointer;color:var(--text-muted);">chevron_left</span>
         <span class="material-icons" style="font-size:14px;cursor:pointer;color:var(--text-muted);">chevron_right</span>
         <span class="material-icons" style="font-size:14px;color:var(--text-muted);">calendar_month</span>
-        <span style="font-weight:600;color:var(--text-primary);">Wednesday, March 25, 2026</span>
+        <span id="calDateLabel" style="font-weight:600;color:var(--text-primary);">Wednesday, March 25, 2026</span>
         <a href="#" style="font-size:11px;color:var(--link);text-decoration:none;margin-left:12px;">Show full day</a>
         <span style="margin-left:auto;">
           <span class="dash-toggle">
@@ -536,56 +591,32 @@
       </div>
       <div class="cal-day-header">
         <div class="cal-time-col">Time</div>
-        <div class="cal-day-col">Wed 3/25</div>
+        <div class="cal-day-col" id="calDayColLabel">Wed 3/25</div>
       </div>
       <div class="dash-panel-body" style="overflow:auto;">
-        <div class="cal-body">
+        <div class="cal-body" id="dashCalBody">
           <div class="cal-row">
             <div class="cal-time-col">10:00</div>
             <div class="cal-day-col"></div>
           </div>
-          <div class="cal-row" style="position:relative;min-height:120px;">
-            <div class="cal-time-col" style="color:#E53935;font-weight:600;">11:00</div>
-            <div class="cal-day-col">
+          <div class="cal-row" style="position:relative;">
+            <div class="cal-time-col">11:00</div>
+            <div class="cal-day-col" id="cal11Slot">
               <div class="cal-now-line" style="top:0;left:0;right:0;position:absolute;"></div>
               <div class="cal-now-dot"></div>
-              <div class="cal-event-card" onclick="this.classList.toggle('expanded')">
-                <span class="cal-event-close material-icons">close</span>
-                <div class="cal-event-title">
-                  <span class="material-icons">psychology</span>
-                  <span class="material-icons" style="font-size:15px;">info</span>
-                  Jackson Thomas, Health Risk Assessment (English)
-                </div>
-                <div class="cal-event-actions">
-                  <span class="material-icons">edit</span>
-                  <span class="material-icons">thumb_up</span>
-                  <span class="material-icons">delete</span>
-                  <span class="material-icons" style="color:#E53935;border-color:#E53935;">location_on</span>
-                </div>
-              </div>
             </div>
           </div>
-          <div class="cal-row" style="min-height:60px;">
+          <div class="cal-row">
             <div class="cal-time-col">12:00</div>
-            <div class="cal-day-col">
-              <div class="cal-event-compact">
-                <span class="material-icons">info</span>
-                Sarah Williams, Call member
-              </div>
-            </div>
+            <div class="cal-day-col"></div>
           </div>
           <div class="cal-row">
             <div class="cal-time-col">13:00</div>
             <div class="cal-day-col"></div>
           </div>
-          <div class="cal-row" style="min-height:60px;">
+          <div class="cal-row">
             <div class="cal-time-col">14:00</div>
-            <div class="cal-day-col">
-              <div class="cal-event-compact">
-                <span class="material-icons">info</span>
-                Maria Rivera, Follow-up Outreach
-              </div>
-            </div>
+            <div class="cal-day-col"></div>
           </div>
           <div class="cal-row">
             <div class="cal-time-col">15:00</div>
@@ -631,7 +662,7 @@
               <th style="padding:4px 8px;">Updated On</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="dashAlertsTbody">
             <tr>
               <td style="padding:4px 8px;">HEALTH_INDICATOR</td>
               <td style="padding:4px 8px;"><a href="#" class="gc-kv-link">1</a></td>
@@ -783,12 +814,12 @@
 
 <!-- ══════════════ MEMBER BANNER ══════════════ -->
 <div class="gc-member-banner">
-  <div style="position:relative;display:inline-flex;"><span class="material-icons" style="font-size:22px;color:var(--teal-dark);">notifications</span><span style="position:absolute;top:-2px;right:-6px;width:16px;height:16px;background:#E53935;color:white;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700;">0</span></div>
-  <span class="gc-banner-check"><span class="material-icons" style="font-size:18px;color:#2E7D32;">check_circle</span></span>
-  <span class="gc-banner-name">AM2 Test-ALT9713</span>
-  <span style="color:var(--text-secondary);font-size:12px;">DOB 01/01/2001</span>
-  <span style="color:var(--text-secondary);font-size:12px;">25 yr(s)</span>
-  <span style="margin-left:auto;cursor:pointer;"><span class="material-icons" style="font-size:16px;color:var(--text-muted);">open_in_full</span></span>
+  <div style="position:relative;display:inline-flex;"><span class="material-icons" style="font-size:24px;color:#315E7B;">notifications</span><span style="position:absolute;top:-4px;right:-6px;min-width:17px;height:17px;background:#C62828;color:white;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700;padding:0 3px;">2</span></div>
+  <span class="gc-banner-check"><span class="material-icons" style="font-size:20px;color:#2E7D32;">check_circle</span></span>
+  <span class="gc-banner-name">John Everhart-AH00000121</span>
+  <span class="gc-banner-dob">DOB 05/14/1942</span>
+  <span class="gc-banner-dob">83 yr(s)</span>
+  <span class="gc-banner-expand"><span class="material-icons" style="font-size:18px;">open_in_full</span></span>
 </div>
 
 <!-- ══════════════ BODY: LEFT NAV + CONTENT ══════════════ -->
@@ -800,25 +831,25 @@
       <span class="gc-left-icon"><span class="material-icons">arrow_forward</span></span>
     </div>
     <div class="gc-left-item active" data-left="member-info">
-      <span class="gc-left-icon"><span class="material-icons">person</span></span><span class="gc-left-label">Member Info</span>
+      <span class="gc-left-icon"><span class="material-icons">account_circle</span></span><span class="gc-left-label">Member Info</span>
     </div>
     <div class="gc-left-item" data-left="health">
-      <span class="gc-left-icon"><span class="material-icons">favorite</span></span><span class="gc-left-label">Health</span>
+      <span class="gc-left-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#315E7B"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/><polyline points="4,13 8,13 9.5,9 11,15 12.5,11 14,13 20,13" fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></span><span class="gc-left-label">Health</span>
     </div>
     <div class="gc-left-item" data-left="care-plan">
-      <span class="gc-left-icon"><span class="material-icons">security</span></span><span class="gc-left-label">Care Plan</span>
+      <span class="gc-left-icon"><span class="material-icons">medical_services</span></span><span class="gc-left-label">Care Plan</span>
     </div>
     <div class="gc-left-item" data-left="activity-record">
-      <span class="gc-left-icon"><span class="material-icons">receipt_long</span></span><span class="gc-left-label">Activity Record</span>
+      <span class="gc-left-icon"><span class="material-icons">inventory_2</span></span><span class="gc-left-label">Activity Record</span>
     </div>
     <div class="gc-left-item" data-left="authorizations">
-      <span class="gc-left-icon"><span class="material-icons">verified</span></span><span class="gc-left-label">Authorizations</span>
+      <span class="gc-left-icon"><span class="material-icons">task_alt</span></span><span class="gc-left-label">Authorizations</span>
     </div>
     <div class="gc-left-item" data-left="complaints">
-      <span class="gc-left-icon"><span class="material-icons">link</span></span><span class="gc-left-label">Complaints</span>
+      <span class="gc-left-icon"><span class="material-icons">balance</span></span><span class="gc-left-label">Complaints</span>
     </div>
     <div class="gc-left-item" data-left="packet-log">
-      <span class="gc-left-icon"><span class="material-icons">save</span></span><span class="gc-left-label">Packet Log</span>
+      <span class="gc-left-icon"><span class="material-icons">move_to_inbox</span></span><span class="gc-left-label">Packet Log</span>
     </div>
   </nav>
 
@@ -1860,12 +1891,11 @@
                   <th>Updated On</th>
                 </tr></thead>
                 <tbody>
-                  <tr><td><input type="checkbox" /></td><td>UM Notes</td><td>Test Note saving as Auth NOte</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td>N/A</td><td>N/A</td><td>Sridevi Palepu : All Access Admin</td><td>02/25/2026 07:10:44 AM</td><td>N/A</td><td>N/A</td></tr>
-                  <tr><td><input type="checkbox" /></td><td>Referral</td><td>Test</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td>N/A</td><td>N/A</td><td>Valliappan Pethaperumal : test ems</td><td>10/30/2023 08:33:21 AM</td><td>N/A</td><td>N/A</td></tr>
-                  <tr><td><input type="checkbox" /></td><td style="display:flex;align-items:center;gap:4px;">Durable Medical Equipment (DME) <span class="material-icons" style="font-size:14px;color:var(--text-muted);">notifications</span></td><td>Wheel chair needed to be sent to the member's home address.</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td>N/A</td><td>N/A</td><td>Valliappan Pethaperumal : test ems</td><td>08/02/2023 07:16:50 PM</td><td>Valliappan Pethaperumal : test ems</td><td>08/02/2023 08:26:08 PM</td></tr>
-                  <tr><td><input type="checkbox" /></td><td>Activity</td><td>call this member</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td>Assessments - Initial Outreach</td><td>N/A</td><td>Pratyusha Kolluri : All Access Admin</td><td>05/12/2022 07:04:07 AM</td><td>N/A</td><td>N/A</td></tr>
-                  <tr><td><input type="checkbox" /></td><td>PH-QMNotes</td><td>Scheduled appointment</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td>N/A</td><td>N/A</td><td>FarhanaActive Kauser : All Access Admin</td><td>08/25/2020 02:28:27 PM</td><td>N/A</td><td>N/A</td></tr>
-                  <tr><td><input type="checkbox" /></td><td>General</td><td>numerous medications - candidate for medication adherence</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>06/07/2017 07:57:55 AM</td><td>GC CM User : Super Admin</td><td>09/12/2021 10:07:51 PM</td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Clinical Note</td><td>Member reports increased fatigue and polyuria over the past two weeks. Current A1C of 8.4% indicates suboptimal glycemic control. Discussed medication adherence barriers — member states he occasionally forgets evening insulin dose. Reinforced importance of consistent dosing schedule and provided written reminder tips. Will coordinate with PCP Dr. Chen for potential Metformin dosage adjustment. Follow-up call scheduled for 04/08/2026.</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td>N/A</td><td>N/A</td><td>Sarah Mitchell, RN : Care Manager</td><td>03/20/2026 10:14:22 AM</td><td>N/A</td><td>N/A</td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Care Coordination Note</td><td>Contacted Providence Medical Center to obtain discharge summary from 03/05/2026 ED visit. Member presented with chest pain, ruled out for ACS, diagnosed with GERD exacerbation. Coordinated with cardiologist Dr. Park to schedule follow-up echocardiogram. PCP notified of ED visit and updated medication list shared via HIE.</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td>N/A</td><td>N/A</td><td>James Okafor, CCM : Care Coordinator</td><td>03/12/2026 02:37:41 PM</td><td>N/A</td><td>N/A</td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Telephonic Outreach Note</td><td>Attempted outreach call to member at (907) 555-0142 — no answer, left voicemail. Second attempt at cell (907) 555-0198 successful. Member reports feeling stable, denies SOB or chest pain. States he has been compliant with Lisinopril and Atorvastatin. Reminded member of upcoming PCP appointment on 03/28/2026. Member verbalized understanding.</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td>N/A</td><td>N/A</td><td>Diana Reyes, MSW : Care Manager</td><td>03/01/2026 09:45:18 AM</td><td>N/A</td><td>N/A</td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Social Determinants Note</td><td>During SDOH screening, member disclosed difficulty affording prescription co-pays since spouse's retirement. Identified food insecurity — member reports skipping meals 2-3 times/week. Referred to Alaska Food Bank and Community Action Program for utility assistance. Submitted application for pharmaceutical patient assistance program for Januvia. Member expressed gratitude and willingness to engage with community resources.</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td>N/A</td><td>N/A</td><td>Diana Reyes, MSW : Social Worker</td><td>02/18/2026 11:22:03 AM</td><td>N/A</td><td>N/A</td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Medication Management Note</td><td>Comprehensive medication reconciliation completed via telehealth. Member currently on 9 medications including Metformin 1000mg BID, Januvia 100mg daily, Lisinopril 20mg daily, Atorvastatin 40mg daily, and ASA 81mg daily. Identified potential interaction between newly prescribed Fluconazole and Atorvastatin — notified prescribing physician. Pharmacist consulted and recommends temporary statin hold. Care plan updated accordingly.</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td>N/A</td><td>N/A</td><td>Tom Callahan, RN : Clinical Pharmacist</td><td>02/05/2026 03:55:09 PM</td><td>Priya Nandakumar, CCM : Care Manager</td><td>02/06/2026 08:12:44 AM</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1920,13 +1950,14 @@
                   <th>Activity Type</th>
                   <th>Activity Outcome</th>
                   <th>Actual Duration</th>
+                  <th>Digital</th>
                   <th>Actions</th>
                 </tr></thead>
-                <tbody>
-                  <tr><td><input type="checkbox" /></td><td><a href="#" style="color:var(--link);font-size:11px;">Adding a script</a></td><td>03/12/2025 06:46:33 AM</td><td>Sridevi Palepu : All Access Admin</td><td>Pending</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0</td><td>Assessments.</td><td><a href="#" style="color:var(--link);">Add</a></td><td>00:00:00</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td><a href="#" style="color:var(--link);font-size:11px;">Adding a script</a></td><td>03/08/2025 06:11:24 AM</td><td>Sridevi Palepu : All Access Admin</td><td>Cancelled</td><td>03/08/2025 06:19:05 AM</td><td>N/A</td><td>N/A</td><td>0</td><td>Assessments.</td><td><a href="#" style="color:var(--link);">Add</a></td><td>00:00:00</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td><a href="#" style="color:var(--link);font-size:11px;">QQ Individual Budget</a></td><td>03/14/2024 12:24:59 AM</td><td>Sridevi Palepu : All Access Admin</td><td>Pending</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0</td><td>Assessments.</td><td><a href="#" style="color:var(--link);">Add</a></td><td>00:00:00</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td><a href="#" style="color:var(--link);font-size:11px;">TX SK SAI Script Form</a></td><td>02/15/2022 10:17:15 AM</td><td>Valliappan Pethaperumal : test ems</td><td>Pending</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0</td><td>Assessments.</td><td><a href="#" style="color:var(--link);">Add</a></td><td>00:00:00</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
+                <tbody id="scriptActivityTbody">
+                  <tr><td><input type="checkbox" /></td><td><a href="#" style="color:var(--link);font-size:11px;">Adding a script</a></td><td>03/12/2025 06:46:33 AM</td><td>Sridevi Palepu : All Access Admin</td><td>Pending</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0</td><td>Assessments.</td><td><a href="#" style="color:var(--link);">Add</a></td><td>00:00:00</td><td>Wellframe</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td><a href="#" style="color:var(--link);font-size:11px;">Adding a script</a></td><td>03/08/2025 06:11:24 AM</td><td>Sridevi Palepu : All Access Admin</td><td>Cancelled</td><td>03/08/2025 06:19:05 AM</td><td>N/A</td><td>N/A</td><td>0</td><td>Assessments.</td><td><a href="#" style="color:var(--link);">Add</a></td><td>00:00:00</td><td>Wellframe</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td><a href="#" style="color:var(--link);font-size:11px;">QQ Individual Budget</a></td><td>03/14/2024 12:24:59 AM</td><td>Sridevi Palepu : All Access Admin</td><td>Pending</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0</td><td>Follow Up.</td><td><a href="#" style="color:var(--link);">Add</a></td><td>00:00:00</td><td></td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td><a href="#" style="color:var(--link);font-size:11px;">TX SK SAI Script Form</a></td><td>02/15/2022 10:17:15 AM</td><td>Valliappan Pethaperumal : test ems</td><td>Pending</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0</td><td>Care Coordination.</td><td><a href="#" style="color:var(--link);">Add</a></td><td>00:00:00</td><td></td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
                 </tbody>
               </table>
             </div>
@@ -1969,16 +2000,21 @@
                   <th>View</th>
                   <th>Delete</th>
                 </tr></thead>
-                <tbody>
-                  <tr><td colspan="10" style="text-align:center;color:var(--text-muted);font-style:italic;padding:30px 16px;"></td></tr>
+                <tbody id="generalActivityTbody">
+                  <tr><td>03/20/2026 10:30 AM</td><td>Sarah Mitchell, RN</td><td>N/A</td><td>N/A</td><td>Telephonic Outreach</td><td>N/A</td><td>N/A</td><td><a href="#" style="color:var(--link);">Completed</a></td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
+                  <tr><td>03/12/2026 02:00 PM</td><td>James Okafor, CCM</td><td>N/A</td><td>N/A</td><td>Care Coordination</td><td>N/A</td><td>N/A</td><td><a href="#" style="color:var(--link);">Completed</a></td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
+                  <tr><td>03/01/2026 09:45 AM</td><td>Diana Reyes, MSW</td><td>N/A</td><td>N/A</td><td>Telephonic Outreach</td><td>N/A</td><td>N/A</td><td><a href="#" style="color:var(--link);">Completed</a></td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
+                  <tr><td>02/18/2026 11:00 AM</td><td>Diana Reyes, MSW</td><td>N/A</td><td>N/A</td><td>SDOH Screening</td><td>N/A</td><td>N/A</td><td><a href="#" style="color:var(--link);">Completed</a></td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
+                  <tr><td>02/05/2026 03:30 PM</td><td>Tom Callahan, RN</td><td>N/A</td><td>N/A</td><td>Medication Reconciliation</td><td>N/A</td><td>N/A</td><td><a href="#" style="color:var(--link);">Completed</a></td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
+                  <tr><td>N/A</td><td>N/A</td><td>04/08/2026</td><td>Priya Nandakumar, CCM</td><td>Follow-Up Call</td><td>N/A</td><td>N/A</td><td><a href="#" style="color:var(--link);">Scheduled</a></td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
                 </tbody>
               </table>
             </div>
             <div class="gc-table-footer">
-              <div class="gc-pager-btn">«</div><div class="gc-pager-btn">‹</div><div class="gc-pager-btn active">0</div><div class="gc-pager-btn">›</div><div class="gc-pager-btn">»</div>
+              <div class="gc-pager-btn">«</div><div class="gc-pager-btn">‹</div><div class="gc-pager-btn active">1</div><div class="gc-pager-btn">›</div><div class="gc-pager-btn">»</div>
               <select style="font-size:11px;border:1px solid var(--border);border-radius:var(--r-sm);padding:1px 4px;margin-left:4px;"><option>20</option></select>
               <span>items per page</span>
-              <span style="margin-left:auto;font-size:11px;">No items to display &nbsp;<span class="material-icons" style="font-size:13px;color:var(--text-muted);cursor:pointer;">refresh</span></span>
+              <span style="margin-left:auto;font-size:11px;">1 - 6 of 6 items &nbsp;<span class="material-icons" style="font-size:13px;color:var(--text-muted);cursor:pointer;">refresh</span></span>
             </div>
           </div>
 
@@ -2023,65 +2059,105 @@
         <div class="ar-tab-panel" id="artab-required-activities" style="display:none;">
 
           <!-- Sub-tabs -->
-          <div style="display:flex;gap:16px;margin-bottom:12px;font-size:12px;">
-            <span style="font-weight:700;color:var(--text-primary);border-bottom:2px solid var(--text-primary);padding-bottom:4px;cursor:pointer;">Eligibility Programs</span>
-            <span style="color:var(--text-muted);cursor:pointer;">Clinical Programs</span>
-            <span style="color:var(--text-muted);cursor:pointer;">Additional Programs Activity</span>
+          <div style="display:flex;gap:0;margin-bottom:12px;font-size:12px;" id="reqActSubTabs">
+            <span class="req-subtab active" data-reqpanel="req-eligibility" style="padding:4px 12px;cursor:pointer;border:1px solid var(--border);border-bottom:2px solid var(--text-primary);font-weight:700;color:var(--text-primary);background:var(--white);">Eligibility Programs</span>
+            <span class="req-subtab" data-reqpanel="req-clinical" style="padding:4px 12px;cursor:pointer;color:var(--teal);border:1px solid transparent;font-weight:400;">Clinical Programs</span>
+            <span class="req-subtab" data-reqpanel="req-additional" style="padding:4px 12px;cursor:pointer;color:var(--teal);border:1px solid transparent;font-weight:400;">Additional Programs Activity</span>
           </div>
 
-          <!-- Program name link -->
-          <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:12px;text-decoration:underline;cursor:pointer;">Altruists Health Assurance</div>
-
-          <!-- Bulk actions -->
-          <div style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:6px;">
-            <button class="gc-btn gc-btn-tertiary gc-btn-sm">Bulk Schedule</button>
-            <button class="gc-btn gc-btn-primary gc-btn-sm">Bulk Complete</button>
+          <!-- Sub-panel: Eligibility Programs -->
+          <div class="req-subpanel" id="req-eligibility">
+            <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:12px;text-decoration:underline;cursor:pointer;">Altruists Health Assurance</div>
+            <div style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:6px;">
+              <button class="gc-btn gc-btn-tertiary gc-btn-sm">Bulk Schedule</button>
+              <button class="gc-btn gc-btn-primary gc-btn-sm">Bulk Complete</button>
+            </div>
+            <div class="gc-table-wrap">
+              <div style="overflow-x:auto;">
+                <table class="gc-table">
+                  <thead><tr>
+                    <th>Program Name</th>
+                    <th>Activity Type</th>
+                    <th>Script Name</th>
+                    <th>Due Date</th>
+                    <th>Recurring</th>
+                    <th style="width:60px;"></th>
+                  </tr></thead>
+                  <tbody>
+                    <tr>
+                      <td rowspan="4" style="vertical-align:top;">N/A</td>
+                      <td><a href="#" style="color:var(--link);">Appointment Reminder</a></td>
+                      <td style="color:var(--link);">N/A</td>
+                      <td>01/31/2020</td>
+                      <td></td>
+                      <td style="text-align:center;"><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">bar_chart</span></td>
+                    </tr>
+                    <tr>
+                      <td><a href="#" style="color:var(--link);">13243</a></td>
+                      <td style="color:var(--link);">N/A</td>
+                      <td>01/31/2020</td>
+                      <td></td>
+                      <td style="text-align:center;"><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">bar_chart</span></td>
+                    </tr>
+                    <tr>
+                      <td><a href="#" style="color:var(--link);">Assessments - Condition Based</a></td>
+                      <td style="color:var(--link);">N/A</td>
+                      <td>02/29/2020</td>
+                      <td></td>
+                      <td style="text-align:center;"><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">bar_chart</span></td>
+                    </tr>
+                    <tr>
+                      <td><a href="#" style="color:var(--link);">Assessments - Initial Outreach</a></td>
+                      <td style="color:var(--link);">N/A</td>
+                      <td>02/29/2020</td>
+                      <td></td>
+                      <td style="text-align:center;"><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">bar_chart</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
 
-          <!-- Required Activities table -->
-          <div class="gc-table-wrap">
-            <div style="overflow-x:auto;">
-              <table class="gc-table">
-                <thead><tr>
-                  <th>Program Name</th>
-                  <th>Activity Type</th>
-                  <th>Script Name</th>
-                  <th>Due Date</th>
-                  <th>Recurring</th>
-                  <th style="width:60px;"></th>
-                </tr></thead>
-                <tbody>
-                  <tr>
-                    <td rowspan="4" style="vertical-align:top;">N/A</td>
-                    <td><a href="#" style="color:var(--link);">Appointment Reminder</a></td>
-                    <td style="color:var(--link);">N/A</td>
-                    <td>01/31/2020</td>
-                    <td></td>
-                    <td style="text-align:center;"><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">bar_chart</span></td>
-                  </tr>
-                  <tr>
-                    <td><a href="#" style="color:var(--link);">13243</a></td>
-                    <td style="color:var(--link);">N/A</td>
-                    <td>01/31/2020</td>
-                    <td></td>
-                    <td style="text-align:center;"><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">bar_chart</span></td>
-                  </tr>
-                  <tr>
-                    <td><a href="#" style="color:var(--link);">Assessments - Condition Based</a></td>
-                    <td style="color:var(--link);">N/A</td>
-                    <td>02/29/2020</td>
-                    <td></td>
-                    <td style="text-align:center;"><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">bar_chart</span></td>
-                  </tr>
-                  <tr>
-                    <td><a href="#" style="color:var(--link);">Assessments - Initial Outreach</a></td>
-                    <td style="color:var(--link);">N/A</td>
-                    <td>02/29/2020</td>
-                    <td></td>
-                    <td style="text-align:center;"><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">bar_chart</span></td>
-                  </tr>
-                </tbody>
-              </table>
+          <!-- Sub-panel: Clinical Programs -->
+          <div class="req-subpanel" id="req-clinical" style="display:none;">
+            <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px;border-bottom:2px solid var(--teal);display:inline-block;padding-bottom:4px;">CM-Noncomplex</div>
+            <div style="margin-top:12px;">
+              <div class="gc-table-wrap">
+                <div style="overflow-x:auto;">
+                  <table class="gc-table">
+                    <thead><tr>
+                      <th>Activity Type</th>
+                      <th>Script Name</th>
+                      <th>Due Date</th>
+                    </tr></thead>
+                    <tbody>
+                      <tr><td colspan="3" style="padding:10px 12px;color:var(--text-muted);font-size:12px;">No Records Found</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-panel: Additional Programs Activity -->
+          <div class="req-subpanel" id="req-additional" style="display:none;">
+            <div style="display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:8px;">
+              <span class="gc-table-action"><span class="material-icons" style="font-size:13px;">add_circle_outline</span> Add Activity</span>
+            </div>
+            <div class="gc-table-wrap">
+              <div style="overflow-x:auto;">
+                <table class="gc-table">
+                  <thead><tr>
+                    <th>Eligibility</th>
+                    <th>Program Name</th>
+                    <th>Activity Type</th>
+                    <th>Script Name</th>
+                    <th>Due Date</th>
+                  </tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
             </div>
           </div>
 
@@ -2148,19 +2224,20 @@
                   <th>Assigned To / WQ</th>
                   <th>Notes</th>
                   <th>Created On</th>
-                  <th style="width:40px;"></th>
+                  <th>Digital</th>
+                  <th style="width:80px;">Actions</th>
                 </tr></thead>
-                <tbody>
-                  <tr><td><input type="checkbox" /></td><td>Assessments - Initial Outreach</td><td></td><td>Medium</td><td>05/12/2022</td><td>N/A</td><td>08:30</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Pratyusha Kolluri : All Access Admin</td><td>N/A</td><td>Accepted</td><td>Pratyusha Kolluri : All Access Admin</td><td>call this member</td><td style="font-size:10px;">05/12/2022 07:04:07</td><td><span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">bar_chart</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td>Assessments-TOC</td><td></td><td>High</td><td>05/11/2022</td><td>05/12/2022</td><td>10:00</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Valliappan Pethaperumal : test ems</td><td>N/A</td><td>Accepted</td><td>Valliappan Pethaperumal : test ems</td><td>TEST Notes US</td><td style="font-size:10px;">05/11/2022 11:48:42</td><td><span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">bar_chart</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td>AG Tools</td><td></td><td>N/A</td><td>01/12/2021</td><td>N/A</td><td>08:33</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Munish Khareja : UM Physician</td><td>N/A</td><td>Accepted</td><td>Munish Khareja : UM Physician</td><td>N/A</td><td style="font-size:10px;">01/12/2021 08:34:05</td><td><span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">bar_chart</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td>Follow Up.</td><td></td><td>High</td><td>07/04/2017</td><td>N/A</td><td>07:59</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td>Accepted</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td style="font-size:10px;">06/07/2017 08:00:32</td><td><span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">bar_chart</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td>Follow Up.</td><td></td><td>High</td><td>07/02/2018</td><td>N/A</td><td>07:59</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td>Accepted</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td style="font-size:10px;">06/07/2017 08:00:32</td><td><span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">bar_chart</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td>Follow Up.</td><td></td><td>High</td><td>06/01/2018</td><td>N/A</td><td>07:59</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td>Accepted</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td style="font-size:10px;">06/07/2017 08:00:32</td><td><span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">bar_chart</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td>Follow Up.</td><td></td><td>High</td><td>05/01/2018</td><td>N/A</td><td>07:59</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td>Accepted</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td style="font-size:10px;">04/07/2017 08:00:32</td><td><span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">bar_chart</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td>Follow Up.</td><td></td><td>High</td><td>04/02/2018</td><td>N/A</td><td>07:59</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td>Accepted</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td style="font-size:10px;">06/07/2017 08:00:32</td><td><span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">bar_chart</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td>Follow Up.</td><td></td><td>High</td><td>03/01/2018</td><td>N/A</td><td>07:59</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td>Accepted</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td style="font-size:10px;">06/07/2017 08:00:32</td><td><span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">bar_chart</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td>Follow Up.</td><td></td><td>High</td><td>02/01/2018</td><td>N/A</td><td>07:59</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td>Accepted</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td style="font-size:10px;">06/07/2017 08:00:32</td><td><span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">settings</span> <span class="material-icons" style="font-size:13px;color:var(--teal);cursor:pointer;">bar_chart</span></td></tr>
+                <tbody id="outstandingTbody">
+                  <tr><td><input type="checkbox" /></td><td>Assessments - Initial Outreach</td><td></td><td>Medium</td><td>05/12/2022</td><td>N/A</td><td>08:30</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Pratyusha Kolluri : All Access Admin</td><td>N/A</td><td>Accepted</td><td>Pratyusha Kolluri : All Access Admin</td><td>call this member</td><td style="font-size:10px;">05/12/2022 07:04:07</td><td>Wellframe</td><td><span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Edit">edit_note</span> <span class="material-icons" style="font-size:18px;color:#315E7B;cursor:pointer;" title="Perform Activity" onclick="openOutcomeModal();">thumb_up</span> <span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Delete">delete</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Assessments-TOC</td><td></td><td>High</td><td>05/11/2022</td><td>05/12/2022</td><td>10:00</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Valliappan Pethaperumal : test ems</td><td>N/A</td><td>Accepted</td><td>Valliappan Pethaperumal : test ems</td><td>TEST Notes US</td><td style="font-size:10px;">05/11/2022 11:48:42</td><td>Wellframe</td><td><span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Edit">edit_note</span> <span class="material-icons" style="font-size:18px;color:#315E7B;cursor:pointer;" title="Perform Activity" onclick="openOutcomeModal();">thumb_up</span> <span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Delete">delete</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td>AG Tools</td><td></td><td>N/A</td><td>01/12/2021</td><td>N/A</td><td>08:33</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Munish Khareja : UM Physician</td><td>N/A</td><td>Accepted</td><td>Munish Khareja : UM Physician</td><td>N/A</td><td style="font-size:10px;">01/12/2021 08:34:05</td><td></td><td><span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Edit">edit_note</span> <span class="material-icons" style="font-size:18px;color:#315E7B;cursor:pointer;" title="Perform Activity" onclick="openOutcomeModal();">thumb_up</span> <span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Delete">delete</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Follow Up.</td><td></td><td>High</td><td>07/04/2017</td><td>N/A</td><td>07:59</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td>Accepted</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td style="font-size:10px;">06/07/2017 08:00:32</td><td></td><td><span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Edit">edit_note</span> <span class="material-icons" style="font-size:18px;color:#315E7B;cursor:pointer;" title="Perform Activity" onclick="openOutcomeModal();">thumb_up</span> <span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Delete">delete</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Follow Up.</td><td></td><td>High</td><td>07/02/2018</td><td>N/A</td><td>07:59</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td>Accepted</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td style="font-size:10px;">06/07/2017 08:00:32</td><td></td><td><span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Edit">edit_note</span> <span class="material-icons" style="font-size:18px;color:#315E7B;cursor:pointer;" title="Perform Activity" onclick="openOutcomeModal();">thumb_up</span> <span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Delete">delete</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Follow Up.</td><td></td><td>High</td><td>06/01/2018</td><td>N/A</td><td>07:59</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td>Accepted</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td style="font-size:10px;">06/07/2017 08:00:32</td><td></td><td><span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Edit">edit_note</span> <span class="material-icons" style="font-size:18px;color:#315E7B;cursor:pointer;" title="Perform Activity" onclick="openOutcomeModal();">thumb_up</span> <span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Delete">delete</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Follow Up.</td><td></td><td>High</td><td>05/01/2018</td><td>N/A</td><td>07:59</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td>Accepted</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td style="font-size:10px;">04/07/2017 08:00:32</td><td></td><td><span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Edit">edit_note</span> <span class="material-icons" style="font-size:18px;color:#315E7B;cursor:pointer;" title="Perform Activity" onclick="openOutcomeModal();">thumb_up</span> <span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Delete">delete</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Follow Up.</td><td></td><td>High</td><td>04/02/2018</td><td>N/A</td><td>07:59</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td>Accepted</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td style="font-size:10px;">06/07/2017 08:00:32</td><td></td><td><span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Edit">edit_note</span> <span class="material-icons" style="font-size:18px;color:#315E7B;cursor:pointer;" title="Perform Activity" onclick="openOutcomeModal();">thumb_up</span> <span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Delete">delete</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Follow Up.</td><td></td><td>High</td><td>03/01/2018</td><td>N/A</td><td>07:59</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td>Accepted</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td style="font-size:10px;">06/07/2017 08:00:32</td><td></td><td><span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Edit">edit_note</span> <span class="material-icons" style="font-size:18px;color:#315E7B;cursor:pointer;" title="Perform Activity" onclick="openOutcomeModal();">thumb_up</span> <span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Delete">delete</span></td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Follow Up.</td><td></td><td>High</td><td>02/01/2018</td><td>N/A</td><td>07:59</td><td>N/A</td><td>N/A</td><td>N/A</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td>Accepted</td><td>Mike Mckitterick : Care Manager</td><td>N/A</td><td style="font-size:10px;">06/07/2017 08:00:32</td><td></td><td><span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Edit">edit_note</span> <span class="material-icons" style="font-size:18px;color:#315E7B;cursor:pointer;" title="Perform Activity" onclick="openOutcomeModal();">thumb_up</span> <span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Delete">delete</span></td></tr>
                 </tbody>
               </table>
             </div>
@@ -2301,15 +2378,18 @@
                   <th>Download</th>
                 </tr></thead>
                 <tbody>
-                  <tr><td colspan="8" style="text-align:center;color:var(--text-muted);font-style:italic;padding:60px 16px;"></td></tr>
+                  <tr><td><a href="#" style="color:var(--link);">Understanding Your A1C: What the Numbers Mean</a></td><td>Learn what your A1C test measures and how to interpret your results to better manage your diabetes.</td><td>GuidingCare</td><td>Chronic Disease Management</td><td>03/15/2026</td><td><span class="gc-badge gc-badge-teal">Read</span></td><td>N/A</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">download</span></td></tr>
+                  <tr><td><a href="#" style="color:var(--link);">Heart-Healthy Eating on a Budget</a></td><td>Practical tips for choosing affordable, nutritious foods that support cardiovascular health.</td><td>GuidingCare</td><td>Nutrition</td><td>03/01/2026</td><td><span class="gc-badge gc-badge-warn">Unread</span></td><td>N/A</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">download</span></td></tr>
+                  <tr><td><a href="#" style="color:var(--link);">Managing Multiple Medications Safely</a></td><td>How to organize your medications, avoid harmful interactions, and stay on track with your prescriptions.</td><td>GuidingCare</td><td>Medication Safety</td><td>02/18/2026</td><td><span class="gc-badge gc-badge-teal">Read</span></td><td>N/A</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">download</span></td></tr>
+                  <tr><td><a href="#" style="color:var(--link);">Community Resources for Seniors in Alaska</a></td><td>A guide to local programs offering food assistance, transportation, and social support for older adults.</td><td>GuidingCare</td><td>Social Support</td><td>02/05/2026</td><td><span class="gc-badge gc-badge-neutral">In Progress</span></td><td>N/A</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">download</span></td></tr>
                 </tbody>
               </table>
             </div>
             <div class="gc-table-footer">
-              <div class="gc-pager-btn">«</div><div class="gc-pager-btn">‹</div><div class="gc-pager-btn active">0</div><div class="gc-pager-btn">›</div><div class="gc-pager-btn">»</div>
+              <div class="gc-pager-btn">«</div><div class="gc-pager-btn">‹</div><div class="gc-pager-btn active">1</div><div class="gc-pager-btn">›</div><div class="gc-pager-btn">»</div>
               <select style="font-size:11px;border:1px solid var(--border);border-radius:var(--r-sm);padding:1px 4px;margin-left:4px;"><option>10</option></select>
               <span>items per page</span>
-              <span style="margin-left:auto;font-size:11px;">No items to display &nbsp;<span class="material-icons" style="font-size:13px;color:var(--text-muted);cursor:pointer;">refresh</span></span>
+              <span style="margin-left:auto;font-size:11px;">1 - 4 of 4 items &nbsp;<span class="material-icons" style="font-size:13px;color:var(--text-muted);cursor:pointer;">refresh</span></span>
             </div>
           </div>
 
@@ -2348,15 +2428,17 @@
                   <th>Remarks</th>
                 </tr></thead>
                 <tbody>
-                  <tr><td colspan="8" style="text-align:center;color:var(--text-muted);font-style:italic;padding:60px 16px;"></td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Authorization to Release Health Information</td><td>Providence Medical Center</td><td><span class="gc-badge gc-badge-teal">Signed</span></td><td><span class="material-icons" style="font-size:14px;color:var(--teal);">check_circle</span></td><td>01/15/2026<br>01/15/2027</td><td>Sarah Mitchell, RN</td><td>Member signed ROI for discharge records and lab results from Providence ED visit.</td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Care Management Program Consent</td><td>Alaska Premier Health</td><td><span class="gc-badge gc-badge-teal">Signed</span></td><td><span class="material-icons" style="font-size:14px;color:var(--teal);">check_circle</span></td><td>10/22/2025<br>10/22/2026</td><td>James Okafor, CCM</td><td>Consent obtained for participation in Complex Care Management program.</td></tr>
+                  <tr><td><input type="checkbox" /></td><td>Telehealth Services Consent</td><td>N/A</td><td><span class="gc-badge gc-badge-warn">Pending</span></td><td></td><td>N/A<br>N/A</td><td>Priya Nandakumar, CCM</td><td>Awaiting member signature for telehealth consent — form mailed 03/10/2026.</td></tr>
                 </tbody>
               </table>
             </div>
             <div class="gc-table-footer">
-              <div class="gc-pager-btn">«</div><div class="gc-pager-btn">‹</div><div class="gc-pager-btn active">0</div><div class="gc-pager-btn">›</div><div class="gc-pager-btn">»</div>
+              <div class="gc-pager-btn">«</div><div class="gc-pager-btn">‹</div><div class="gc-pager-btn active">1</div><div class="gc-pager-btn">›</div><div class="gc-pager-btn">»</div>
               <select style="font-size:11px;border:1px solid var(--border);border-radius:var(--r-sm);padding:1px 4px;margin-left:4px;"><option>10</option></select>
               <span>items per page</span>
-              <span style="margin-left:auto;font-size:11px;">No items to display &nbsp;<span class="material-icons" style="font-size:13px;color:var(--text-muted);cursor:pointer;">refresh</span></span>
+              <span style="margin-left:auto;font-size:11px;">1 - 3 of 3 items &nbsp;<span class="material-icons" style="font-size:13px;color:var(--text-muted);cursor:pointer;">refresh</span></span>
             </div>
           </div>
 
@@ -2376,15 +2458,17 @@
                   <th>View Episode Summary</th>
                 </tr></thead>
                 <tbody>
-                  <tr><td colspan="6" style="text-align:center;color:var(--text-muted);font-style:italic;padding:60px 16px;"></td></tr>
+                  <tr><td><a href="#" style="color:var(--link);">HEDIS Comprehensive Diabetes Care</a></td><td>EP-2026-0412</td><td>Sarah Mitchell, RN</td><td>01/15/2026</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">summarize</span></td></tr>
+                  <tr><td><a href="#" style="color:var(--link);">ACC/AHA Guideline for Management of Heart Failure</a></td><td>EP-2026-0398</td><td>James Okafor, CCM</td><td>02/10/2026</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">summarize</span></td></tr>
+                  <tr><td><a href="#" style="color:var(--link);">USPSTF Statin Use for Primary Prevention of CVD</a></td><td>EP-2026-0445</td><td>Tom Callahan, RN</td><td>03/05/2026</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">summarize</span></td></tr>
                 </tbody>
               </table>
             </div>
             <div class="gc-table-footer">
-              <div class="gc-pager-btn">«</div><div class="gc-pager-btn">‹</div><div class="gc-pager-btn active">0</div><div class="gc-pager-btn">›</div><div class="gc-pager-btn">»</div>
+              <div class="gc-pager-btn">«</div><div class="gc-pager-btn">‹</div><div class="gc-pager-btn active">1</div><div class="gc-pager-btn">›</div><div class="gc-pager-btn">»</div>
               <select style="font-size:11px;border:1px solid var(--border);border-radius:var(--r-sm);padding:1px 4px;margin-left:4px;"><option>20</option></select>
               <span>items per page</span>
-              <span style="margin-left:auto;font-size:11px;">No items to display &nbsp;<span class="material-icons" style="font-size:13px;color:var(--text-muted);cursor:pointer;">refresh</span></span>
+              <span style="margin-left:auto;font-size:11px;">1 - 3 of 3 items &nbsp;<span class="material-icons" style="font-size:13px;color:var(--text-muted);cursor:pointer;">refresh</span></span>
             </div>
           </div>
         </div>
@@ -2457,15 +2541,18 @@
                   <th>Alert Date</th>
                 </tr></thead>
                 <tbody>
-                  <tr><td colspan="5" style="text-align:center;color:var(--text-muted);font-style:italic;padding:60px 16px;"></td></tr>
+                  <tr><td><input type="checkbox" /></td><td><span class="gc-badge gc-badge-danger">New</span></td><td>Gap in Care — HbA1c test overdue</td><td>HEDIS measure CDC: Member has not completed HbA1c testing within the past 6 months. Last recorded A1C was 8.4% on 09/18/2025. Outreach required to schedule lab work.</td><td>03/22/2026</td></tr>
+                  <tr><td><input type="checkbox" /></td><td><span class="gc-badge gc-badge-danger">Active</span></td><td>Readmission Risk — ED visit within 30 days</td><td>Member had ED visit on 03/05/2026 for chest pain (R/O ACS). LACE index score of 11 indicates high readmission risk. Transition of care follow-up required within 48 hours of discharge.</td><td>03/06/2026</td></tr>
+                  <tr><td><input type="checkbox" /></td><td><span class="gc-badge gc-badge-warn">Active</span></td><td>Medication Flag — Drug interaction detected</td><td>Potential moderate interaction identified between Fluconazole and Atorvastatin (increased risk of rhabdomyolysis). Prescribing physician notified 02/05/2026; awaiting medication adjustment confirmation.</td><td>02/05/2026</td></tr>
+                  <tr><td><input type="checkbox" /></td><td><span class="gc-badge gc-badge-warn">Active</span></td><td>Social Risk — Food insecurity identified</td><td>SDOH screening on 02/18/2026 revealed member is skipping meals 2-3 times per week due to financial constraints. Referrals to Alaska Food Bank and Community Action Program submitted. Care manager should verify resource engagement at next contact.</td><td>02/18/2026</td></tr>
                 </tbody>
               </table>
             </div>
             <div class="gc-table-footer">
-              <div class="gc-pager-btn">«</div><div class="gc-pager-btn">‹</div><div class="gc-pager-btn active">0</div><div class="gc-pager-btn">›</div><div class="gc-pager-btn">»</div>
+              <div class="gc-pager-btn">«</div><div class="gc-pager-btn">‹</div><div class="gc-pager-btn active">1</div><div class="gc-pager-btn">›</div><div class="gc-pager-btn">»</div>
               <select style="font-size:11px;border:1px solid var(--border);border-radius:var(--r-sm);padding:1px 4px;margin-left:4px;"><option>20</option></select>
               <span>items per page</span>
-              <span style="margin-left:auto;font-size:11px;">No items to display &nbsp;<span class="material-icons" style="font-size:13px;color:var(--text-muted);cursor:pointer;">refresh</span></span>
+              <span style="margin-left:auto;font-size:11px;">1 - 4 of 4 items &nbsp;<span class="material-icons" style="font-size:13px;color:var(--text-muted);cursor:pointer;">refresh</span></span>
             </div>
           </div>
 
@@ -2630,15 +2717,57 @@
   var memberView = document.getElementById('member-view');
   var homeBtn = document.getElementById('home-shortcut');
 
+  // Pending outstanding activities queue — flushed when user sees home dashboard
+  var pendingOutstandingActivities = [];
+
+  function flushPendingOutstanding() {
+    var tbody = document.getElementById('outstandingTbody');
+    if (!tbody || pendingOutstandingActivities.length === 0) return;
+    pendingOutstandingActivities.forEach(function(item) {
+      var tr = document.createElement('tr');
+      tr.dataset.dynamic = 'true';
+      tr.style.background = '#FFFDE7';
+      tr.innerHTML = '<td><input type="checkbox" /></td>' +
+        '<td>' + item.activityType + '</td>' +
+        '<td></td>' +
+        '<td>High</td>' +
+        '<td>' + item.dateStr + '</td>' +
+        '<td>N/A</td>' +
+        '<td>' + item.timeStr + '</td>' +
+        '<td>N/A</td>' +
+        '<td>N/A</td>' +
+        '<td>N/A</td>' +
+        '<td>Lansing Cai : All Access Admin</td>' +
+        '<td>N/A</td>' +
+        '<td>Accepted</td>' +
+        '<td>Lansing Cai : All Access Admin</td>' +
+        '<td>' + item.notesVal + '</td>' +
+        '<td style="font-size:10px;">' + item.createdStr + '</td>' +
+        '<td>' + (item.isAssessment ? 'Wellframe' : '') + '</td>' +
+        '<td><span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Edit">edit_note</span> <span class="material-icons" style="font-size:18px;color:#315E7B;cursor:pointer;" title="Perform Activity" onclick="openOutcomeModal();">thumb_up</span> <span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Delete">delete</span></td>';
+      tbody.insertBefore(tr, tbody.firstChild);
+      setTimeout(function() { tr.style.transition = 'background 1.5s'; tr.style.background = ''; }, 100);
+    });
+    rcAddedActivities = rcAddedActivities.concat(pendingOutstandingActivities.map(function() { return Date.now(); }));
+    pendingOutstandingActivities = [];
+    updateRcCounts();
+  }
+
   // Show dashboard / hide member view (or toggle)
   function showDashboard() {
     homeDash.style.display = '';
     memberView.style.display = 'none';
+    var hraPage = document.getElementById('hraReviewPage');
+    if (hraPage) hraPage.style.display = 'none';
+    // When user sees the home dashboard (and the alerts), flush pending outstanding activities
+    flushPendingOutstanding();
   }
 
   function showMemberView() {
     homeDash.style.display = 'none';
     memberView.style.display = '';
+    var hraPage = document.getElementById('hraReviewPage');
+    if (hraPage) hraPage.style.display = 'none';
   }
 
   // Home shortcut toggles between dashboard and member view
@@ -2724,6 +2853,28 @@
     });
   });
 
+  // Required Activities sub-tab switching
+  document.querySelectorAll('.req-subtab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.req-subtab').forEach(function(t) {
+        t.style.border = '1px solid transparent';
+        t.style.borderBottom = 'none';
+        t.style.fontWeight = '400';
+        t.style.color = 'var(--teal)';
+        t.style.background = 'transparent';
+      });
+      tab.style.border = '1px solid var(--border)';
+      tab.style.borderBottom = '2px solid var(--text-primary)';
+      tab.style.fontWeight = '700';
+      tab.style.color = 'var(--text-primary)';
+      tab.style.background = 'var(--white)';
+      document.querySelectorAll('.req-subpanel').forEach(function(p) { p.style.display = 'none'; });
+      var target = tab.getAttribute('data-reqpanel');
+      var panel = document.getElementById(target);
+      if (panel) panel.style.display = '';
+    });
+  });
+
   // Health tab switching
   var healthTabs = document.querySelectorAll('#healthTabs .gc-tab');
   var healthPanels = document.querySelectorAll('.health-tab-panel');
@@ -2749,7 +2900,10 @@
       var modalName = document.getElementById('modalMemberName');
       if (modalName) modalName.textContent = m.name;
     }
-    document.querySelector('.gc-tool-menu.open')?.classList.remove('open');
+    // Force close all open menus with a slight delay to override toggle
+    setTimeout(function() {
+      document.querySelectorAll('.gc-tool-menu').forEach(function(m) { m.classList.remove('open'); });
+    }, 0);
     document.getElementById('addActivityModal').classList.add('open');
     document.getElementById('modalSuccessBanner').style.display = 'none';
   };
@@ -2774,6 +2928,200 @@
     // Scroll modal body to top so banner is visible
     var modalBody = document.querySelector('.gc-modal-body');
     if (modalBody) modalBody.scrollTop = 0;
+
+    // Add the activity to the outstanding activities table
+    var actType = document.querySelector('#addActivityModal .gc-modal-select') ;
+    var actTypeSelects = document.querySelectorAll('#addActivityModal .gc-modal-select');
+    var activityTypeVal = 'N/A';
+    var notesVal = '';
+    // Find the Activity Type select (3rd select in modal) and notes
+    actTypeSelects.forEach(function(sel) {
+      var label = sel.closest('.gc-modal-field');
+      if (label) {
+        var lbl = label.querySelector('label');
+        if (lbl && lbl.textContent.indexOf('Activity Type') > -1) activityTypeVal = sel.value !== 'Select' ? sel.value : 'N/A';
+      }
+    });
+    var commentArea = document.querySelector('#addActivityModal textarea');
+    if (commentArea) notesVal = commentArea.value || 'N/A';
+
+    var now = new Date();
+    var mm = String(now.getMonth()+1).padStart(2,'0');
+    var dd = String(now.getDate()).padStart(2,'0');
+    var yyyy = now.getFullYear();
+    var hh = String(now.getHours()).padStart(2,'0');
+    var mi = String(now.getMinutes()).padStart(2,'0');
+    var dateStr = mm+'/'+dd+'/'+yyyy;
+    var timeStr = hh+':'+mi;
+    var createdStr = mm+'/'+dd+'/'+yyyy+' '+hh+':'+mi+':'+String(now.getSeconds()).padStart(2,'0');
+
+    // Queue the outstanding activity — it will be added when user sees the alert on home
+    pendingOutstandingActivities.push({
+      activityType: activityTypeVal,
+      dateStr: dateStr,
+      timeStr: timeStr,
+      createdStr: createdStr,
+      notesVal: notesVal || 'N/A',
+      isAssessment: activityTypeVal.toLowerCase().indexOf('assessment') > -1
+    });
+
+    // Also add to Script Activity table in Activity Summary
+    var scriptTbody = document.getElementById('scriptActivityTbody');
+    if (scriptTbody) {
+      var str = document.createElement('tr');
+      str.style.background = '#FFFDE7';
+      str.innerHTML = '<td><input type="checkbox" /></td>' +
+        '<td><a href="#" style="color:var(--link);font-size:11px;">' + activityTypeVal + '</a></td>' +
+        '<td>' + createdStr + '</td>' +
+        '<td>Lansing Cai : All Access Admin</td>' +
+        '<td>Pending</td>' +
+        '<td>N/A</td>' +
+        '<td>N/A</td>' +
+        '<td>N/A</td>' +
+        '<td>0</td>' +
+        '<td>' + activityTypeVal + '</td>' +
+        '<td><a href="#" style="color:var(--link);">Add</a></td>' +
+        '<td>00:00:00</td>' +
+        '<td>' + (activityTypeVal.toLowerCase().indexOf('assessment') > -1 ? 'Wellframe' : '') + '</td>' +
+        '<td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td>';
+      scriptTbody.insertBefore(str, scriptTbody.firstChild);
+      setTimeout(function() { str.style.transition = 'background 1.5s'; str.style.background = ''; }, 100);
+    }
+
+    // Also add to General Activity table in Activity Summary
+    var genTbody = document.getElementById('generalActivityTbody');
+    if (genTbody) {
+      var gtr = document.createElement('tr');
+      gtr.style.background = '#FFFDE7';
+      gtr.innerHTML = '<td>N/A</td>' +
+        '<td>N/A</td>' +
+        '<td>' + dateStr + '</td>' +
+        '<td>Lansing Cai : All Access Admin</td>' +
+        '<td>' + activityTypeVal + '</td>' +
+        '<td>N/A</td>' +
+        '<td>N/A</td>' +
+        '<td><a href="#" style="color:var(--link);">Scheduled</a></td>' +
+        '<td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td>' +
+        '<td><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td>';
+      genTbody.insertBefore(gtr, genTbody.firstChild);
+      setTimeout(function() { gtr.style.transition = 'background 1.5s'; gtr.style.background = ''; }, 100);
+    }
+
+    // Add alert to dashboard My Alerts
+    var dashAlerts = document.getElementById('dashAlertsTbody');
+    if (dashAlerts) {
+      var alertMemberKey = currentMemberKey;
+      var atr = document.createElement('tr');
+      atr.dataset.dynamic = 'true';
+      atr.style.background = '#FFFDE7';
+      atr.innerHTML = '<td style="padding:4px 8px;">Member completed ' + activityTypeVal + '</td>' +
+        '<td style="padding:4px 8px;"><a href="#" class="gc-kv-link alert-member-link" data-member="' + alertMemberKey + '">1</a></td>' +
+        '<td style="padding:4px 8px;">Wellframe</td>' +
+        '<td style="padding:4px 8px;">' + dateStr + '</td>';
+      dashAlerts.insertBefore(atr, dashAlerts.firstChild);
+      setTimeout(function() { atr.style.transition = 'background 1.5s'; atr.style.background = ''; }, 100);
+
+      // Attach click handler: flush pending, navigate to member outstanding activities
+      atr.querySelector('.alert-member-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        var key = this.getAttribute('data-member');
+        if (key && memberData[key]) {
+          populateProfile(key);
+          document.querySelectorAll('.member-switcher-item').forEach(function(i) {
+            i.classList.remove('active');
+            var ck = i.querySelector('.material-icons');
+            if (ck) ck.remove();
+            if (i.getAttribute('data-member') === key) {
+              i.classList.add('active');
+              var cs = document.createElement('span');
+              cs.className = 'material-icons';
+              cs.style.cssText = 'font-size:14px;color:var(--teal);';
+              cs.textContent = 'check';
+              i.appendChild(cs);
+            }
+          });
+        }
+        // Flush pending outstanding activities so they appear
+        flushPendingOutstanding();
+        // Show member view
+        showMemberView();
+        // Navigate to Activity Record left panel
+        document.querySelectorAll('.gc-left-item').forEach(function(li) { li.classList.remove('active'); });
+        var arNav = document.querySelector('.gc-left-item[data-left="activity-record"]');
+        if (arNav) arNav.classList.add('active');
+        document.querySelectorAll('.left-panel').forEach(function(p) { p.style.display = 'none'; p.classList.remove('active'); });
+        var arPanel = document.getElementById('panel-activity-record');
+        if (arPanel) { arPanel.style.display = ''; arPanel.classList.add('active'); }
+        // Switch to Outstanding Activities tab
+        var arTabs = document.querySelectorAll('#activityTabs .gc-tab');
+        var arPanels = document.querySelectorAll('.ar-tab-panel');
+        arTabs.forEach(function(t) { t.classList.remove('active'); t.style.color = ''; t.style.borderBottomColor = ''; });
+        arPanels.forEach(function(p) { p.style.display = 'none'; p.classList.remove('active'); });
+        var oaTab = document.querySelector('#activityTabs .gc-tab[data-artab="outstanding-activities"]');
+        if (oaTab) { oaTab.classList.add('active'); oaTab.style.color = 'var(--teal)'; oaTab.style.borderBottomColor = 'var(--teal)'; }
+        var oaPanel = document.getElementById('artab-outstanding-activities');
+        if (oaPanel) { oaPanel.style.display = ''; oaPanel.classList.add('active'); }
+      });
+
+      rcAddedAlerts.push(Date.now());
+      updateRcCounts();
+
+      // Add calendar review event 2 days from now
+      var reviewDate = new Date();
+      reviewDate.setDate(reviewDate.getDate() + 2);
+      var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      var dayAbbr = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      var rMM = String(reviewDate.getMonth()+1).padStart(2,'0');
+      var rDD = String(reviewDate.getDate()).padStart(2,'0');
+      var rDay = days[reviewDate.getDay()];
+      var rDayShort = dayAbbr[reviewDate.getDay()];
+      var rMonth = months[reviewDate.getMonth()];
+
+      // Update calendar header to review date
+      var calDateLabel = document.getElementById('calDateLabel');
+      if (calDateLabel) calDateLabel.textContent = rDay + ', ' + rMonth + ' ' + reviewDate.getDate() + ', ' + reviewDate.getFullYear();
+      var calDayColLabel = document.getElementById('calDayColLabel');
+      if (calDayColLabel) calDayColLabel.textContent = rDayShort + ' ' + rMM.replace(/^0/,'') + '/' + rDD.replace(/^0/,'');
+
+      var calSlot = document.getElementById('cal11Slot');
+      if (calSlot) {
+        var m = memberData[alertMemberKey];
+        var calName = m ? m.name : 'Member';
+        // Make the row taller for the card
+        calSlot.parentElement.style.minHeight = '120px';
+        var calCard = document.createElement('div');
+        calCard.className = 'cal-event-card';
+        calCard.dataset.dynamic = 'true';
+        calCard.style.borderLeftColor = '#2E7D32';
+        calCard.style.borderLeftWidth = '5px';
+        calCard.innerHTML = '<span class="cal-event-close material-icons" onclick="this.parentElement.remove();">close</span>' +
+          '<div class="cal-event-title">' +
+          '<span class="material-icons">monitor_heart</span>' +
+          '<span class="material-icons" style="font-size:15px;">info</span>' +
+          calName + ', ' + activityTypeVal + ' (Review)' +
+          '</div>' +
+          '<div class="cal-event-actions">' +
+          '<span class="material-icons">edit</span>' +
+          '<span class="material-icons cal-perform-btn" title="Perform Activity" style="cursor:pointer;">thumb_up</span>' +
+          '<span class="material-icons">delete</span>' +
+          '<span class="material-icons" style="color:#315E7B;border-color:#315E7B;">location_on</span>' +
+          '</div>';
+        calSlot.appendChild(calCard);
+        // Attach perform activity handler to thumbs up
+        var performBtn = calCard.querySelector('.cal-perform-btn');
+        if (performBtn) {
+          performBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            openHRAReview();
+          });
+        }
+        calCard.style.opacity = '0';
+        calCard.style.transform = 'translateY(-8px)';
+        calCard.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        setTimeout(function() { calCard.style.opacity = '1'; calCard.style.transform = 'translateY(0)'; }, 50);
+      }
+    }
   };
 
   // Member data for switching
@@ -2919,6 +3267,245 @@
   });
 
   showDashboard();
+
+  // ═══ HRA Review Page ═══
+  window.openHRAReview = function() {
+    // Populate HRA page with current member data
+    var m = memberData[currentMemberKey];
+    if (m) {
+      var el = document.getElementById('hraBannerName');
+      if (el) el.textContent = m.name + '-' + m.id;
+      var dob = document.getElementById('hraBannerDOB');
+      if (dob) dob.textContent = 'DOB ' + m.dob;
+      var age = document.getElementById('hraBannerAge');
+      if (age) age.textContent = m.age + ' yr(s)';
+      var capName = document.getElementById('captureOutcomeMemberName');
+      if (capName) capName.textContent = m.name;
+      var hdrName = document.getElementById('hraHeaderMemberName');
+      if (hdrName) hdrName.textContent = m.name;
+    }
+    document.getElementById('home-dashboard').style.display = 'none';
+    document.getElementById('member-view').style.display = 'none';
+    document.getElementById('hraReviewPage').style.display = 'block';
+  };
+  window.openOutcomeModal = function() {
+    var m = memberData[currentMemberKey];
+    if (m) {
+      var el = document.getElementById('outcomeMemName');
+      if (el) el.textContent = m.name;
+    }
+    document.getElementById('outcomeModal').classList.add('open');
+  };
+  window.completeActivity = function() {
+    document.getElementById('captureOutcomeModal').classList.remove('open');
+    closeHRAReview();
+
+    var now = new Date();
+    var mm = String(now.getMonth()+1).padStart(2,'0');
+    var dd = String(now.getDate()).padStart(2,'0');
+    var yyyy = now.getFullYear();
+    var hh = String(now.getHours()).padStart(2,'0');
+    var mi = String(now.getMinutes()).padStart(2,'0');
+    var ss = String(now.getSeconds()).padStart(2,'0');
+    var dateStr = mm+'/'+dd+'/'+yyyy;
+    var createdStr = mm+'/'+dd+'/'+yyyy+' '+hh+':'+mi+':'+ss;
+
+    // Add completed row to Script Activity
+    var scriptTbody = document.getElementById('scriptActivityTbody');
+    if (scriptTbody) {
+      var tr = document.createElement('tr');
+      tr.style.background = '#E8F5E9';
+      tr.dataset.dynamic = 'true';
+      tr.innerHTML = '<td><input type="checkbox" /></td>' +
+        '<td><a href="#" style="color:var(--link);font-size:11px;">Health Risk Assessment</a></td>' +
+        '<td>' + createdStr + '</td>' +
+        '<td>Lansing Cai : All Access Admin</td>' +
+        '<td style="color:#2E7D32;font-weight:700;">Completed</td>' +
+        '<td>' + createdStr + '</td>' +
+        '<td>N/A</td>' +
+        '<td>N/A</td>' +
+        '<td>21.72</td>' +
+        '<td>Health Risk Assessment</td>' +
+        '<td style="color:#2E7D32;font-weight:700;">Successful: Assessment Complete</td>' +
+        '<td>00:30:00</td>' +
+        '<td>Wellframe</td>' +
+        '<td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td>';
+      scriptTbody.insertBefore(tr, scriptTbody.firstChild);
+      setTimeout(function() { tr.style.transition = 'background 2s'; tr.style.background = ''; }, 200);
+    }
+
+    // Add completed row to General Activity
+    var genTbody = document.getElementById('generalActivityTbody');
+    if (genTbody) {
+      var gtr = document.createElement('tr');
+      gtr.style.background = '#E8F5E9';
+      gtr.dataset.dynamic = 'true';
+      gtr.innerHTML = '<td>' + dateStr + ' ' + hh + ':' + mi + ' AM</td>' +
+        '<td>Lansing Cai : All Access Admin</td>' +
+        '<td>N/A</td>' +
+        '<td>N/A</td>' +
+        '<td>Health Risk Assessment</td>' +
+        '<td>N/A</td>' +
+        '<td>N/A</td>' +
+        '<td><span style="color:#2E7D32;font-weight:700;">Successful: Assessment Complete</span></td>' +
+        '<td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td>' +
+        '<td><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td>';
+      genTbody.insertBefore(gtr, genTbody.firstChild);
+      setTimeout(function() { gtr.style.transition = 'background 2s'; gtr.style.background = ''; }, 200);
+    }
+  };
+
+  window.saveAndAddActivity = function() {
+    // Close capture outcome modal and HRA page
+    document.getElementById('captureOutcomeModal').classList.remove('open');
+    document.getElementById('hraReviewPage').style.display = 'none';
+
+    // Show member view in the background, navigate to Care Plan
+    memberView.style.display = '';
+    homeDash.style.display = 'none';
+
+    // Activate Care Plan in left nav
+    document.querySelectorAll('.gc-left-item').forEach(function(li) { li.classList.remove('active'); });
+    var cpNav = document.querySelector('.gc-left-item[data-left="care-plan"]');
+    if (cpNav) cpNav.classList.add('active');
+    document.querySelectorAll('.left-panel').forEach(function(p) { p.style.display = 'none'; p.classList.remove('active'); });
+    var cpPanel = document.getElementById('panel-care-plan');
+    if (cpPanel) { cpPanel.style.display = ''; cpPanel.classList.add('active'); }
+
+    // Open the Add Activity modal on top
+    openAddActivity();
+  };
+
+  window.closeHRAReview = function() {
+    document.getElementById('hraReviewPage').style.display = 'none';
+    showDashboard();
+  };
+
+  // ═══ Remote Control: track added items ═══
+  var rcAddedActivities = [];
+  var rcAddedAlerts = [];
+  var rcAddedScripts = [];
+
+  // Store original tbodies HTML for reset
+  var origOutstanding = document.getElementById('outstandingTbody') ? document.getElementById('outstandingTbody').innerHTML : '';
+  var origGenActivity = document.getElementById('generalActivityTbody') ? document.getElementById('generalActivityTbody').innerHTML : '';
+  var origScriptActivity = document.getElementById('scriptActivityTbody') ? document.getElementById('scriptActivityTbody').innerHTML : '';
+
+  // Patch showActivitySuccess to track additions
+  var _origShowSuccess = window.showActivitySuccess;
+  window.showActivitySuccess = function(closeModal) {
+    rcAddedActivities.push(Date.now());
+    rcAddedScripts.push(Date.now());
+    updateRcCounts();
+    _origShowSuccess(closeModal);
+  };
+
+  function updateRcCounts() {
+    var ac = document.getElementById('rcActivityCount');
+    var al = document.getElementById('rcAlertCount');
+    var sc = document.getElementById('rcScriptCount');
+    if (ac) ac.textContent = rcAddedActivities.length;
+    if (al) al.textContent = rcAddedAlerts.length;
+    if (sc) sc.textContent = rcAddedScripts.length;
+  }
+
+  // Reset Activities: remove all dynamically added rows, restore originals
+  document.getElementById('rcResetActivities').addEventListener('click', function() {
+    var outTbody = document.getElementById('outstandingTbody');
+    var genTbody = document.getElementById('generalActivityTbody');
+    if (outTbody) outTbody.innerHTML = origOutstanding;
+    if (genTbody) genTbody.innerHTML = origGenActivity;
+    pendingOutstandingActivities = [];
+    rcAddedActivities = [];
+    updateRcCounts();
+    this.classList.add('rc-flash');
+    var self = this;
+    setTimeout(function() { self.classList.remove('rc-flash'); }, 500);
+  });
+
+  // Reset Alerts: clear dynamically added alert rows from dashboard My Alerts
+  document.getElementById('rcResetAlerts').addEventListener('click', function() {
+    var dashAlerts = document.getElementById('dashAlertsTbody');
+    if (dashAlerts) {
+      var rows = dashAlerts.querySelectorAll('tr[data-dynamic="true"]');
+      rows.forEach(function(r) { r.remove(); });
+    }
+    // Also reset member alerts in activity record
+    var memberAlertTbody = document.querySelector('#artab-member-alerts .gc-table tbody');
+    if (memberAlertTbody) {
+      var rows = memberAlertTbody.querySelectorAll('tr[data-dynamic="true"]');
+      rows.forEach(function(r) { r.remove(); });
+    }
+    // Remove dynamic calendar events and restore date
+    var calSlot = document.getElementById('cal11Slot');
+    if (calSlot) {
+      calSlot.querySelectorAll('.cal-event-card[data-dynamic="true"]').forEach(function(c) { c.remove(); });
+      calSlot.parentElement.style.minHeight = '';
+    }
+    var calDateLabel = document.getElementById('calDateLabel');
+    if (calDateLabel) calDateLabel.textContent = 'Wednesday, March 25, 2026';
+    var calDayColLabel = document.getElementById('calDayColLabel');
+    if (calDayColLabel) calDayColLabel.textContent = 'Wed 3/25';
+    rcAddedAlerts = [];
+    updateRcCounts();
+    this.classList.add('rc-flash');
+    var self = this;
+    setTimeout(function() { self.classList.remove('rc-flash'); }, 500);
+  });
+
+  // Reset Scripts: restore script activity table to original
+  document.getElementById('rcResetScripts').addEventListener('click', function() {
+    var scriptTbody = document.getElementById('scriptActivityTbody');
+    if (scriptTbody) scriptTbody.innerHTML = origScriptActivity;
+    rcAddedScripts = [];
+    updateRcCounts();
+    this.classList.add('rc-flash');
+    var self = this;
+    setTimeout(function() { self.classList.remove('rc-flash'); }, 500);
+  });
+
+  // Reset All
+  document.getElementById('rcResetAll').addEventListener('click', function() {
+    // Reset activities
+    var outTbody = document.getElementById('outstandingTbody');
+    var genTbody = document.getElementById('generalActivityTbody');
+    if (outTbody) outTbody.innerHTML = origOutstanding;
+    if (genTbody) genTbody.innerHTML = origGenActivity;
+    pendingOutstandingActivities = [];
+    rcAddedActivities = [];
+    // Reset alerts
+    var dashAlerts = document.getElementById('dashAlertsTbody');
+    if (dashAlerts) {
+      var rows = dashAlerts.querySelectorAll('tr[data-dynamic="true"]');
+      rows.forEach(function(r) { r.remove(); });
+    }
+    var memberAlertTbody = document.querySelector('#artab-member-alerts .gc-table tbody');
+    if (memberAlertTbody) {
+      var rows = memberAlertTbody.querySelectorAll('tr[data-dynamic="true"]');
+      rows.forEach(function(r) { r.remove(); });
+    }
+    rcAddedAlerts = [];
+    // Reset calendar events and restore date
+    var calSlot = document.getElementById('cal11Slot');
+    if (calSlot) {
+      calSlot.querySelectorAll('.cal-event-card[data-dynamic="true"]').forEach(function(c) { c.remove(); });
+      calSlot.parentElement.style.minHeight = '';
+    }
+    var calDateLabel = document.getElementById('calDateLabel');
+    if (calDateLabel) calDateLabel.textContent = 'Wednesday, March 25, 2026';
+    var calDayColLabel = document.getElementById('calDayColLabel');
+    if (calDayColLabel) calDayColLabel.textContent = 'Wed 3/25';
+    // Reset scripts
+    var scriptTbody = document.getElementById('scriptActivityTbody');
+    if (scriptTbody) scriptTbody.innerHTML = origScriptActivity;
+    rcAddedScripts = [];
+    // Update counts
+    updateRcCounts();
+    this.classList.add('rc-flash');
+    var self = this;
+    setTimeout(function() { self.classList.remove('rc-flash'); }, 500);
+  });
+
 })();
 </script>
 
@@ -2930,7 +3517,7 @@
       <button onclick="document.getElementById('addActivityModal').classList.remove('open');"><span class="material-icons">close</span></button>
     </div>
     <div class="gc-modal-accent"></div>
-    <div id="modalSuccessBanner" style="display:none;padding:8px 20px 0;">
+    <div id="modalSuccessBanner" style="display:none;padding:4px 20px 0;">
       <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:4px;border-left:3px solid #2e7d32;background:#e8f5e9;color:#1b5e20;font-size:12px;line-height:1.5;">
         <span class="material-icons" style="font-size:16px;flex-shrink:0;color:#2e7d32;">check_circle</span>
         <div style="flex:1;"><strong>Activity added successfully</strong> — A new activity has been scheduled for Jackson Thomas.</div>
@@ -2943,10 +3530,11 @@
 
       <fieldset class="gc-modal-fieldset">
         <legend>Add Activity For</legend>
-        <div style="display:flex;gap:36px;align-items:center;">
-          <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;"><input type="radio" name="actFor" checked style="accent-color:var(--teal);width:16px;height:16px;" /> Care Staff</label>
-          <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;"><input type="radio" name="actFor" style="accent-color:var(--teal);width:16px;height:16px;" /> External Care Team</label>
-          <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;"><input type="radio" name="actFor" style="accent-color:var(--teal);width:16px;height:16px;" /> Pharmacist</label>
+        <div style="display:flex;gap:24px;align-items:center;flex-wrap:nowrap;white-space:nowrap;">
+          <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;white-space:nowrap;"><input type="radio" name="actFor" checked style="accent-color:var(--teal);width:16px;height:16px;" /> Care Staff</label>
+          <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;white-space:nowrap;"><input type="radio" name="actFor" style="accent-color:var(--teal);width:16px;height:16px;" /> External Care Team</label>
+          <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;white-space:nowrap;"><input type="radio" name="actFor" style="accent-color:var(--teal);width:16px;height:16px;" /> Pharmacist</label>
+          <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;white-space:nowrap;"><input type="checkbox" name="actForMember" style="accent-color:var(--teal);width:16px;height:16px;" /> Digital Member</label>
         </div>
       </fieldset>
 
@@ -3108,6 +3696,460 @@
       <button onclick="showActivitySuccess(true);" style="background:#fff;color:var(--teal);border:1px solid var(--teal);border-radius:3px;padding:0 28px;height:38px;font-size:14px;font-weight:600;font-family:var(--font);cursor:pointer;">Add and Close</button>
     </div>
   </div>
+</div>
+
+<!-- ══════════════ HRA REVIEW PAGE ══════════════ -->
+<div id="hraReviewPage">
+
+  <!-- Member banner (same as profile) -->
+  <div class="gc-member-banner">
+    <div style="position:relative;display:inline-flex;"><span class="material-icons" style="font-size:24px;color:#315E7B;">notifications</span><span style="position:absolute;top:-4px;right:-6px;min-width:17px;height:17px;background:#C62828;color:white;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700;padding:0 3px;">0</span></div>
+    <span class="gc-banner-check"><span class="material-icons" style="font-size:20px;color:#2E7D32;">check_circle</span></span>
+    <span class="gc-banner-name" id="hraBannerName">AM2 Test-ALT9713</span>
+    <span class="gc-banner-dob" id="hraBannerDOB">DOB 01/01/2001</span>
+    <span class="gc-banner-dob" id="hraBannerAge">25 yr(s)</span>
+    <span class="gc-banner-expand"><span class="material-icons" style="font-size:18px;">open_in_full</span></span>
+  </div>
+
+  <div class="hra-body">
+    <!-- Main content -->
+    <div style="flex:1;display:flex;flex-direction:column;">
+      <div class="hra-header" style="background:#444;color:#fff;display:flex;gap:30px;"><span>Single Screen Script</span><span>Member Name: <span id="hraHeaderMemberName">AM2 Test</span></span></div>
+      <div class="hra-script-bar">
+        <span>Script Name : <strong>Health Risk Assessment</strong></span>
+        <span>Script Score : <strong>21.721000</strong></span>
+        <span>Score Received : <strong style="color:#C62828;">15.817000</strong></span>
+        <span style="margin-left:auto;display:flex;gap:6px;">
+          <span class="material-icons" style="font-size:16px;color:var(--teal);cursor:pointer;">edit</span>
+          <span class="material-icons" style="font-size:16px;color:var(--teal);cursor:pointer;">upload</span>
+          <span class="material-icons" style="font-size:16px;color:var(--teal);cursor:pointer;">edit_note</span>
+          <span class="material-icons" style="font-size:16px;color:var(--teal);cursor:pointer;">image</span>
+          <span class="material-icons" style="font-size:16px;color:var(--teal);cursor:pointer;">print</span>
+        </span>
+      </div>
+      <div class="hra-warning">Note: Save script before you move out of this page</div>
+
+      <div class="hra-questions">
+
+        <!-- Q1 - expanded with answer -->
+        <div class="hra-q open">
+          <div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">1</span><span class="hra-q-text">Do I give permission to discuss my personal health information with the healthcare team?</span></div>
+          <div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q1" checked /> <span>Yes, I give permission</span></div><div class="hra-q-option"><input type="radio" name="q1" /> <span>No, I do not give permission</span></div></div><div class="hra-care-notes">Care Notes</div></div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">2</span><span class="hra-q-text">Do I give permission to share the results of this assessment with my doctor?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q2" checked /> <span>Yes, please share with my doctor</span></div><div class="hra-q-option"><input type="radio" name="q2" /> <span>No, do not share</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q3 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered" style="background:#E65100;"><span style="font-size:9px;font-weight:700;">OOI</span></div><span class="hra-q-num">3</span><span class="hra-q-text">Who is filling out this questionnaire?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><span class="hra-q-ogi">OGI</span> <input type="radio" name="q3" checked /> <span>I am filling this out myself</span></div><div class="hra-q-option"><input type="radio" name="q3" /> <span>My caregiver is helping me</span></div><div class="hra-q-option"><input type="radio" name="q3" /> <span>My parent is helping me</span></div><div class="hra-q-option"><input type="radio" name="q3" /> <span>My legal guardian is helping me</span></div><div class="hra-q-option"><input type="radio" name="q3" /> <span>My grandparent is helping me</span></div><div class="hra-q-option"><input type="radio" name="q3" /> <span>Someone else is helping me</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q4 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">4</span><span class="hra-q-text">Is the race listed on my profile correct?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q4" checked /> <span>Yes, it is correct</span></div><div class="hra-q-option"><input type="radio" name="q4" /> <span>No, it needs to be updated</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q5 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">5</span><span class="hra-q-text">Is the ethnicity listed on my profile correct?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q5" checked /> <span>Yes, it is correct</span></div><div class="hra-q-option"><input type="radio" name="q5" /> <span>No, it needs to be updated</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q6 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">6</span><span class="hra-q-text">How would I rate my overall health right now?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q6" /> <span>Excellent</span></div><div class="hra-q-option"><input type="radio" name="q6" /> <span>Very Good</span></div><div class="hra-q-option"><input type="radio" name="q6" checked /> <span>Good</span></div><div class="hra-q-option"><input type="radio" name="q6" /> <span>Fair</span></div><div class="hra-q-option"><input type="radio" name="q6" /> <span>Poor</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q7 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">7</span><span class="hra-q-text">Have I visited the Emergency Room in the last 6 months?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q7" /> <span>Yes</span></div><div class="hra-q-option"><input type="radio" name="q7" checked /> <span>No</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q8 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">8</span><span class="hra-q-text">Have I been admitted to the hospital in the last 6 months?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q8" /> <span>Yes</span></div><div class="hra-q-option"><input type="radio" name="q8" checked /> <span>No</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q9 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">9</span><span class="hra-q-text">Am I currently taking any prescription medications?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q9" checked /> <span>Yes</span></div><div class="hra-q-option"><input type="radio" name="q9" /> <span>No</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q10 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">10</span><span class="hra-q-text">Do I have trouble paying for my medications?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q10" checked /> <span>Yes, it is sometimes difficult</span></div><div class="hra-q-option"><input type="radio" name="q10" /> <span>No</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q11 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">11</span><span class="hra-q-text">Do I have a doctor that I see regularly (a Primary Care Provider)?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q11" checked /> <span>Yes</span></div><div class="hra-q-option"><input type="radio" name="q11" /> <span>No</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q12 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">12</span><span class="hra-q-text">Have I seen my regular doctor in the last 12 months?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q12" checked /> <span>Yes</span></div><div class="hra-q-option"><input type="radio" name="q12" /> <span>No</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q13 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">13</span><span class="hra-q-text">Do I have any concerns about my eyesight or hearing?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q13" /> <span>Yes</span></div><div class="hra-q-option"><input type="radio" name="q13" checked /> <span>No</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q14 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">14</span><span class="hra-q-text">Have I fallen in the past 12 months?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q14" /> <span>Yes</span></div><div class="hra-q-option"><input type="radio" name="q14" checked /> <span>No</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q15 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">15</span><span class="hra-q-text">Do I feel safe where I live?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q15" checked /> <span>Yes, I feel safe</span></div><div class="hra-q-option"><input type="radio" name="q15" /> <span>No, I have some concerns</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q16 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">16</span><span class="hra-q-text">Over the last 2 weeks, how often have I felt down, depressed, or hopeless?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q16" /> <span>Not at all</span></div><div class="hra-q-option"><input type="radio" name="q16" checked /> <span>Several days</span></div><div class="hra-q-option"><input type="radio" name="q16" /> <span>More than half the days</span></div><div class="hra-q-option"><input type="radio" name="q16" /> <span>Nearly every day</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q17 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">17</span><span class="hra-q-text">Over the last 2 weeks, how often have I had little interest or pleasure in doing things?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q17" checked /> <span>Not at all</span></div><div class="hra-q-option"><input type="radio" name="q17" /> <span>Several days</span></div><div class="hra-q-option"><input type="radio" name="q17" /> <span>More than half the days</span></div><div class="hra-q-option"><input type="radio" name="q17" /> <span>Nearly every day</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q18 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">18</span><span class="hra-q-text">Do I use any tobacco products (cigarettes, vaping, chewing tobacco)?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q18" /> <span>Yes, I currently use tobacco</span></div><div class="hra-q-option"><input type="radio" name="q18" checked /> <span>No, I do not use tobacco</span></div><div class="hra-q-option"><input type="radio" name="q18" /> <span>I used to, but I quit</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q19 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">19</span><span class="hra-q-text">How often do I drink alcohol?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q19" /> <span>Never</span></div><div class="hra-q-option"><input type="radio" name="q19" checked /> <span>Once or twice a month</span></div><div class="hra-q-option"><input type="radio" name="q19" /> <span>About once a week</span></div><div class="hra-q-option"><input type="radio" name="q19" /> <span>Every day or almost every day</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q20 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">20</span><span class="hra-q-text">Do I need help with everyday activities like bathing, getting dressed, eating, or getting around?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q20" /> <span>Yes, I need some help</span></div><div class="hra-q-option"><input type="radio" name="q20" checked /> <span>No, I can manage on my own</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q21 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">21</span><span class="hra-q-text">Can I get to my doctor appointments without difficulty?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q21" checked /> <span>Yes, I have reliable transportation</span></div><div class="hra-q-option"><input type="radio" name="q21" /> <span>No, getting there can be hard</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q22 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">22</span><span class="hra-q-text">In the past year, have I worried about having enough food to eat?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q22" checked /> <span>Yes, this has been a concern</span></div><div class="hra-q-option"><input type="radio" name="q22" /> <span>No</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q23 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">23</span><span class="hra-q-text">Do I have a living will or advance directive that explains my wishes for medical care?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q23" /> <span>Yes, I have one</span></div><div class="hra-q-option"><input type="radio" name="q23" checked /> <span>No, I do not have one</span></div><div class="hra-q-option"><input type="radio" name="q23" /> <span>I am not sure</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q24 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">24</span><span class="hra-q-text">Would I like to learn about programs in my community that could help me, like meal delivery, senior centers, or support groups?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q24" checked /> <span>Yes, I would like more information</span></div><div class="hra-q-option"><input type="radio" name="q24" /> <span>No thank you</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Q25 -->
+        <div class="hra-q"><div class="hra-q-header" onclick="this.parentElement.classList.toggle('open')"><div class="hra-q-icon answered"></div><span class="hra-q-num">25</span><span class="hra-q-text">Is there anything else I would like to talk about with my care team?</span></div><div class="hra-q-body"><div class="hra-q-options"><div class="hra-q-option"><input type="radio" name="q25" checked /> <span>Yes, I would like someone to call me about my medication costs</span></div><div class="hra-q-option"><input type="radio" name="q25" /> <span>No, I am all set for now</span></div></div><div class="hra-care-notes">Care Notes</div></div></div>
+
+        <!-- Action buttons -->
+        <div class="hra-actions">
+          <button style="background:var(--teal);color:#fff;border:1px solid var(--teal);">Save &amp; Continue</button>
+          <button onclick="document.getElementById('captureOutcomeModal').classList.add('open');" style="background:var(--white);color:var(--text-primary);border:1px solid var(--border);">Save For Later</button>
+          <button onclick="document.getElementById('endScriptConfirm').classList.add('open');" style="background:var(--white);color:var(--text-primary);border:1px solid var(--border);">Save &amp; End Script</button>
+          <button onclick="document.getElementById('cancelScriptConfirm').classList.add('open');" style="background:var(--teal);color:#fff;border:1px solid var(--teal);">Cancel</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Right sidebar -->
+    <div class="hra-sidebar">
+      <div class="hra-sidebar-section">
+        <div class="hra-sidebar-title">Quick Update</div>
+        <div class="hra-sidebar-body">
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <label style="cursor:pointer;"><input type="radio" name="quickUpdate" style="accent-color:var(--teal);" /> Any New Drug Sensitivity or Reaction</label>
+            <label style="cursor:pointer;"><input type="radio" name="quickUpdate" style="accent-color:var(--teal);" /> Communication Impairment</label>
+            <label style="cursor:pointer;"><input type="radio" name="quickUpdate" style="accent-color:var(--teal);" /> Date Of Birth</label>
+            <label style="cursor:pointer;"><input type="radio" name="quickUpdate" style="accent-color:var(--teal);" /> Last Immunization Date And Type</label>
+            <label style="cursor:pointer;"><input type="radio" name="quickUpdate" style="accent-color:var(--teal);" /> Last Preventive Screening Date And Type</label>
+            <label style="cursor:pointer;"><input type="radio" name="quickUpdate" style="accent-color:var(--teal);" /> Next Doctors Appointment Date and Reason</label>
+            <label style="cursor:pointer;"><input type="radio" name="quickUpdate" style="accent-color:var(--teal);" /> Preferred Time Of Call</label>
+            <label style="cursor:pointer;"><input type="radio" name="quickUpdate" style="accent-color:var(--teal);" /> Primary Caregiver Name And Phone Number</label>
+            <label style="cursor:pointer;"><input type="radio" name="quickUpdate" style="accent-color:var(--teal);" /> Update Alternate Email</label>
+            <label style="cursor:pointer;"><input type="radio" name="quickUpdate" style="accent-color:var(--teal);" /> Update Primary Email</label>
+            <label style="cursor:pointer;"><input type="radio" name="quickUpdate" style="accent-color:var(--teal);" /> Update Primary Phone</label>
+          </div>
+        </div>
+      </div>
+      <div class="hra-sidebar-section">
+        <div class="hra-sidebar-title">Quick Links</div>
+        <div class="hra-sidebar-body"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ CANCEL SCRIPT CONFIRMATION MODAL ══════════════ -->
+<div class="gc-modal-overlay" id="cancelScriptConfirm">
+  <div class="gc-modal" style="max-width:440px;">
+    <div style="background:#e8e8e8;padding:12px 16px;font-size:16px;font-weight:700;color:#555;border-bottom:1px solid #ccc;">Confirmation</div>
+    <div style="padding:24px 20px 8px;text-align:center;font-size:14px;color:var(--text-primary);">Are you sure you want to cancel the script?</div>
+    <div style="padding:4px 20px 20px;text-align:center;font-size:13px;color:var(--text-secondary);line-height:1.6;">Note : - Responses will be saved to the member record in cancelled status.<br>- Canceling the assessment will also cancel any opportunities, goals<br>or interventions associated with this assessment</div>
+    <div style="display:flex;justify-content:center;gap:12px;padding:8px 20px 24px;">
+      <button onclick="document.getElementById('cancelScriptConfirm').classList.remove('open');closeHRAReview();" style="background:#315E7B;color:#fff;border:none;border-radius:3px;padding:0 28px;height:38px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;">Ok</button>
+      <button onclick="document.getElementById('cancelScriptConfirm').classList.remove('open');" style="background:#315E7B;color:#fff;border:none;border-radius:3px;padding:0 28px;height:38px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ END SCRIPT CONFIRMATION MODAL ══════════════ -->
+<div class="gc-modal-overlay" id="endScriptConfirm">
+  <div class="gc-modal" style="max-width:400px;">
+    <div style="background:#e8e8e8;padding:12px 16px;font-size:16px;font-weight:700;color:#555;border-bottom:1px solid #ccc;">Confirmation</div>
+    <div style="padding:24px 20px 16px;text-align:center;font-size:14px;color:var(--text-primary);">Are you sure you want to end the script?</div>
+    <div style="display:flex;justify-content:center;gap:12px;padding:8px 20px 24px;">
+      <button onclick="document.getElementById('endScriptConfirm').classList.remove('open');document.getElementById('captureOutcomeModal').classList.add('open');" style="background:#315E7B;color:#fff;border:none;border-radius:3px;padding:0 28px;height:38px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;">Ok</button>
+      <button onclick="document.getElementById('endScriptConfirm').classList.remove('open');" style="background:#315E7B;color:#fff;border:none;border-radius:3px;padding:0 28px;height:38px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ CAPTURE ACTIVITY OUTCOME MODAL ══════════════ -->
+<div class="gc-modal-overlay" id="captureOutcomeModal">
+  <div class="gc-modal" style="max-width:780px;">
+    <div class="gc-modal-title">
+      <span style="font-size:18px;">Capture Activity Outcome</span>
+      <button onclick="document.getElementById('captureOutcomeModal').classList.remove('open');"><span class="material-icons" style="font-size:20px;color:#315E7B;">close</span></button>
+    </div>
+    <div class="gc-modal-accent"></div>
+    <div class="gc-modal-body" style="gap:0;background:#fff;">
+
+      <!-- Member info row -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;font-size:13px;">
+        <div>
+          <div style="color:#888;font-weight:600;">Member Name</div>
+          <a href="#" class="gc-kv-link" style="font-size:14px;" id="captureOutcomeMemberName">AM2 Test</a>
+        </div>
+        <div>
+          <div style="color:#888;font-weight:600;">Activity Type</div>
+          <div style="font-weight:700;font-size:14px;">Health Risk Assessment</div>
+        </div>
+        <div>
+          <div style="color:#888;font-weight:600;">Script</div>
+          <div style="font-weight:700;font-size:14px;">Health Risk Assessment</div>
+        </div>
+      </div>
+
+      <!-- Form fields -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 40px;margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <label style="font-size:13px;color:var(--text-primary);min-width:120px;">Outcome Type</label>
+          <select class="gc-modal-select" style="flex:1;height:34px;font-size:13px;background:#eee;">
+            <option selected>Successful</option>
+            <option>Unsuccessful</option>
+            <option>Partially Successful</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <label style="font-size:13px;color:var(--text-primary);min-width:120px;">Activity Outcome</label>
+          <select class="gc-modal-select" style="flex:1;height:34px;font-size:13px;background:#eee;">
+            <option selected>Attended</option>
+            <option>Completed Assessment</option>
+            <option>Left Voicemail</option>
+            <option>No Answer</option>
+            <option>Member Refused</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <label style="font-size:13px;color:var(--text-primary);min-width:120px;">Actual Duration</label>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <input class="gc-modal-input" type="text" placeholder="HH" style="width:44px;height:34px;text-align:center;" />
+            <span style="font-size:12px;font-weight:600;">Hrs</span>
+            <input class="gc-modal-input" type="text" placeholder="MM" style="width:44px;height:34px;text-align:center;" />
+            <span style="font-size:12px;font-weight:600;">Mins</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <label style="font-size:13px;color:var(--text-primary);min-width:120px;">Contact Type</label>
+          <select class="gc-modal-select" style="flex:1;height:34px;font-size:13px;background:#888;color:#fff;">
+            <option selected>Wellframe Assessment</option>
+            <option>Member - Phone</option>
+            <option>Member - Telehealth</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <label style="font-size:13px;color:var(--text-primary);min-width:120px;">Place of Service</label>
+          <select class="gc-modal-select" style="flex:1;height:34px;font-size:13px;background:#eee;">
+            <option>Select</option>
+            <option>Home</option>
+            <option>Office</option>
+            <option>Telehealth</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <label style="font-size:13px;color:var(--text-primary);min-width:120px;">Service Code</label>
+          <select class="gc-modal-select" style="flex:1;height:34px;font-size:13px;background:#eee;">
+            <option>Select</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Outcome Notes -->
+      <div style="margin-bottom:16px;">
+        <label style="font-size:13px;color:var(--text-primary);font-weight:600;display:block;margin-bottom:4px;">Outcome Notes</label>
+        <textarea style="border:1px solid #ccc;border-radius:3px;padding:10px;font-size:13px;font-family:var(--font);background:#fff;outline:none;min-height:120px;resize:vertical;width:100%;"></textarea>
+      </div>
+
+      <!-- Review Care Plan checkbox -->
+      <div style="margin-bottom:8px;">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
+          <input type="checkbox" checked style="accent-color:#E68A00;width:18px;height:18px;" />
+          <span style="color:var(--teal);font-weight:600;">Review Care Plan</span>
+        </label>
+      </div>
+
+    </div>
+    <div class="gc-modal-footer" style="gap:12px;background:#fff;border-top:1px solid #ddd;">
+      <button onclick="completeActivity();" style="background:#315E7B;color:#fff;border:none;border-radius:3px;padding:0 24px;height:42px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;display:flex;align-items:center;gap:6px;"><span class="material-icons" style="font-size:16px;">save</span> Save and Proceed</button>
+      <button onclick="saveAndAddActivity();" style="background:#315E7B;color:#fff;border:none;border-radius:3px;padding:0 24px;height:42px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;display:flex;align-items:center;gap:6px;"><span class="material-icons" style="font-size:16px;">save</span> Save and Add Activity</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ GENERAL ACTIVITY OUTCOME MODAL ══════════════ -->
+<div class="gc-modal-overlay" id="outcomeModal">
+  <div class="gc-modal" style="max-width:720px;">
+    <div class="gc-modal-title">
+      <span style="font-size:18px;">General Activity Outcome</span>
+      <button onclick="document.getElementById('outcomeModal').classList.remove('open');"><span class="material-icons">close</span></button>
+    </div>
+    <div class="gc-modal-accent"></div>
+    <div class="gc-modal-body" style="gap:0;">
+
+      <div style="font-size:11px;color:#555;margin-bottom:10px;"><span style="color:#C62828;font-weight:700;">*</span> Indicates required field</div>
+
+      <!-- Summary link -->
+      <div style="text-align:right;margin-bottom:8px;">
+        <a href="#" style="color:var(--link);font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;"><span class="material-icons" style="font-size:14px;">description</span> Summary</a>
+      </div>
+
+      <!-- Member info grid -->
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px 16px;font-size:11px;margin-bottom:12px;line-height:1.6;">
+        <div><span style="color:#888;">Member Name:</span><br><a href="#" class="gc-kv-link" id="outcomeMemName">AM2 Test</a></div>
+        <div><span style="color:#888;">DOB:</span><br><strong id="outcomeMemDOB">01/01/2001</strong></div>
+        <div><span style="color:#888;">Address:</span><br><span id="outcomeMemAddr">123 Main Street</span></div>
+        <div><span style="color:#888;">City:</span><br><span>N/A</span></div>
+        <div><span style="color:#888;">State:</span><br><span>N/A</span></div>
+        <div><span style="color:#888;">Zip:</span><br><span>N/A</span></div>
+
+        <div><span style="color:#888;">Primary Phone:</span><br><span>N/A</span></div>
+        <div><span style="color:#888;">Alternate Phone:</span><br><span>N/A</span></div>
+        <div><span style="color:#888;">Cell Phone:</span><br><span>N/A</span></div>
+        <div><span style="color:#888;">Language:</span><br><span>N/A</span></div>
+        <div></div><div></div>
+
+        <div><span style="color:#888;">Payor:</span><br><a href="#" class="gc-kv-link">Active</a></div>
+        <div><span style="color:#888;">Care Staff:</span><br><span>Lansing Cai</span></div>
+        <div><span style="color:#888;">Priority:</span><br><span>N/A</span></div>
+        <div><span style="color:#888;">Activity Type:</span><br><strong id="outcomeActType">Assessment- HRA</strong></div>
+        <div><span style="color:#888;">Scheduled Date:</span><br><strong id="outcomeSchedDate">3/25/2026 08:10:00</strong></div>
+        <div><span style="color:#888;">Scheduled Duration:</span><br><strong>00 Hrs: 30 Mins</strong></div>
+      </div>
+
+      <!-- Custom fields -->
+      <div style="display:flex;gap:24px;font-size:11px;margin-bottom:16px;line-height:1.6;">
+        <div><span style="font-weight:700;">Custom Field Example</span><br>Yes</div>
+        <div><span style="font-weight:700;">Mandatory Due date</span><br><span id="outcomeDueDate">03/18/2026</span></div>
+      </div>
+
+      <!-- Form fields -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;margin-bottom:14px;">
+        <div class="gc-modal-field">
+          <label style="font-size:13px;font-weight:700;"><span class="req">*</span>Contact Type</label>
+          <select class="gc-modal-select" style="height:36px;font-size:13px;">
+            <option>Member - Phone</option>
+            <option>Member - Telehealth</option>
+            <option>Member - Face to Face</option>
+            <option>Provider - Phone</option>
+            <option>Caregiver - Phone</option>
+            <option>Wellframe Outreach</option>
+          </select>
+        </div>
+        <div class="gc-modal-field">
+          <label style="font-size:13px;font-weight:700;"><span class="req">*</span>Outcome Type</label>
+          <select class="gc-modal-select" style="height:36px;font-size:13px;">
+            <option>Successful</option>
+            <option>Unsuccessful</option>
+            <option>Partially Successful</option>
+          </select>
+        </div>
+        <div class="gc-modal-field">
+          <label style="font-size:13px;font-weight:700;"><span class="req">*</span>Activity Outcome</label>
+          <select class="gc-modal-select" style="height:36px;font-size:13px;">
+            <option>Select</option>
+            <option>Completed Assessment</option>
+            <option>Left Voicemail</option>
+            <option>No Answer</option>
+            <option>Member Refused</option>
+            <option>Scheduled Follow-Up</option>
+          </select>
+        </div>
+        <div class="gc-modal-field">
+          <label style="font-size:13px;font-weight:700;">Place of Service</label>
+          <select class="gc-modal-select" style="height:36px;font-size:13px;">
+            <option>Select</option>
+            <option>Home</option>
+            <option>Office</option>
+            <option>Telehealth</option>
+            <option>Inpatient</option>
+          </select>
+        </div>
+        <div class="gc-modal-field">
+          <label style="font-size:13px;font-weight:700;"><span class="req">*</span>Actual Duration</label>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <input class="gc-modal-input" type="text" placeholder="HH" style="width:50px;height:36px;text-align:center;" />
+            <span style="font-size:12px;font-weight:600;">Hrs</span>
+            <input class="gc-modal-input" type="text" placeholder="MM" style="width:50px;height:36px;text-align:center;" />
+            <span style="font-size:12px;font-weight:600;">Mins</span>
+          </div>
+        </div>
+        <div class="gc-modal-field">
+          <label style="font-size:13px;font-weight:700;">Service Code</label>
+          <select class="gc-modal-select" style="height:36px;font-size:13px;">
+            <option>Select</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Outcome Notes -->
+      <div class="gc-modal-field" style="margin-bottom:6px;">
+        <label style="font-size:13px;font-weight:700;">Outcome Notes</label>
+        <textarea style="border:1px solid #BBB;border-radius:3px;padding:8px;font-size:13px;font-family:var(--font);background:#fff;outline:none;min-height:70px;resize:vertical;width:100%;"></textarea>
+      </div>
+      <div style="font-size:11px;margin-bottom:16px;">
+        <span style="font-weight:700;">Notes viewable by</span>
+        <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="notesView" style="accent-color:var(--teal);" /> All Users</label>
+        <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="notesView" checked style="accent-color:var(--teal);" /> Internal Users Only</label>
+      </div>
+
+      <!-- Notes table -->
+      <div style="font-size:14px;font-weight:700;margin-bottom:4px;border-bottom:2px solid var(--text-primary);padding-bottom:4px;">Notes</div>
+      <div class="gc-table-wrap" style="margin-bottom:0;">
+        <div style="overflow-x:auto;">
+          <table class="gc-table">
+            <thead><tr>
+              <th>Note Type</th>
+              <th>Notes</th>
+              <th>Entered By</th>
+              <th>Created On</th>
+            </tr></thead>
+            <tbody>
+              <tr><td colspan="4" style="text-align:center;color:var(--text-muted);font-style:italic;padding:40px 16px;"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="gc-table-footer">
+          <div class="gc-pager-btn">«</div><div class="gc-pager-btn">‹</div><div class="gc-pager-btn active">0</div><div class="gc-pager-btn">›</div><div class="gc-pager-btn">»</div>
+          <select style="font-size:11px;border:1px solid var(--border);border-radius:var(--r-sm);padding:1px 4px;margin-left:4px;"><option>5</option></select>
+          <span>items per page</span>
+          <span style="margin-left:auto;font-size:11px;">No items to display &nbsp;<span class="material-icons" style="font-size:13px;color:var(--text-muted);cursor:pointer;">refresh</span></span>
+        </div>
+      </div>
+
+    </div>
+    <div class="gc-modal-footer" style="gap:24px;">
+      <button onclick="document.getElementById('outcomeModal').classList.remove('open');" style="background:var(--teal);color:#fff;border:none;border-radius:3px;padding:0 40px;height:42px;font-size:15px;font-weight:700;font-family:var(--font);cursor:pointer;">Complete</button>
+      <button onclick="document.getElementById('outcomeModal').classList.remove('open');" style="background:#fff;color:var(--teal);border:2px solid var(--teal);border-radius:3px;padding:0 28px;height:42px;font-size:15px;font-weight:600;font-family:var(--font);cursor:pointer;">Complete and Add Activity</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ REMOTE CONTROL ══════════════ -->
+<div class="rc-fab" id="rcFab">
+  <div class="rc-panel">
+    <div class="rc-header">Demo Controls</div>
+    <div class="rc-item" id="rcResetActivities">
+      <span class="material-icons">restart_alt</span>
+      Reset Activities
+      <span class="rc-item-count" id="rcActivityCount">0</span>
+    </div>
+    <div class="rc-item" id="rcResetAlerts">
+      <span class="material-icons">notifications_off</span>
+      Reset Alerts
+      <span class="rc-item-count" id="rcAlertCount">0</span>
+    </div>
+    <div class="rc-item" id="rcResetScripts">
+      <span class="material-icons">backspace</span>
+      Reset Scripts
+      <span class="rc-item-count" id="rcScriptCount">0</span>
+    </div>
+    <div class="rc-item" id="rcResetAll" style="border-top:1px solid #444;color:#E53935;">
+      <span class="material-icons" style="color:#E53935;">delete_sweep</span>
+      Reset All
+    </div>
+  </div>
+  <button class="rc-toggle" onclick="this.parentElement.classList.toggle('open');">
+    <span class="material-icons">tune</span>
+  </button>
 </div>
 
 <!-- ══════════════ FOOTER ══════════════ -->
