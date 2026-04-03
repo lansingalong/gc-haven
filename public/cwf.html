@@ -4847,6 +4847,10 @@ function openScriptResponseModal() {
     if (textarea) textarea.value = noteText || '';
     var consentCheck = document.getElementById('sukiConsentCheck');
     if (consentCheck) consentCheck.checked = false;
+    var alertCb = document.getElementById('sukiNoteAlert');
+    if (alertCb) { alertCb.checked = false; document.getElementById('sukiNoteAlertTrack').style.background = '#ccc'; document.getElementById('sukiNoteAlertThumb').style.left = '2px'; }
+    var internalRadio = document.querySelector('input[name="sukiNoteVisibility"][value="internal"]');
+    if (internalRadio) internalRadio.checked = true;
     document.getElementById('addNoteModal').classList.add('open');
   };
 
@@ -5264,7 +5268,17 @@ function openScriptResponseModal() {
           </select>
         </div>
         <div class="gc-modal-field" style="flex:1;min-width:180px;">
-          <label>Date</label>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px;">
+            <label style="margin:0;">Entered Date</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text-primary);white-space:nowrap;">
+              <span style="position:relative;display:inline-block;width:32px;height:18px;flex-shrink:0;">
+                <input type="checkbox" id="sukiNoteAlert" style="opacity:0;width:0;height:0;position:absolute;" />
+                <span id="sukiNoteAlertTrack" style="position:absolute;inset:0;border-radius:9px;background:#ccc;transition:background 0.2s;cursor:pointer;" onclick="var cb=document.getElementById('sukiNoteAlert');cb.checked=!cb.checked;document.getElementById('sukiNoteAlertTrack').style.background=cb.checked?'var(--teal)':'#ccc';document.getElementById('sukiNoteAlertThumb').style.left=cb.checked?'16px':'2px';"></span>
+                <span id="sukiNoteAlertThumb" style="position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left 0.2s;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,.25);"></span>
+              </span>
+              Note is Alert
+            </label>
+          </div>
           <input class="gc-modal-input" type="text" id="sukiNoteDate" readonly />
         </div>
       </div>
@@ -5282,6 +5296,19 @@ function openScriptResponseModal() {
       <div class="gc-modal-field">
         <label>Note <span class="req">*</span></label>
         <textarea class="gc-modal-input" id="sukiNoteText" rows="8" style="height:180px;resize:vertical;padding:8px;line-height:1.55;"></textarea>
+      </div>
+      <div class="gc-modal-field" style="gap:6px;">
+        <label>Notes viewable by</label>
+        <div style="display:flex;gap:20px;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;font-weight:400;">
+            <input type="radio" name="sukiNoteVisibility" value="all" style="accent-color:var(--teal);width:15px;height:15px;" />
+            All Users
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;font-weight:400;">
+            <input type="radio" name="sukiNoteVisibility" value="internal" checked style="accent-color:var(--teal);width:15px;height:15px;" />
+            Internal Users Only
+          </label>
+        </div>
       </div>
     </div>
     <div class="gc-modal-footer">
