@@ -164,7 +164,7 @@ export function HavenWindow({
       // Check guardrails before any backend call
       const guardrail = getGuardrailMessage(resolvedText)
       if (guardrail) {
-        await new Promise(r => setTimeout(r, 600))
+        await new Promise(r => setTimeout(r, 100))
         if (cancelledRef.current) return // Member switched mid-response — discard
         setMessages(prev => [...prev, { id: `a-${Date.now()}`, role: 'assistant', content: guardrail }])
         return
@@ -175,7 +175,7 @@ export function HavenWindow({
         reply = await onSend(resolvedText)
         if (cancelledRef.current) return
       } else {
-        await new Promise(r => setTimeout(r, 1000 + Math.random() * 800))
+        await new Promise(r => setTimeout(r, 100))
         if (cancelledRef.current) return // Member switched while generating — discard partial output
         reply = getMockReply(resolvedText, memberName, mockMemberId)
       }
