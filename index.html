@@ -2632,10 +2632,6 @@
                   <th>Actions</th>
                 </tr></thead>
                 <tbody id="scriptActivityTbody" onclick="(function(e){var b=e.target.closest('button,a');if(b&&b.textContent.trim()===(window._gcSelectedActivity||'Health Risk Assessment')){e.preventDefault();openScriptResponseModal();}})(event)">
-                  <tr><td><input type="checkbox" /></td><td><a href="#" style="color:var(--link);font-size:11px;">Adding a script</a></td><td>03/12/2025 06:46:33 AM</td><td>Sridevi Palepu : All Access Admin</td><td>Pending</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0</td><td>Assessments.</td><td><a href="#" style="color:var(--link);">Add</a></td><td>00:00:00</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td><a href="#" style="color:var(--link);font-size:11px;">Adding a script</a></td><td>03/08/2025 06:11:24 AM</td><td>Sridevi Palepu : All Access Admin</td><td>Cancelled</td><td>03/08/2025 06:19:05 AM</td><td>N/A</td><td>N/A</td><td>0</td><td>Assessments.</td><td><a href="#" style="color:var(--link);">Add</a></td><td>00:00:00</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td><a href="#" style="color:var(--link);font-size:11px;">QQ Individual Budget</a></td><td>03/14/2024 12:24:59 AM</td><td>Sridevi Palepu : All Access Admin</td><td>Pending</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0</td><td>Follow Up.</td><td><a href="#" style="color:var(--link);">Add</a></td><td>00:00:00</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
-                  <tr><td><input type="checkbox" /></td><td><a href="#" style="color:var(--link);font-size:11px;">TX SK SAI Script Form</a></td><td>02/15/2022 10:17:15 AM</td><td>Valliappan Pethaperumal : test ems</td><td>Pending</td><td>N/A</td><td>N/A</td><td>N/A</td><td>0</td><td>Care Coordination.</td><td><a href="#" style="color:var(--link);">Add</a></td><td>00:00:00</td><td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td></tr>
                 </tbody>
               </table>
             </div>
@@ -3589,6 +3585,18 @@ function openScriptResponseModal() {
   // Pending outstanding activities queue — flushed when user sees home dashboard
   var pendingOutstandingActivities = [];
 
+  // Purge legacy checklist items that have no memberKey (added before the per-member fix)
+  (function() {
+    try {
+      var raw = localStorage.getItem('wf_member_checklist');
+      if (raw) {
+        var items = JSON.parse(raw);
+        var clean = items.filter(function(it) { return !!it.memberKey; });
+        if (clean.length !== items.length) localStorage.setItem('wf_member_checklist', JSON.stringify(clean));
+      }
+    } catch(e) {}
+  })();
+
   function flushPendingOutstanding() {
     var tbody = document.getElementById('outstandingTbody');
     if (!tbody || pendingOutstandingActivities.length === 0) return;
@@ -3603,7 +3611,7 @@ function openScriptResponseModal() {
         '<td>' + item.dateStr + '</td>' +
         '<td>N/A</td>' +
         '<td>' + item.timeStr + '</td>' +
-        '<td>N/A</td>' +
+        '<td>' + (item.scriptVal || 'N/A') + '</td>' +
         '<td>N/A</td>' +
         '<td>N/A</td>' +
         '<td>Beatrice Kanya : All Access Admin</td>' +
@@ -3618,6 +3626,109 @@ function openScriptResponseModal() {
     });
     pendingOutstandingActivities = [];
   }
+
+  // Sync Outstanding Activities table to match localStorage checklist for the current member
+  function syncOutstandingActivities() {
+    var tbody = document.getElementById('outstandingTbody');
+    if (!tbody) return;
+    // Remove all dynamic rows
+    tbody.querySelectorAll('tr[data-dynamic="true"]').forEach(function(r) { r.remove(); });
+    // Re-render one row per localStorage item for this member
+    var items = JSON.parse(localStorage.getItem('wf_member_checklist') || '[]');
+    var memberItems = items.filter(function(it) { return it.memberKey === currentMemberKey && it.status !== 'Completed'; });
+    memberItems.forEach(function(item) {
+      var parts = (item.date || '').split(' ');
+      var rowDate = parts[0] || '';
+      var rowTime = parts[1] ? parts[1].substring(0, 5) : '';
+      var tr = document.createElement('tr');
+      tr.dataset.dynamic = 'true';
+      tr.innerHTML = '<td><input type="checkbox" /></td>' +
+        '<td>Assessment</td>' +
+        '<td>Wellframe</td>' +
+        '<td>High</td>' +
+        '<td>' + rowDate + '</td>' +
+        '<td>N/A</td>' +
+        '<td>' + rowTime + '</td>' +
+        '<td>' + item.assessment + '</td>' +
+        '<td>N/A</td><td>N/A</td>' +
+        '<td>Beatrice Kanya : All Access Admin</td>' +
+        '<td>N/A</td>' +
+        '<td>Accepted</td>' +
+        '<td>Beatrice Kanya : All Access Admin</td>' +
+        '<td>N/A</td>' +
+        '<td style="font-size:10px;">' + item.date + '</td>' +
+        '<td><span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Edit">edit_note</span> ' +
+        '<span class="material-icons" style="font-size:18px;color:#315E7B;cursor:pointer;" title="Perform Activity" onclick="openOutcomeModal();">thumb_up</span> ' +
+        '<span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Delete">delete</span></td>';
+      tbody.insertBefore(tr, tbody.firstChild);
+    });
+  }
+
+  // Sync member-completed assessments into Activity Summary
+  function syncCompletedToActivitySummary() {
+    var genTbody = document.getElementById('generalActivityTbody');
+    var scriptTbody = document.getElementById('scriptActivityTbody');
+    // Remove any previously synced member-completed rows from both tables
+    if (genTbody) genTbody.querySelectorAll('tr[data-member-completed="true"]').forEach(function(r) { r.remove(); });
+    if (scriptTbody) scriptTbody.querySelectorAll('tr[data-member-completed="true"]').forEach(function(r) { r.remove(); });
+    var items = JSON.parse(localStorage.getItem('wf_member_checklist') || '[]');
+    var completed = items.filter(function(it) { return it.memberKey === currentMemberKey && it.status === 'Completed'; });
+    completed.forEach(function(item) {
+      var memberName = (memberData[currentMemberKey] || {}).name || 'Member';
+      var completedDate = item.completedAt || 'N/A';
+
+      // ── General Activity row ──
+      if (genTbody) {
+        var gtr = document.createElement('tr');
+        gtr.dataset.memberCompleted = 'true';
+        gtr.style.background = '#E8F5E9';
+        gtr.innerHTML =
+          '<td>' + completedDate + '</td>' +
+          '<td>Beatrice Kanya : All Access Admin</td>' +
+          '<td>' + (item.date ? item.date.split(' ')[0] : 'N/A') + '</td>' +
+          '<td>Beatrice Kanya : All Access Admin</td>' +
+          '<td>Assessment – ' + item.assessment + '</td>' +
+          '<td>N/A</td>' +
+          '<td>N/A</td>' +
+          '<td><a href="#" style="color:var(--link);">Add</a></td>' +
+          '<td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td>' +
+          '<td><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td>';
+        genTbody.insertBefore(gtr, genTbody.firstChild);
+        setTimeout(function(row) { row.style.transition = 'background 1.5s'; row.style.background = ''; }.bind(null, gtr), 100);
+      }
+
+      // ── Script Activity row ──
+      if (scriptTbody) {
+        var str = document.createElement('tr');
+        str.dataset.memberCompleted = 'true';
+        str.style.background = '#E8F5E9';
+        str.innerHTML =
+          '<td><input type="checkbox" /></td>' +
+          '<td><a href="#" style="color:var(--link);font-size:11px;">' + item.assessment + '</a></td>' +
+          '<td>' + completedDate + '</td>' +
+          '<td>Beatrice Kanya : All Access Admin</td>' +
+          '<td>Completed</td>' +
+          '<td>' + completedDate + '</td>' +
+          '<td>N/A</td>' +
+          '<td>N/A</td>' +
+          '<td>0</td>' +
+          '<td>Assessments.</td>' +
+          '<td><a href="#" style="color:var(--link);">Add</a></td>' +
+          '<td>00:00:00</td>' +
+          '<td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td>';
+        scriptTbody.insertBefore(str, scriptTbody.firstChild);
+        setTimeout(function(row) { row.style.transition = 'background 1.5s'; row.style.background = ''; }.bind(null, str), 100);
+      }
+    });
+  }
+
+  // Listen for member app completing an assessment
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'wf_member_checklist') {
+      syncOutstandingActivities();
+      syncCompletedToActivitySummary();
+    }
+  });
 
   // Show dashboard / hide member view (or toggle)
   function showDashboard() {
@@ -3716,6 +3827,8 @@ function openScriptResponseModal() {
       var target = tab.getAttribute('data-artab');
       var panel = document.getElementById('artab-' + target);
       if (panel) { panel.style.display = ''; panel.classList.add('active'); }
+      if (target === 'outstanding-activities') syncOutstandingActivities();
+      if (target === 'activity-summary') syncCompletedToActivitySummary();
     });
   });
 
@@ -3817,39 +3930,19 @@ function openScriptResponseModal() {
     var timeStr = hh+':'+mi;
     var createdStr = mm+'/'+dd+'/'+yyyy+' '+hh+':'+mi+':'+String(now.getSeconds()).padStart(2,'0');
 
-    // Add directly to Outstanding Activities table
-    var outTbody = document.getElementById('outstandingTbody');
-    if (outTbody) {
-      var otr = document.createElement('tr');
-      otr.dataset.dynamic = 'true';
-      otr.style.background = '#FFFDE7';
-      otr.innerHTML = '<td><input type="checkbox" /></td>' +
-        '<td>' + activityTypeVal + '</td>' +
-        '<td>Wellframe</td>' +
-        '<td>High</td>' +
-        '<td>' + dateStr + '</td>' +
-        '<td>N/A</td>' +
-        '<td>' + timeStr + '</td>' +
-        '<td>N/A</td><td>N/A</td><td>N/A</td>' +
-        '<td>Beatrice Kanya : All Access Admin</td>' +
-        '<td>N/A</td>' +
-        '<td>Accepted</td>' +
-        '<td>Beatrice Kanya : All Access Admin</td>' +
-        '<td>' + (notesVal || 'N/A') + '</td>' +
-        '<td style="font-size:10px;">' + createdStr + '</td>' +
-        '<td><span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Edit">edit_note</span> ' +
-        '<span class="material-icons" style="font-size:18px;color:#315E7B;cursor:pointer;" title="Perform Activity" onclick="openOutcomeModal();">thumb_up</span> ' +
-        '<span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Delete">delete</span></td>';
-      outTbody.insertBefore(otr, outTbody.firstChild);
-      setTimeout(function() { otr.style.transition = 'background 1.5s'; otr.style.background = ''; }, 100);
-    }
-
     // Save to localStorage so member-cwfassessments checklist can pick it up
     if (activityTypeVal === 'Assessment' && scriptVal !== 'N/A') {
-      var existing = JSON.parse(localStorage.getItem('wf_member_checklist') || '[]');
-      existing.unshift({ assessment: scriptVal, addedBy: 'Beatrice Kanya', date: createdStr, status: 'Pending' });
-      localStorage.setItem('wf_member_checklist', JSON.stringify(existing));
+      var allItems = JSON.parse(localStorage.getItem('wf_member_checklist') || '[]');
+      // Remove any existing entry for this member+assessment to prevent duplicates
+      allItems = allItems.filter(function(it) {
+        return !(it.memberKey === currentMemberKey && it.assessment === scriptVal);
+      });
+      allItems.unshift({ assessment: scriptVal, addedBy: 'Beatrice Kanya', date: createdStr, status: 'Pending', memberKey: currentMemberKey });
+      localStorage.setItem('wf_member_checklist', JSON.stringify(allItems));
     }
+
+    // Sync Outstanding Activities table from localStorage (single source of truth)
+    syncOutstandingActivities();
 
     // Also add to General Activity table in Activity Summary
     var genTbody = document.getElementById('generalActivityTbody');
@@ -4015,12 +4108,7 @@ function openScriptResponseModal() {
         _nr('Social Determinants Note','During SDOH screening, member disclosed difficulty affording prescription co-pays since spouse\'s retirement. Identified food insecurity — member reports skipping meals 2-3 times/week. Referred to Alaska Food Bank and Community Action Program. Submitted application for pharmaceutical patient assistance program for Januvia.','Diana Reyes, MSW : Social Worker','02/18/2026 11:22:03 AM'),
         _nr('Medication Management Note','Comprehensive medication reconciliation completed via telehealth. Member currently on 9 medications including Metformin 1000mg BID, Januvia 100mg daily, Lisinopril 20mg daily, Atorvastatin 40mg daily, and ASA 81mg daily. Identified potential interaction between newly prescribed Fluconazole and Atorvastatin — notified prescribing physician. Pharmacist consulted and recommends temporary statin hold.','Tom Callahan, RN : Clinical Pharmacist','02/05/2026 03:55:09 PM')
       ],
-      scriptActivity: [
-        _sr('Adding a script','03/12/2025 06:46:33 AM','Sridevi Palepu : All Access Admin','Pending','N/A','N/A','0','Assessments','Add','00:00:00'),
-        _sr('Adding a script','03/08/2025 06:11:24 AM','Sridevi Palepu : All Access Admin','Cancelled','03/08/2025 06:19:05 AM','N/A','0','Assessments','Add','00:00:00'),
-        _sr('QQ Individual Budget','03/14/2024 12:24:59 AM','Sridevi Palepu : All Access Admin','Pending','N/A','N/A','0','Follow Up','Add','00:00:00'),
-        _sr('TX SK SAI Script Form','02/15/2022 10:17:15 AM','Valliappan Pethaperumal : test ems','Pending','N/A','N/A','0','Care Coordination','Add','00:00:00')
-      ],
+      scriptActivity: [],
       generalActivity: [
         _gr('03/20/2026 10:30 AM','Sarah Mitchell, RN','Telephonic Outreach','Completed'),
         _gr('03/12/2026 02:00 PM','James Okafor, CCM','Care Coordination','Completed'),
@@ -4180,6 +4268,8 @@ function openScriptResponseModal() {
     var outTbody = document.getElementById('outstandingTbody');
     if (outTbody) outTbody.innerHTML = d.outstandingActivities.join('');
     pendingOutstandingActivities = [];
+    syncOutstandingActivities();
+    syncCompletedToActivitySummary();
     var alertsTbody = document.querySelector('#artab-member-alerts .gc-table tbody');
     if (alertsTbody) alertsTbody.innerHTML = d.memberAlerts.join('');
   }
@@ -4556,7 +4646,7 @@ function openScriptResponseModal() {
         function(td) { td.textContent = 'N/A'; },
         function(td) { td.textContent = '21.72'; },
         function(td) { td.textContent = 'Assessments'; },
-        function(td) { td.textContent = 'Successful: Assessment Complete'; },
+        function(td) { td.innerHTML = '<a href="#" style="color:var(--link);">Add</a>'; },
         function(td) { td.textContent = '00:30:00'; },
         function(td) { td.innerHTML = '<span class="material-icons" style="font-size:16px;color:#388e3c;">check</span>'; },
         function(td) { td.innerHTML = '<span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span>'; }
@@ -4677,7 +4767,7 @@ function openScriptResponseModal() {
         '<td>N/A</td><td>N/A</td>' +
         '<td>21.72</td>' +
         '<td>Assessments</td>' +
-        '<td>Successful: Assessment Complete</td>' +
+        '<td><a href="#" style="color:var(--link);">Add</a></td>' +
         '<td>00:30:00</td>' +
         '<td><span class="material-icons" style="font-size:16px;color:#388e3c;">check</span></td>' +
         '<td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">description</span><br><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td>';
@@ -4707,7 +4797,7 @@ function openScriptResponseModal() {
         '<td>' + _actName + '</td>' +
         '<td>N/A</td>' +
         '<td>N/A</td>' +
-        '<td>Successful: Assessment Complete</td>' +
+        '<td><a href="#" style="color:var(--link);">Add</a></td>' +
         '<td><span class="material-icons" style="font-size:14px;color:var(--teal);cursor:pointer;">visibility</span></td>' +
         '<td><span style="font-size:10px;color:var(--link);cursor:pointer;">Delete</span></td>';
       genTbody.insertBefore(gtr, genTbody.firstChild);
