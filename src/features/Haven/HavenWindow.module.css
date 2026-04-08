@@ -16,6 +16,64 @@
   overflow: hidden;
 }
 
+/* ── Haven pill ── */
+.fabHavenPill {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 28px;
+  background: #ffffff;
+  border: 2.5px solid #7EC8E3;
+  border-radius: 20px;
+  box-shadow: 0 4px 18px rgba(0, 93, 159, 0.14);
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.fabHavenPill:hover {
+  box-shadow: 0 6px 24px rgba(0, 93, 159, 0.22);
+  border-color: var(--color-primary);
+}
+
+.fabHavenPill:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.fabHavenLabel {
+  font-family: var(--font-family-base);
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a3a5f;
+  letter-spacing: -0.2px;
+}
+
+/* ── Collapse (minimize) button ── */
+.fabCollapseBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: #ffffff;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  align-self: flex-start;
+  margin-top: 2px;
+  transition: background var(--transition-fast);
+}
+
+.fabCollapseBtn:hover {
+  background: var(--color-surface-raised);
+}
+
+.fabCollapseBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 /* Minimized tab — white card docked to right edge */
 .fabMinimized {
   position: fixed;
@@ -124,15 +182,15 @@
   flex-shrink: 0;
 }
 
-/* Right — Haven button */
-.fabHaven {
+/* Right — Haven button (filled, default when closed) */
+.fabHavenFilled {
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
   margin: 11px 14px;
   padding: 14px 25px;
   background: var(--color-primary);
-  border: none;
+  border: 2px solid var(--color-primary);
   border-radius: 10px;
   cursor: pointer;
   color: var(--color-text-inverse);
@@ -143,12 +201,41 @@
   white-space: nowrap;
 }
 
-.fabHaven:hover {
+.fabHavenFilled:hover {
   background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.fabHavenFilled:focus-visible {
+  outline: 2px solid var(--color-text-inverse);
+  outline-offset: 2px;
+}
+
+/* Right — Haven button (outlined, when open) */
+.fabHaven {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin: 11px 14px;
+  padding: 14px 25px;
+  background: transparent;
+  border: 2px solid var(--color-primary);
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--color-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-h6);
+  font-weight: var(--font-weight-medium);
+  transition: background var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.fabHaven:hover {
+  background: var(--color-primary-light);
 }
 
 .fabHaven:focus-visible {
-  outline: 2px solid var(--color-text-inverse);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
@@ -291,6 +378,7 @@
   flex-direction: column;
   overflow: hidden;
   min-height: 0;
+  position: relative;
 }
 
 /* ── Minimized bar ── */

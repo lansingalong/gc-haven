@@ -1,0 +1,276 @@
+/* ChatHistoryDrawer — left sidebar with dimmed overlay on the right */
+
+.root {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  animation: fadeIn 180ms ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Sidebar panel ── */
+.sidebar {
+  width: 62%;
+  background: #eaf4fb;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 0 18px;
+  animation: slideIn 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+/* ── Close button (top-right of sidebar) ── */
+.closeBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.closeBtn:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.closeBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ── New Chat button ── */
+.newChatBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 8px 13px 22px;
+  margin: 28px 0 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+  text-align: left;
+  width: 100%;
+}
+
+.newChatBtn:hover {
+  background: rgba(0, 93, 159, 0.08);
+}
+
+.newChatBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.newChatIcon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.newChatLabel {
+  font-family: var(--font-family-base);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-primary);
+  letter-spacing: -0.1px;
+}
+
+/* ── Session list ── */
+.list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0 4px;
+}
+
+.list::-webkit-scrollbar {
+  width: 4px;
+}
+.list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+}
+
+/* ── Session row (item + menu button) ── */
+.sessionRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sessionItem {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 13px 8px 13px 22px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.sessionRow:hover {
+  background: rgba(0, 93, 159, 0.08);
+  border-radius: var(--radius-md);
+}
+
+.sessionText {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-family-base);
+  font-size: 15px;
+  font-weight: 400;
+  color: #1a2e45;
+  line-height: 1.4;
+}
+
+/* ── Hover menu button ── */
+.menuWrap {
+  position: relative;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.menuBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  color: #1a2e45;
+  transition: background var(--transition-fast);
+}
+
+.sessionRow:hover .menuBtn {
+  display: flex;
+}
+
+.menuBtn:hover {
+  background: rgba(0, 93, 159, 0.12);
+}
+
+.menuBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  display: flex;
+}
+
+/* ── Dropdown ── */
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  background: var(--color-bg-default);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-4);
+  z-index: 50;
+  min-width: 148px;
+  overflow: hidden;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  text-align: left;
+  transition: background var(--transition-fast);
+}
+
+.dropdownItem:hover {
+  background: var(--color-action-hover);
+}
+
+.dropdownItemDelete {
+  color: var(--color-error);
+}
+
+.sessionItem:hover {
+  background: rgba(0, 93, 159, 0.08);
+}
+
+.sessionItem:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+/* ── Settings button ── */
+.settingsBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 8px 13px 22px;
+  margin: 4px 0 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+  text-align: left;
+  width: 100%;
+}
+
+.settingsBtn:hover {
+  background: rgba(0, 93, 159, 0.08);
+}
+
+.settingsBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.settingsLabel {
+  font-family: var(--font-family-base);
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a2e45;
+}
+
+/* ── Dimmed overlay (right side) ── */
+.overlay {
+  flex: 1;
+  background: rgba(30, 40, 55, 0.45);
+  cursor: pointer;
+}

@@ -1,5 +1,6 @@
 import { Icon, Typography } from '@/components'
 import sukiIcon from '@/assets/suki.png'
+import dockToRightIcon from '/assets/dock_to_right.svg'
 import styles from './MemberHeader.module.css'
 
 export interface MemberHeaderProps {
@@ -8,18 +9,24 @@ export interface MemberHeaderProps {
   memberId: string
   pcp: string
   onSukiClick?: () => void
+  onHistoryClick?: () => void
 }
 
-export function MemberHeader({ memberName, phone, memberId, pcp, onSukiClick }: MemberHeaderProps) {
+export function MemberHeader({ memberName, phone, memberId, pcp, onSukiClick, onHistoryClick }: MemberHeaderProps) {
   return (
     <div className={styles.root}>
       {/* Row 1 — member name */}
       <div className={styles.nameRow}>
         <Icon name="Person" size="md" color="action" />
         <Typography variant="h6">{memberName}</Typography>
-        <button className={styles.sukiBtn} type="button" aria-label="Launch Suki voice scribe" onClick={onSukiClick}>
-          <img src={sukiIcon} width={28} height={28} alt="Suki" />
-        </button>
+        <div className={styles.headerActions}>
+          <button className={styles.sukiBtn} type="button" aria-label="Launch Suki voice scribe" onClick={onSukiClick}>
+            <img src={sukiIcon} width={28} height={28} alt="Suki" />
+          </button>
+          <button className={styles.historyBtn} type="button" aria-label="View chat history" onClick={onHistoryClick}>
+            <img src={dockToRightIcon} width={14} height={14} alt="" aria-hidden="true" />
+          </button>
+        </div>
       </div>
 
       {/* Row 2 — data fields */}

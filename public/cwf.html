@@ -4893,6 +4893,83 @@ function openScriptResponseModal() {
   });
 
 })();
+
+// ── Haven → CWF bridge ──
+window.addEventListener('message', function(e) {
+  if (!e.data) return;
+
+  // Add an activity row to Outstanding Activities
+  if (e.data.type === 'HAVEN_ADD_ACTIVITY') {
+    var activityTypeVal = e.data.activityType || 'N/A';
+    var contactTypeVal  = e.data.contactType  || 'N/A';
+    var now = new Date();
+    var mm  = String(now.getMonth()+1).padStart(2,'0');
+    var dd  = String(now.getDate()).padStart(2,'0');
+    var yyyy = now.getFullYear();
+    var hh  = String(now.getHours()).padStart(2,'0');
+    var mi  = String(now.getMinutes()).padStart(2,'0');
+    var dateStr    = mm+'/'+dd+'/'+yyyy;
+    var timeStr    = hh+':'+mi;
+    var createdStr = mm+'/'+dd+'/'+yyyy+' '+hh+':'+mi+':'+String(now.getSeconds()).padStart(2,'0');
+
+    var outTbody = document.getElementById('outstandingTbody');
+    if (outTbody) {
+      var otr = document.createElement('tr');
+      otr.dataset.dynamic = 'true';
+      otr.style.background = '#FFFDE7';
+      otr.innerHTML =
+        '<td><input type="checkbox" /></td>' +
+        '<td>' + activityTypeVal + '</td>' +
+        '<td>' + contactTypeVal + '</td>' +
+        '<td>High</td>' +
+        '<td>' + dateStr + '</td>' +
+        '<td>N/A</td>' +
+        '<td>' + timeStr + '</td>' +
+        '<td>N/A</td><td>N/A</td><td>N/A</td>' +
+        '<td>Lansing Cai : All Access Admin</td>' +
+        '<td>N/A</td>' +
+        '<td>Accepted</td>' +
+        '<td>Lansing Cai : All Access Admin</td>' +
+        '<td>N/A</td>' +
+        '<td style="font-size:10px;">' + createdStr + '</td>' +
+        '<td></td>' +
+        '<td>' +
+          '<span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Edit">edit_note</span> ' +
+          '<span class="material-icons" style="font-size:18px;color:#315E7B;cursor:pointer;" title="Perform Activity">thumb_up</span> ' +
+          '<span class="material-icons" style="font-size:18px;color:#5a8aab;cursor:pointer;" title="Delete">delete</span>' +
+        '</td>';
+      outTbody.insertBefore(otr, outTbody.firstChild);
+      setTimeout(function() { otr.style.transition = 'background 1.5s'; otr.style.background = ''; }, 100);
+    }
+  }
+
+  // Navigate to Activity Record → Outstanding Activities tab
+  if (e.data.type === 'HAVEN_NAVIGATE_OUTSTANDING') {
+    document.querySelectorAll('.gc-left-item').forEach(function(li) { li.classList.remove('active'); });
+    var arNav = document.querySelector('.gc-left-item[data-left="activity-record"]');
+    if (arNav) arNav.classList.add('active');
+    document.querySelectorAll('.left-panel').forEach(function(p) { p.style.display = 'none'; p.classList.remove('active'); });
+    var arPanel = document.getElementById('panel-activity-record');
+    if (arPanel) { arPanel.style.display = ''; arPanel.classList.add('active'); }
+    document.querySelectorAll('#activityTabs .gc-tab').forEach(function(t) { t.classList.remove('active'); t.style.color = ''; t.style.borderBottomColor = ''; });
+    document.querySelectorAll('.ar-tab-panel').forEach(function(p) { p.style.display = 'none'; p.classList.remove('active'); });
+    var oaTab = document.querySelector('#activityTabs .gc-tab[data-artab="outstanding-activities"]');
+    if (oaTab) { oaTab.classList.add('active'); oaTab.style.color = 'var(--teal)'; oaTab.style.borderBottomColor = 'var(--teal)'; }
+    var oaPanel = document.getElementById('artab-outstanding-activities');
+    if (oaPanel) { oaPanel.style.display = ''; oaPanel.classList.add('active'); }
+  }
+
+  // Navigate to Care Plan left panel
+  if (e.data.type === 'HAVEN_NAVIGATE_CARE_PLAN') {
+    document.querySelectorAll('.gc-left-item').forEach(function(li) { li.classList.remove('active'); });
+    var cpNav = document.querySelector('.gc-left-item[data-left="care-plan"]');
+    if (cpNav) cpNav.classList.add('active');
+    document.querySelectorAll('.left-panel').forEach(function(p) { p.style.display = 'none'; p.classList.remove('active'); });
+    var cpPanel = document.getElementById('panel-care-plan');
+    if (cpPanel) { cpPanel.style.display = ''; cpPanel.classList.add('active'); }
+  }
+});
+
 </script>
 
 <!-- ══════════════ ADD ACTIVITY MODAL ══════════════ -->

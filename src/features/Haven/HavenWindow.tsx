@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { Icon } from '@/components/Icons'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Icon, AiAssistant } from '@/components/Icons'
 import { MemberHeader } from './MemberHeader'
 import { ChatWelcome } from './ChatWelcome'
 import { MemberDetailMenu } from './MemberDetailMenu'
@@ -7,10 +7,19 @@ import { ChatMessages, type Message } from './ChatMessages'
 import { AskHavenInput } from './AskHavenInput'
 import styles from './HavenWindow.module.css'
 import panelStyles from './HavenPanel.module.css'
-import { getMockReply, getFollowUp, getFollowUpQuery, getGuardrailMessage } from './mockReplies'
+import { getMockReply, getFollowUp, getFollowUpQuery, getGuardrailMessage, getRecommendedActionsFromNote } from './mockReplies'
 import { HomeWelcome } from './HomeWelcome'
 import { MemberChatWindow } from './MemberChatWindow'
 import { SukiWindow } from './SukiWindow'
+import { ChatHistoryDrawer } from './ChatHistoryDrawer'
+import { RecommendedActionsCard } from './RecommendedActionsCard'
+import type { ActivityConfig } from './AddActivityModal'
+import { useChatHistory } from './useChatHistory'
+
+function postToIframe(data: object) {
+  const iframe = document.querySelector('iframe') as HTMLIFrameElement | null
+  iframe?.contentWindow?.postMessage(data, '*')
+}
 import chatIcon from '@/assets/chat.png'
 import chevronForwardIcon from '@/assets/chevron_forward.png'
 
@@ -71,6 +80,30 @@ export function HavenWindow({
   const [memberChatOpen, setMemberChatOpen] = useState(false)
   const [sukiOpen, setSukiOpen] = useState(false)
   const [fabExpanded, setFabExpanded] = useState(true)
+  const [historyOpen, setHistoryOpen] = useState(false)
+  const [sukiActionsReady, setSukiActionsReady] = useState(false)
+
+  const { getSessionsForMember, saveSession, deleteSession, toggleFavorite } = useChatHistory()
+  const [historyVersion, setHistoryVersion] = useState(0)
+  const refreshHistory = () => setHistoryVersion(v => v + 1)
+  const historySessions = useMemo(() => getSessionsForMember(memberId), [getSessionsForMember, memberId, historyVersion]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Refs so the unmount cleanup can read the latest values without stale closures
+  const messagesRef = useRef<Message[]>([])
+  const memberIdRef = useRef(memberId)
+  const memberNameRef = useRef(memberName)
+  const saveSessionRef = useRef(saveSession)
+  useEffect(() => { messagesRef.current = messages }, [messages])
+  useEffect(() => { memberIdRef.current = memberId }, [memberId])
+  useEffect(() => { memberNameRef.current = memberName }, [memberName])
+  useEffect(() => { saveSessionRef.current = saveSession }, [saveSession])
+
+  // Save session when member switches (component unmounts due to key change in App)
+  useEffect(() => {
+    return () => {
+      saveSessionRef.current(memberIdRef.current, memberNameRef.current, messagesRef.current)
+    }
+  }, [])
 
   const [pos, setPos] = useState({ left: 0, top: 0 })
   const [size, setSize] = useState({ w: defaultWidth, h: defaultHeight })
@@ -247,7 +280,12 @@ export function HavenWindow({
   }, [])
 
   /* ── Window controls ── */
-  const handleClose    = () => { setWinState('closed'); setMenuOpen(false); setMessages([]) }
+  const handleClose    = () => {
+    saveSession(memberId, memberName, messages)
+    setWinState('closed')
+    setMenuOpen(false)
+    setMessages([])
+  }
   const handleMinimize = () => setWinState(s => s === 'minimized' ? 'open' : 'minimized')
   const handleMaximize = () => { if (winState === 'minimized') setWinState('open') }
 
@@ -259,6 +297,10 @@ export function HavenWindow({
 
   const openMemberChat = useCallback(() => {
     setMemberChatOpen(true)
+  }, [])
+
+  const handleActivityAdded = useCallback((config: ActivityConfig, _destination: 'activities' | 'care-plan') => {
+    postToIframe({ type: 'HAVEN_ADD_ACTIVITY', activityType: config.activityType, contactType: config.contactType })
   }, [])
 
   // Bottom edge of the Haven window (px from viewport top) — used to align MemberChatWindow
@@ -295,9 +337,12 @@ export function HavenWindow({
   }, [])
 
   // ── FAB — always rendered ──
+  const fabStyle: React.CSSProperties = sukiOpen ? { zIndex: 800 } : {}
+
   const fab = isHome ? null : !fabExpanded ? (
     <button
       className={styles.fabMinimized}
+      style={fabStyle}
       onClick={expandFab}
       type="button"
       aria-label="Expand"
@@ -305,7 +350,7 @@ export function HavenWindow({
       <img src={chevronForwardIcon} width={29} height={29} alt="" aria-hidden="true" className={styles.fabChevronMin} style={{ transform: 'rotate(180deg)' }} />
     </button>
   ) : (
-    <div className={styles.fabCard}>
+    <div className={styles.fabCard} style={fabStyle}>
       <button
         className={styles.fabChevronBtn}
         onClick={minimizeFab}
@@ -320,8 +365,8 @@ export function HavenWindow({
         <span className={styles.fabMemberName}>{memberName}</span>
       </button>
       <div className={styles.fabDivider} />
-      <button className={styles.fabHaven} onClick={openWindow} type="button" aria-label="Open Haven AI assistant">
-        <Icon name="AutoAwesome" size="md" color="inverse" />
+      <button className={winState === 'closed' ? styles.fabHavenFilled : styles.fabHaven} onClick={openWindow} type="button" aria-label="Open Haven AI assistant">
+        <Icon name="AutoAwesome" size="md" color={winState === 'closed' ? 'inverse' : 'primary'} />
         Haven
       </button>
     </div>
@@ -350,7 +395,12 @@ export function HavenWindow({
     {sukiOpen && !isHome && (
       <SukiWindow
         onClose={() => setSukiOpen(false)}
-        onNoteSent={() => { setSukiOpen(false); setWinState('closed') }}
+        onNoteSent={() => {
+          setSukiOpen(false)
+          setSukiActionsReady(true)
+          openMsgShownRef.current = true
+          setWinState('closed')
+        }}
         memberName={memberName}
         memberId={memberId}
         phone={phone}
@@ -390,7 +440,7 @@ export function HavenWindow({
       {/* Window body */}
       {!isMinimized && (
         <div className={styles.body}>
-          {!isHome && <MemberHeader memberName={memberName} phone={phone} memberId={memberId} pcp={pcp} onSukiClick={() => setSukiOpen(true)} />}
+          {!isHome && <MemberHeader memberName={memberName} phone={phone} memberId={memberId} pcp={pcp} onSukiClick={() => setSukiOpen(true)} onHistoryClick={() => setHistoryOpen(true)} />}
 
           <div className={panelStyles.chatArea}>
             {/* Back button */}
@@ -408,15 +458,28 @@ export function HavenWindow({
 
             {/* Scroll area */}
             <div className={panelStyles.chatScroll}>
+              {sukiActionsReady && !isHome && (
+                <RecommendedActionsCard
+                  memberName={memberName}
+                  onDismiss={() => setSukiActionsReady(false)}
+                  onActivityAdded={handleActivityAdded}
+                  onNavigate={(dest) => {
+                    postToIframe({ type: dest === 'activities' ? 'HAVEN_NAVIGATE_OUTSTANDING' : 'HAVEN_NAVIGATE_CARE_PLAN' })
+                    setWinState('minimized')
+                  }}
+                />
+              )}
               {hasMessages ? (
                 <ChatMessages messages={messages} loading={loading} />
               ) : (
-                <div className={panelStyles.welcomeWrap}>
-                  {isHome
-                    ? <HomeWelcome onPrompt={sendMessage} />
-                    : <ChatWelcome onMemberDetails={() => setMenuOpen(true)} />
-                  }
-                </div>
+                !sukiActionsReady && (
+                  <div className={panelStyles.welcomeWrap}>
+                    {isHome
+                      ? <HomeWelcome onPrompt={sendMessage} />
+                      : <ChatWelcome onMemberDetails={() => setMenuOpen(true)} />
+                    }
+                  </div>
+                )
               )}
             </div>
 
@@ -441,6 +504,22 @@ export function HavenWindow({
               </p>
             </div>
           </div>
+
+          {/* Chat history drawer — covers entire body including member header */}
+          {historyOpen && !isHome && (
+            <ChatHistoryDrawer
+              sessions={historySessions}
+              onClose={() => setHistoryOpen(false)}
+              onSelectSession={(msgs) => { setMessages(msgs); setLearnMoreOpen(false) }}
+              onNewConversation={() => {
+                saveSession(memberId, memberName, messages)
+                setMessages([])
+                setLearnMoreOpen(false)
+              }}
+              onDelete={(id) => { deleteSession(id); refreshHistory() }}
+              onToggleFavorite={(id) => { toggleFavorite(id); refreshHistory() }}
+            />
+          )}
         </div>
       )}
     </div>

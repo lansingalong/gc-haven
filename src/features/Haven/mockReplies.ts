@@ -1633,3 +1633,42 @@ export function getMockReply(input: string, memberName: string, memberId = 'AH58
   // Fallback — general-purpose responder
   return getGeneralFallback(q, first, false)
 }
+
+
+/** Generate recommended next-step actions from a Suki note summary */
+export function getRecommendedActionsFromNote(summaryText: string, memberName: string): string {
+  const t = summaryText.toLowerCase()
+  const actions: string[] = []
+
+  if (t.includes('pcp') || t.includes('primary care') || t.includes('schedule an appointment'))
+    actions.push('Schedule a PCP appointment within 2 weeks — member confirmed willingness during the call')
+
+  if (t.includes('hba1c') || t.includes('a1c') || t.includes('glucose') || t.includes('diabetes'))
+    actions.push('Order overdue HbA1c lab work — last result was 7.8%, target is <7.0%')
+
+  if (t.includes('nutritionist') || t.includes('dietary') || t.includes('diet'))
+    actions.push('Refer to a registered dietitian — member expressed interest in nutritional support')
+
+  if (t.includes('cardiolog') || t.includes('cardiology'))
+    actions.push('Follow up on the pending cardiology referral — not yet completed')
+
+  if (t.includes('medication adherence') || t.includes('adherence'))
+    actions.push('Explore medication adherence barriers — consider pharmacy delivery or a pill organizer')
+
+  if (t.includes('knee') || t.includes('knee pain'))
+    actions.push('Document reported knee pain and assess its impact on physical activity — consider a PT referral')
+
+  if (t.includes('blood pressure') || t.includes('hypertension') || t.includes('142/88'))
+    actions.push('Review hypertension management — self-reported BP was 142/88 mmHg, may need a medication adjustment')
+
+  if (t.includes('care plan'))
+    actions.push('Schedule a structured care plan review — member agreed to participate')
+
+  if (actions.length === 0) {
+    actions.push('Review open care gaps and update the care plan based on today\'s discussion')
+    actions.push('Follow up with member within 2 weeks to check in on progress')
+  }
+
+  const firstName = memberName.split(' ')[0]
+  return `Based on your discussion with ${firstName}, here are some recommended next steps:\n\n${actions.map((a, i) => `${i + 1}. ${a}`).join('\n\n')}`
+}

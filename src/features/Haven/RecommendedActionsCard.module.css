@@ -1,0 +1,485 @@
+/* RecommendedActionsCard */
+
+.root {
+  margin: 16px 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+  padding: 0 2px 4px;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.title {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  flex-shrink: 0;
+}
+
+.addAllBtn {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  background: none;
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-full);
+  padding: 3px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition-fast);
+}
+
+.addAllBtn:hover {
+  background: var(--color-primary-light);
+}
+
+.addAllBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.allDone {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+}
+
+.dismissBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.dismissBtn:hover {
+  background: var(--color-action-hover);
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.backBtn:hover {
+  background: var(--color-action-hover);
+}
+
+/* ── Individual action cards ── */
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.actionCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--color-bg-default);
+  border: 1px solid var(--color-sky-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+  box-shadow: 0 1px 4px rgba(0, 93, 159, 0.06);
+}
+
+.actionCard:hover {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+.actionCard:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.actionCardAdded {
+  background: var(--color-primary-light);
+  border-color: #90caf9;
+}
+
+.actionCardAdded:hover {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+.addIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.actionText {
+  flex: 1;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-sm);
+}
+
+.addedTag {
+  flex-shrink: 0;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  background: #ffffff;
+  border: 1px solid #90caf9;
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
+/* ── Finish / View task list button ── */
+.finishBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  width: 100%;
+  padding: 11px;
+  margin-top: 2px;
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  transition: background var(--transition-fast);
+}
+
+.finishBtn:hover {
+  background: var(--color-primary-hover);
+}
+
+.finishBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ── Task list cards ── */
+.taskCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--color-bg-default);
+  border: 1px solid var(--color-sky-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 4px rgba(0, 93, 159, 0.06);
+  transition: background var(--transition-fast);
+}
+
+.taskCardLeft {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.taskCardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.taskLinkBtn {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  line-height: var(--line-height-sm);
+}
+
+.taskLinkBtn:hover {
+  color: var(--color-primary-hover);
+}
+
+.taskLinkBtnDone {
+  color: var(--color-text-secondary);
+  text-decoration: line-through;
+  cursor: default;
+}
+
+.taskLinkBtnDone:hover {
+  color: var(--color-text-secondary);
+}
+
+.viewInLink {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  transition: color var(--transition-fast);
+}
+
+.viewInLink:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.viewInLinkBelow {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  padding: 0 2px 2px 40px;
+  cursor: pointer;
+  text-align: left;
+  transition: color var(--transition-fast);
+  align-self: flex-start;
+}
+
+.viewInLinkBelow:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.taskCardDone {
+  background: var(--color-success-light);
+  border-color: #a3d9a5;
+}
+
+.taskCheckbox {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.taskCheckbox:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+.actionTextDone {
+  color: var(--color-text-secondary);
+  text-decoration: line-through;
+}
+
+/* ── Mode toggle ── */
+.modeToggle {
+  display: flex;
+  gap: 0;
+  background: var(--color-bg-subtle, #f0f4f8);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  align-self: flex-start;
+}
+
+.modeBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  background: none;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.modeBtn:hover {
+  color: var(--color-text-primary);
+}
+
+.modeBtnActive {
+  background: #ffffff;
+  color: var(--color-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.modeBtnActive:hover {
+  color: var(--color-primary);
+}
+
+/* ── AI mode card states ── */
+.actionCardSelected {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+.actionCardSelected:hover {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+.actionCardAiDone {
+  background: var(--color-success-light, #f0faf0);
+  border-color: #a3d9a5;
+  cursor: default;
+}
+
+.actionCardAiDone:hover {
+  background: var(--color-success-light, #f0faf0);
+  border-color: #a3d9a5;
+}
+
+.doneTag {
+  flex-shrink: 0;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: #2e7d32;
+  background: #ffffff;
+  border: 1px solid #a3d9a5;
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
+/* ── Automate button ── */
+.automateBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  width: 100%;
+  padding: 11px;
+  margin-top: 2px;
+  background: linear-gradient(135deg, #1a3a5f 0%, #005d9f 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  transition: opacity var(--transition-fast);
+}
+
+.automateBtn:hover {
+  opacity: 0.9;
+}
+
+.automateBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ── Automating status bar ── */
+.automatingBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-subtle, #f0f4f8);
+  border-radius: var(--radius-md);
+}
+
+/* ── Automation success banner ── */
+.automationSuccess {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--color-success-light, #f0faf0);
+  border: 1px solid #a3d9a5;
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: #2e7d32;
+}
+
+/* ── Spinners ── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(0, 93, 159, 0.2);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.spinnerSm {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0, 93, 159, 0.2);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
