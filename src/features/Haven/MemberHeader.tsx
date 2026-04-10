@@ -1,6 +1,7 @@
 import { Icon, Typography } from '@/components'
 import sukiIcon from '@/assets/suki.png'
 import dockToRightIcon from '/assets/dock_to_right.svg'
+import promptIcon from '/assets/prompt.svg'
 import styles from './MemberHeader.module.css'
 
 export interface MemberHeaderProps {
@@ -9,10 +10,11 @@ export interface MemberHeaderProps {
   memberId: string
   pcp: string
   onSukiClick?: () => void
+  onPresetsClick?: () => void
   onHistoryClick?: () => void
 }
 
-export function MemberHeader({ memberName, phone, memberId, pcp, onSukiClick, onHistoryClick }: MemberHeaderProps) {
+export function MemberHeader({ memberName, phone, memberId, pcp, onSukiClick, onPresetsClick, onHistoryClick }: MemberHeaderProps) {
   return (
     <div className={styles.root}>
       {/* Row 1 — member name */}
@@ -22,6 +24,9 @@ export function MemberHeader({ memberName, phone, memberId, pcp, onSukiClick, on
         <div className={styles.headerActions}>
           <button className={styles.sukiBtn} type="button" aria-label="Launch Suki voice scribe" onClick={onSukiClick}>
             <img src={sukiIcon} width={28} height={28} alt="Suki" />
+          </button>
+          <button className={styles.promptsBtn} type="button" aria-label="Preset prompts" onClick={onPresetsClick}>
+            <img src={promptIcon} width={14} height={12} alt="" aria-hidden="true" />
           </button>
           <button className={styles.historyBtn} type="button" aria-label="View chat history" onClick={onHistoryClick}>
             <img src={dockToRightIcon} width={14} height={14} alt="" aria-hidden="true" />

@@ -1,0 +1,151 @@
+/* PresetPromptsPanel — slide-in overlay matching ChatHistoryDrawer's pattern */
+
+.root {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  animation: fadeIn 180ms ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 62%;
+  background: #eaf4fb;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 0 18px;
+  animation: slideIn 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+/* ── Close button ── */
+.closeBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.closeBtn:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.closeBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px 4px;
+  margin: 22px 0 6px;
+}
+
+.title {
+  font-family: var(--font-family-base);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-primary);
+  letter-spacing: -0.1px;
+}
+
+/* ── Scrollable list ── */
+.list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+}
+
+.list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+}
+
+/* ── Category group ── */
+.category {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0 4px;
+}
+
+.category + .category {
+  border-top: 1px solid rgba(0, 93, 159, 0.1);
+}
+
+.categoryLabel {
+  margin: 0 0 4px;
+  padding: 0 22px;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+/* ── Individual prompt button ── */
+.promptBtn {
+  display: block;
+  width: 100%;
+  padding: 10px 22px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: 13px;
+  font-weight: 400;
+  color: #1a2e45;
+  line-height: 1.45;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  border-radius: 0;
+}
+
+.promptBtn:hover {
+  background: rgba(0, 93, 159, 0.08);
+  color: var(--color-primary);
+}
+
+.promptBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Dimmed overlay (right side) ── */
+.overlay {
+  flex: 1;
+  background: rgba(30, 40, 55, 0.45);
+  cursor: pointer;
+}

@@ -12,6 +12,7 @@ import { HomeWelcome } from './HomeWelcome'
 import { MemberChatWindow } from './MemberChatWindow'
 import { SukiWindow } from './SukiWindow'
 import { ChatHistoryDrawer } from './ChatHistoryDrawer'
+import { PresetPromptsPanel } from './PresetPromptsPanel'
 import { RecommendedActionsCard } from './RecommendedActionsCard'
 import type { ActivityConfig } from './AddActivityModal'
 import { useChatHistory } from './useChatHistory'
@@ -81,6 +82,7 @@ export function HavenWindow({
   const [sukiOpen, setSukiOpen] = useState(false)
   const [fabExpanded, setFabExpanded] = useState(true)
   const [historyOpen, setHistoryOpen] = useState(false)
+  const [presetsOpen, setPresetsOpen] = useState(false)
   const [sukiActionsReady, setSukiActionsReady] = useState(false)
 
   const { getSessionsForMember, saveSession, deleteSession, toggleFavorite, clearAllForMember } = useChatHistory()
@@ -444,7 +446,7 @@ export function HavenWindow({
       {/* Window body */}
       {!isMinimized && (
         <div className={styles.body}>
-          {!isHome && <MemberHeader memberName={memberName} phone={phone} memberId={memberId} pcp={pcp} onSukiClick={() => setSukiOpen(true)} onHistoryClick={() => setHistoryOpen(true)} />}
+          {!isHome && <MemberHeader memberName={memberName} phone={phone} memberId={memberId} pcp={pcp} onSukiClick={() => setSukiOpen(true)} onPresetsClick={() => setPresetsOpen(true)} onHistoryClick={() => setHistoryOpen(true)} />}
 
           <div className={panelStyles.chatArea}>
             {/* Back button */}
@@ -507,6 +509,14 @@ export function HavenWindow({
               </p>
             </div>
           </div>
+
+          {/* Preset prompts panel */}
+          {presetsOpen && !isHome && (
+            <PresetPromptsPanel
+              onClose={() => setPresetsOpen(false)}
+              onSelectPrompt={(text) => { sendMessage(text); setPresetsOpen(false) }}
+            />
+          )}
 
           {/* Chat history drawer — covers entire body including member header */}
           {historyOpen && !isHome && (

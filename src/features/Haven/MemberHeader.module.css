@@ -24,6 +24,56 @@
   gap: var(--spacing-2);
 }
 
+.promptsBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: #ffffff;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: box-shadow var(--transition-fast);
+}
+
+.promptsBtn:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.promptsBtn::after {
+  content: 'Preset prompts';
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: var(--color-tooltip-bg);
+  color: var(--color-text-inverse);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  white-space: nowrap;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  z-index: 10;
+}
+
+.promptsBtn:hover::after {
+  opacity: 1;
+}
+
+.promptsBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
 .historyBtn {
   display: flex;
   align-items: center;
