@@ -1,0 +1,3935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wellframe Web · Core — Member Portal Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Merriweather:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     DESIGN TOKENS — Wellframe Web Core
+     Warm, editorial healthcare aesthetic — deliberately not indigo,
+     to signal a finished product distinct from the wireframe layout.
+     ============================================================ */
+  :root {
+    /* === Mapped to WF mobile design system === */
+    --ink:        #0F3541;   /* WF shade2 — darkest surface */
+    --ink-2:      #19566A;   /* WF shade1 — secondary dark */
+    --teal:       #0080A3;   /* WF primary */
+    --teal-700:   #19566A;   /* WF shade1 used as 'deeper' accent */
+    --teal-50:    #E6F4F7;   /* WF wash (active bg) */
+    --teal-100:   #B0DEEA;   /* WF light teal */
+    --terra:      #0E98BE;   /* repurposed: WF primary-2 (CTA/accent) */
+    --terra-soft: #DDF1F6;   /* light teal-blue */
+    --gold:       #0E98BE;   /* WF accent / call-out (was warm gold) */
+    --gold-soft:  #DDF1F6;
+    --paper:      #F2F8FA;   /* WF surface wash */
+    --paper-2:    #E6F4F7;
+    --paper-3:    #D9E3E7;
+    --card:       #FFFFFF;
+    --line:       #D9E3E7;   /* WF border */
+    --line-2:     #A6B4BA;
+    --muted:      #4E5961;   /* WF text-3 */
+    --muted-2:    #78868E;   /* WF text-4 */
+    --green:      #73BE5E;   /* WF success */
+    --green-soft: #E1F1DA;
+    --rose:       #923133;   /* WF destruct */
+    --rose-soft:  #F0DEDF;
+    --blue:       #0080A3;
+    --blue-soft:  #DDF1F6;
+    --shadow-sm:  0 1px 2px rgba(15,53,65,.05), 0 1px 1px rgba(15,53,65,.03);
+    --shadow-md:  0 6px 18px -8px rgba(15,53,65,.18), 0 2px 6px rgba(15,53,65,.06);
+    --shadow-lg:  0 24px 48px -20px rgba(15,53,65,.22), 0 8px 16px -8px rgba(15,53,65,.10);
+    --radius-sm:  6px;
+    --radius:     10px;
+    --radius-lg:  14px;
+    --radius-xl:  20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .serif { font-family: 'Merriweather', Georgia, serif; font-optical-sizing: auto; }
+  .mono  { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+  /* ============================================================
+     PROTOTYPE TAB BAR — scaffolding for screen navigation.
+     This is NOT product chrome; it is reviewer navigation.
+     ============================================================ */
+  .proto-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--ink);
+    color: #E8DDC4;
+    padding: 10px 24px 0;
+    border-bottom: 1px solid #2A4548;
+    box-shadow: 0 8px 24px -16px rgba(0,0,0,.4);
+  }
+  .proto-meta {
+    display:flex; align-items:center; justify-content:space-between;
+    padding-bottom: 10px;
+    flex-wrap: wrap; gap: 10px;
+  }
+  .proto-mark {
+    display:flex; align-items:center; gap:10px;
+    font-family:'Merriweather', serif; font-weight:600; font-size: 17px;
+    letter-spacing:-.01em; color: var(--paper);
+  }
+  .proto-mark-dot {
+    width:24px;height:24px;border-radius:50%;
+    background: linear-gradient(135deg, var(--terra), var(--gold));
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.2);
+    position:relative;
+  }
+  .proto-mark-dot::after {
+    content:""; position:absolute; inset:5px; border-radius:50%;
+    background: var(--ink); box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+  }
+  .proto-mark .light { color:#A9C7C5; font-weight:400; font-style:italic; }
+  .proto-meta-right {
+    display:flex; align-items:center; gap:14px;
+    font-size:11px; color:#9CB4B2; font-family:'JetBrains Mono', monospace;
+  }
+  .proto-meta-right .pill {
+    background: rgba(255,255,255,.06); border:1px solid #2E5256;
+    padding:3px 8px; border-radius: 999px;
+    color:#E8DDC4; letter-spacing:.04em;
+  }
+  .proto-tabs {
+    display:flex; gap: 2px; flex-wrap: wrap;
+    overflow-x: auto;
+  }
+  .proto-tab {
+    padding: 9px 14px 10px;
+    background: transparent;
+    color: #94B0AE;
+    border: none; border-bottom: 2px solid transparent;
+    font: 600 11.5px 'Roboto', sans-serif;
+    letter-spacing: .04em; text-transform: uppercase;
+    cursor: pointer; white-space: nowrap;
+    transition: all .15s ease;
+    position:relative;
+  }
+  .proto-tab:hover { color: var(--paper); }
+  .proto-tab.active {
+    color: var(--paper);
+    border-bottom-color: var(--terra);
+  }
+  .proto-tab .num {
+    font-family:'JetBrains Mono', monospace;
+    font-weight:400; font-size:10px;
+    margin-right:6px; color:#5F8A87;
+  }
+  .proto-tab.active .num { color: var(--gold); }
+
+  .screen { display: none; min-height: calc(100vh - 80px); }
+  .screen.active { display: block; }
+
+  /* ============================================================
+     PRODUCT CHROME — App shell used inside member-facing screens
+     ============================================================ */
+  .app { display: flex; flex-direction: column; min-height: calc(100vh - 80px); }
+  .app-top {
+    background: var(--card);
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 48px; z-index: 50;
+  }
+  .app-top-inner {
+    max-width: 1280px; margin: 0 auto;
+    display:flex; align-items:center; justify-content: space-between;
+    padding: 12px 28px;
+    gap: 24px;
+  }
+  /* White-label brand block */
+  .brand {
+    display:flex; align-items:center; gap: 10px;
+    font-family:'Merriweather', serif; font-weight:600; font-size:18px;
+    color: var(--ink); letter-spacing: -.01em;
+  }
+  .brand-mark {
+    width:30px; height:30px; border-radius:8px;
+    background: linear-gradient(135deg, #0F3541, #0080A3);
+    position:relative; box-shadow: 0 0 0 1px rgba(0,0,0,.04);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .brand-mark::before, .brand-mark::after { display: none; }
+  .brand .plan-name { font-style: italic; }
+  .brand .plan-name .accent { color: var(--terra); font-style: normal; }
+
+  .top-nav { display:flex; gap: 4px; align-items:center; flex: 1; justify-content:center; }
+  .top-nav a {
+    text-decoration: none; color: var(--ink-2);
+    font: 500 13px 'Roboto', sans-serif;
+    padding: 8px 12px; border-radius: 8px;
+    position:relative;
+    transition: background .15s ease;
+  }
+  .top-nav a:hover { background: var(--paper-2); }
+  .top-nav a.active { color: var(--teal-700); background: var(--teal-50); }
+  .top-nav a .dot-badge {
+    position:absolute; top: -4px; right: -2px;
+    background: var(--terra); color: white;
+    font: 700 9px 'Roboto', sans-serif;
+    border-radius: 999px; padding: 1px 5px;
+    box-shadow: 0 0 0 2px var(--card);
+  }
+
+  .top-utils { display:flex; align-items:center; gap: 6px; }
+  .icon-btn {
+    width:36px;height:36px;border-radius:50%;
+    border: 1px solid var(--line); background: var(--card);
+    color: var(--ink-2); cursor: pointer;
+    display: inline-flex; align-items:center; justify-content:center;
+    position: relative;
+    transition: all .15s ease;
+  }
+  .icon-btn:hover { background: var(--paper-2); border-color: var(--line-2); }
+  .icon-btn .dot {
+    position:absolute; top:6px; right:6px;
+    width:8px; height:8px; border-radius:50%;
+    background: var(--terra);
+    box-shadow: 0 0 0 2px var(--card);
+  }
+  .lang-toggle {
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--card); padding: 4px;
+    display:flex; gap:2px;
+    font-size: 11px; font-weight: 600;
+  }
+  .lang-toggle button {
+    border:none; background:transparent; cursor:pointer;
+    padding: 3px 9px; border-radius: 999px;
+    color: var(--muted); font: inherit;
+  }
+  .lang-toggle button.active {
+    background: var(--ink); color: var(--paper);
+  }
+  .avatar {
+    width:36px;height:36px;border-radius:50%;
+    background: linear-gradient(135deg, var(--terra-soft), var(--gold-soft));
+    color: var(--ink);
+    font-family:'Merriweather', serif; font-weight: 600; font-size: 14px;
+    display:inline-flex; align-items:center; justify-content:center;
+    cursor: pointer;
+    border: 1px solid var(--line-2);
+  }
+
+  /* Alert banner — feature #24 */
+  .alert-banner {
+    background: linear-gradient(90deg, var(--gold-soft), var(--paper-2));
+    border-bottom: 1px solid var(--line);
+    color: var(--ink-2);
+    padding: 9px 28px;
+    font-size: 12.5px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap: 16px;
+  }
+  .alert-banner .pulse {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--terra);
+    box-shadow: 0 0 0 0 rgba(199, 97, 61, .6);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(199, 97, 61, .6); }
+    70%  { box-shadow: 0 0 0 12px rgba(199, 97, 61, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(199, 97, 61, 0); }
+  }
+  .alert-banner .alert-text { display:flex; align-items:center; gap:10px; flex:1; }
+  .alert-banner .alert-actions { display:flex; gap:8px; align-items:center; }
+  .alert-banner a {
+    color: var(--teal-700); font-weight: 700;
+    text-decoration: none; font-size: 11.5px;
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .alert-banner .close {
+    background:transparent; border:none; cursor:pointer;
+    color: var(--muted); font-size:18px; line-height:1;
+    padding: 0 4px;
+  }
+
+  /* Page container */
+  .page {
+    max-width: 1280px; margin: 0 auto;
+    padding: 28px 28px 60px;
+  }
+  .page-header {
+    display:flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 24px; gap: 24px; flex-wrap: wrap;
+  }
+  .page-title {
+    font-family:'Merriweather', Georgia, serif;
+    font-weight: 300; font-size: 32px; line-height: 1.2;
+    letter-spacing: -.005em; color: var(--ink);
+  }
+  .page-title .em, .page-title em {
+    font-family:'Merriweather', Georgia, serif;
+    font-style: italic; color: var(--teal); font-weight: 300;
+  }
+  .page-sub {
+    font-size: 13px; color: var(--muted);
+    margin-top: 6px; max-width: 520px;
+  }
+  .breadcrumb {
+    font: 500 11px 'Roboto', sans-serif;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted-2); margin-bottom: 8px;
+  }
+  .breadcrumb .sep { margin: 0 8px; color: var(--line-2); }
+  .breadcrumb .current { color: var(--teal-700); }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  .card-pad { padding: 22px 24px; }
+  .card-pad-sm { padding: 14px 16px; }
+  .card-head {
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--line);
+  }
+  .card-head h3 {
+    font: 600 13px 'Roboto', sans-serif;
+    letter-spacing: .04em; text-transform: uppercase;
+    color: var(--ink); margin: 0;
+  }
+  .card-head .meta { font-size: 12px; color: var(--muted); font-family:'JetBrains Mono', monospace; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding: 10px 18px; border-radius: 999px;
+    font: 600 13px 'Roboto', sans-serif; letter-spacing: .01em;
+    border: 1px solid transparent; cursor: pointer;
+    transition: all .15s ease;
+    text-decoration: none;
+  }
+  .btn-primary {
+    background: var(--teal); color: #ffffff;
+    border-color: var(--teal);
+  }
+  .btn-primary:hover { background: var(--terra); border-color: var(--terra); }
+  .btn-accent {
+    background: var(--terra); color: white;
+    border-color: var(--terra);
+  }
+  .btn-accent:hover { background: var(--teal); border-color: var(--teal); }
+  .btn-ghost {
+    background: transparent; color: var(--ink-2);
+    border-color: var(--line-2);
+  }
+  .btn-ghost:hover { background: var(--paper-2); border-color: var(--ink-2); }
+  .btn-link {
+    background: transparent; color: var(--teal-700);
+    border: none; padding: 4px 0;
+    font-weight: 600;
+  }
+  .btn-link::after {
+    content: " →"; transition: transform .15s ease;
+    display: inline-block;
+  }
+  .btn-link:hover::after { transform: translateX(3px); }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+  /* Chips */
+  .chip {
+    display:inline-flex; align-items:center; gap:5px;
+    padding: 3px 9px; border-radius: 999px;
+    font: 600 11px 'Roboto', sans-serif;
+    letter-spacing: .02em;
+    border: 1px solid transparent;
+  }
+  .chip-teal  { background: var(--teal-50);  color: var(--teal-700);  border-color: var(--teal-100);  }
+  .chip-green { background: var(--green-soft); color: var(--green); border-color: #BBD4BD; }
+  .chip-gold  { background: var(--gold-soft); color: #6F4E16; border-color: #E2C77A; }
+  .chip-terra { background: var(--terra-soft); color: #7A3318; border-color: #E2BCA7; }
+  .chip-rose  { background: var(--rose-soft); color: var(--rose); border-color: #E8B5B8; }
+  .chip-blue  { background: var(--blue-soft); color: var(--blue); border-color: #B5C9DF; }
+  .chip-ink   { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .chip-paper { background: var(--paper-2); color: var(--ink-2); border-color: var(--line); }
+  .chip .dot { width:6px;height:6px;border-radius:50%; background: currentColor; }
+
+  /* Feature tag — maps to the 28-feature HealthTrio baseline */
+  .feat {
+    display:inline-block;
+    background: rgba(26,111,115,.08); color: var(--teal-700);
+    border: 1px dashed var(--teal-100);
+    border-radius: 4px;
+    font: 600 9.5px 'JetBrains Mono', monospace;
+    padding: 1px 5px; letter-spacing: .04em;
+    vertical-align: middle;
+  }
+  .feat-row { display:flex; gap: 4px; flex-wrap: wrap; }
+
+  /* Form */
+  .field { display:flex; flex-direction:column; gap:6px; margin-bottom: 14px; }
+  .field label {
+    font: 600 11px 'Roboto', sans-serif;
+    text-transform: uppercase; letter-spacing: .06em;
+    color: var(--ink-2);
+  }
+  .field input, .field select, .field textarea {
+    border: 1px solid var(--line);
+    background: var(--card);
+    border-radius: 8px;
+    padding: 11px 13px;
+    font: 500 14px 'Roboto', sans-serif;
+    color: var(--ink);
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(26, 111, 115, .12);
+  }
+  .field .hint { font-size: 11.5px; color: var(--muted); }
+
+  /* Tables */
+  .tbl { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+  .tbl thead th {
+    background: var(--paper-2);
+    color: var(--ink-2);
+    font: 700 10.5px 'Roboto', sans-serif;
+    letter-spacing: .08em; text-transform: uppercase;
+    text-align: left;
+    padding: 10px 14px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .tbl thead th:first-child { border-left: 1px solid var(--line); border-top-left-radius: 10px; }
+  .tbl thead th:last-child  { border-right: 1px solid var(--line); border-top-right-radius: 10px; }
+  .tbl tbody td {
+    padding: 14px 14px; border-bottom: 1px solid var(--line);
+    background: var(--card); vertical-align: middle;
+  }
+  .tbl tbody tr:hover td { background: #FCFAF4; }
+  .tbl tbody td:first-child { border-left: 1px solid var(--line); }
+  .tbl tbody td:last-child  { border-right: 1px solid var(--line); }
+  .tbl tbody tr:last-child td:first-child { border-bottom-left-radius: 10px; }
+  .tbl tbody tr:last-child td:last-child  { border-bottom-right-radius: 10px; }
+  .tbl .num { font-family:'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-2); }
+
+  /* Footer */
+  .app-foot {
+    border-top: 1px solid var(--line);
+    background: var(--paper-2);
+    margin-top: 60px;
+    padding: 24px 28px;
+  }
+  .app-foot-inner {
+    max-width: 1280px; margin: 0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    gap: 16px; flex-wrap: wrap;
+    font-size: 11.5px; color: var(--muted);
+  }
+  .app-foot a { color: var(--ink-2); text-decoration: none; margin-right: 18px; }
+  .app-foot a:hover { color: var(--teal-700); }
+  .powered {
+    font-family:'JetBrains Mono', monospace;
+    font-size: 10.5px; color: var(--muted-2);
+    letter-spacing: .04em;
+  }
+  .powered b { color: var(--teal-700); font-weight: 600; }
+
+  /* Util classes */
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .grid-3 { display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .grid-4 { display:grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .row { display:flex; gap: 14px; }
+  .col { display:flex; flex-direction:column; gap: 14px; }
+  .stack-tight { display:flex; flex-direction:column; gap:6px; }
+  .between { justify-content: space-between; }
+  .center { align-items: center; }
+  .end { align-items: flex-end; }
+  .mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mt-4 { margin-top: 16px; } .mt-6 { margin-top: 24px; }
+  .mb-2 { margin-bottom: 8px; } .mb-3 { margin-bottom: 12px; } .mb-4 { margin-bottom: 16px; } .mb-6 { margin-bottom: 24px; }
+  .gap-sm { gap: 8px; } .gap-md { gap: 14px; } .gap-lg { gap: 22px; }
+  .text-mute { color: var(--muted); }
+  .text-ink  { color: var(--ink); }
+  .text-teal { color: var(--teal-700); }
+  .text-terra { color: var(--terra); }
+  .small { font-size: 11.5px; }
+  .tiny  { font-size: 10.5px; }
+  .label-eyebrow {
+    font: 700 10.5px 'Roboto', sans-serif;
+    text-transform: uppercase; letter-spacing: .12em;
+    color: var(--muted-2);
+  }
+
+  /* Inline SVG icons sizing */
+  .ico { width: 18px; height: 18px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .ico-sm { width: 14px; height: 14px; }
+  .ico-lg { width: 22px; height: 22px; }
+
+  /* ============================================================
+     SIGN IN SCREEN
+     ============================================================ */
+  .signin-wrap {
+    min-height: calc(100vh - 80px);
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    background: var(--paper);
+  }
+  .signin-art {
+    background:
+      radial-gradient(800px 500px at 80% 20%, rgba(199,151,60,.18), transparent 60%),
+      radial-gradient(600px 400px at 10% 90%, rgba(26,111,115,.18), transparent 60%),
+      linear-gradient(160deg, var(--ink) 0%, #0B2426 50%, #102E30 100%);
+    color: var(--paper);
+    padding: 56px 64px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; overflow: hidden;
+  }
+  .signin-art::before {
+    /* decorative ornament */
+    content: ""; position: absolute; right: -120px; bottom: -120px;
+    width: 500px; height: 500px; border-radius: 50%;
+    border: 1px solid rgba(232,221,196,.08);
+    box-shadow:
+      inset 0 0 0 80px rgba(232,221,196,0),
+      inset 0 0 0 81px rgba(232,221,196,.06),
+      inset 0 0 0 160px rgba(232,221,196,0),
+      inset 0 0 0 161px rgba(232,221,196,.04);
+  }
+  .signin-art-head {
+    display:flex; align-items:center; gap:12px;
+    color: var(--paper);
+    font-family: 'Merriweather', serif;
+    font-weight: 600; font-size: 22px;
+    letter-spacing: -.01em;
+  }
+  .signin-art-head .brand-mark {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--terra), var(--gold));
+    display:flex; align-items:center; justify-content:center;
+    color: var(--ink);
+  }
+  .signin-art-head .brand-mark::before,
+  .signin-art-head .brand-mark::after { display: none; }
+  .signin-art-head em { font-style: italic; color: #C7B07A; font-weight: 500; }
+  .signin-art-quote {
+    max-width: 460px; position: relative; z-index: 1;
+  }
+  .signin-art-quote .pre {
+    font: 600 11px 'Roboto', sans-serif;
+    text-transform: uppercase; letter-spacing: .14em;
+    color: var(--gold); margin-bottom: 18px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .signin-art-quote .pre::before {
+    content:""; width: 28px; height: 1px; background: var(--gold);
+  }
+  .signin-art-quote h2 {
+    font-family: 'Merriweather', serif;
+    font-weight: 400; font-size: 44px; line-height: 1.1;
+    letter-spacing: -.02em;
+    color: var(--paper);
+  }
+  .signin-art-quote h2 em { color: #E0A86F; font-style: italic; font-weight: 500; }
+  .signin-art-quote .by {
+    margin-top: 22px; font-size: 12.5px; color: #A9C7C5;
+    line-height: 1.6;
+  }
+  .signin-art-foot {
+    display:flex; gap:18px; flex-wrap:wrap;
+    font: 500 11px 'Roboto', sans-serif;
+    color: #6E8E8C;
+    position: relative; z-index: 1;
+  }
+  .signin-art-foot span { display:flex; align-items:center; gap:6px; }
+  .signin-art-foot span::before {
+    content:""; width:6px; height:6px; border-radius:50%; background: var(--green);
+  }
+
+  .signin-form-pane {
+    display:flex; align-items:center; justify-content:center;
+    padding: 48px 64px;
+    background: var(--paper);
+  }
+  .signin-form {
+    width: 100%; max-width: 420px;
+  }
+  .signin-form .eyebrow {
+    font: 600 11px 'Roboto', sans-serif;
+    text-transform: uppercase; letter-spacing: .14em;
+    color: var(--terra); margin-bottom: 12px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .signin-form .eyebrow::before {
+    content:""; width: 22px; height: 1px; background: var(--terra);
+  }
+  .signin-form h1 {
+    font-family: 'Merriweather', serif;
+    font-weight: 500; font-size: 38px; line-height: 1.1;
+    letter-spacing: -.02em; color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .signin-form h1 em { color: var(--teal-700); font-style: italic; }
+  .signin-form .lede {
+    color: var(--muted); font-size: 13.5px; margin-bottom: 28px;
+  }
+
+  .role-toggle {
+    display:flex; background: var(--paper-2); border:1px solid var(--line);
+    border-radius: 12px; padding: 4px; margin-bottom: 20px;
+  }
+  .role-toggle button {
+    flex: 1; border: none; background: transparent;
+    font: 600 12.5px 'Roboto', sans-serif;
+    color: var(--muted); padding: 9px 12px; border-radius: 9px;
+    cursor: pointer;
+  }
+  .role-toggle button.active {
+    background: var(--card); color: var(--ink);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .signin-form .checkbox {
+    display:flex; align-items:center; gap:10px;
+    font-size: 12.5px; color: var(--ink-2);
+  }
+  .signin-form .checkbox input[type="checkbox"] {
+    width: 16px; height: 16px; accent-color: var(--teal);
+  }
+  .signin-form .row-between {
+    display:flex; align-items:center; justify-content:space-between;
+    margin: -4px 0 18px;
+  }
+  .signin-form .row-between a {
+    color: var(--teal-700); font-size: 12.5px; font-weight: 600; text-decoration: none;
+  }
+  .signin-form .submit-btn {
+    width: 100%; padding: 13px;
+    font-size: 14px; margin-bottom: 14px;
+  }
+  .or-divider {
+    display:flex; align-items:center; gap:12px;
+    color: var(--muted-2); font-size: 11px;
+    text-transform: uppercase; letter-spacing: .12em;
+    margin: 14px 0;
+  }
+  .or-divider::before, .or-divider::after {
+    content:""; flex:1; height: 1px; background: var(--line);
+  }
+  .sso-btn {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    padding: 11px 14px; border-radius: 10px;
+    display:flex; align-items:center; justify-content:center; gap: 10px;
+    font: 600 13px 'Roboto', sans-serif; color: var(--ink-2);
+    cursor: pointer;
+  }
+  .sso-btn:hover { background: var(--paper-2); }
+  .sso-btn .sso-mark {
+    width:18px;height:18px;border-radius:4px;
+    background: linear-gradient(135deg, #2E5C8A, #4A7BA8);
+  }
+  .signin-form .register-prompt {
+    text-align: center; margin-top: 28px;
+    font-size: 13px; color: var(--muted);
+  }
+  .signin-form .register-prompt a {
+    color: var(--terra); font-weight: 700; text-decoration: none;
+  }
+  .signin-form .compliance-badges {
+    margin-top: 36px;
+    display:flex; gap: 6px; flex-wrap: wrap;
+    align-items:center;
+  }
+
+  /* ============================================================
+     DASHBOARD
+     ============================================================ */
+  .greet {
+    font-family:'Merriweather', Georgia, serif;
+    font-weight: 300; font-size: 36px; line-height: 1.2;
+    letter-spacing: -.005em; color: var(--ink);
+  }
+  .greet em {
+    font-family:'Merriweather', Georgia, serif;
+    font-style: italic; color: var(--teal); font-weight: 300;
+  }
+  .greet-sub {
+    font-family: 'Roboto', system-ui, sans-serif;
+    color: var(--muted); margin-top: 8px; font-size: 14px;
+  }
+
+  /* Hero accumulator card */
+  .hero-card {
+    background: linear-gradient(135deg, var(--ink) 0%, #1A4548 100%);
+    color: var(--paper);
+    border-radius: var(--radius-xl);
+    padding: 28px 30px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  .hero-card::after {
+    content:""; position:absolute; right:-80px; top:-80px;
+    width: 280px; height: 280px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(199,151,60,.18), transparent 65%);
+  }
+  .hero-card .label-eyebrow { color: var(--gold); }
+  .hero-card .accum-grid {
+    display:grid; grid-template-columns: 1fr 1fr; gap: 22px;
+    margin-top: 18px; position: relative; z-index: 1;
+  }
+  .accum {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(232,221,196,.08);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .accum h4 {
+    font: 600 11px 'Roboto', sans-serif;
+    text-transform: uppercase; letter-spacing: .1em;
+    color: #C7B07A;
+    margin-bottom: 10px;
+  }
+  .accum .num {
+    font-family:'Merriweather', serif;
+    font-weight: 500; font-size: 28px;
+    color: var(--paper); line-height: 1;
+  }
+  .accum .num .max {
+    font-family:'Roboto', sans-serif;
+    font-weight: 500; font-size: 13px;
+    color: #94B0AE; margin-left: 8px;
+  }
+  .accum-bar {
+    height: 8px; background: rgba(232,221,196,.1);
+    border-radius: 4px; overflow: hidden;
+    margin: 12px 0 8px;
+  }
+  .accum-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--terra));
+    border-radius: 4px;
+    transition: width .4s ease;
+  }
+  .accum .small { color: #A9C7C5; }
+
+  .hero-quick-row {
+    display:flex; gap: 10px; margin-top: 22px; flex-wrap: wrap;
+    position: relative; z-index: 1;
+  }
+  .hero-quick {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(232,221,196,.1);
+    color: var(--paper);
+    padding: 8px 14px; border-radius: 999px;
+    font: 600 12px 'Roboto', sans-serif;
+    cursor: pointer;
+    display:flex; align-items:center; gap: 8px;
+  }
+  .hero-quick:hover { background: rgba(255,255,255,.1); }
+
+  /* Tile cards */
+  .tile {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+    transition: transform .15s ease, box-shadow .15s ease;
+    position: relative;
+  }
+  .tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .tile h4 {
+    font: 600 11px 'Roboto', sans-serif;
+    text-transform: uppercase; letter-spacing: .1em;
+    color: var(--muted); margin-bottom: 10px;
+    display:flex; align-items:center; gap: 8px;
+  }
+  .tile h4 .feat { margin-left: auto; }
+  .tile .big {
+    font-family:'Merriweather', serif;
+    font-weight: 500; font-size: 26px; color: var(--ink);
+    line-height: 1;
+  }
+  .tile .big .unit {
+    font-family:'Roboto', sans-serif;
+    font-size: 12px; color: var(--muted); font-weight: 500;
+    margin-left: 6px;
+  }
+  .tile .sub { color: var(--muted); font-size: 12.5px; margin-top: 6px; }
+  .tile-foot { margin-top: 14px; }
+
+  /* ID card */
+  .id-card {
+    background: linear-gradient(135deg, var(--teal-700), var(--teal));
+    color: var(--paper);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 6px 14px -4px rgba(19, 78, 81, .4);
+    position: relative;
+    overflow: hidden;
+  }
+  .id-card::after {
+    content:""; position:absolute; right:-30px; top:-30px;
+    width: 110px; height: 110px; border-radius: 50%;
+    background: rgba(199,151,60,.16);
+  }
+  .id-card .id-top {
+    display:flex; align-items: flex-start; justify-content:space-between;
+    position: relative; z-index: 1;
+  }
+  .id-card .id-plan {
+    font-family:'Merriweather', serif; font-weight: 600; font-size: 13px;
+    letter-spacing: -.005em;
+  }
+  .id-card .id-num {
+    font-family:'JetBrains Mono', monospace;
+    font-size: 13px; letter-spacing: .04em;
+    margin-top: 12px; color: var(--paper);
+  }
+  .id-card .id-row {
+    display:flex; gap: 16px; margin-top: 10px; font-size: 10.5px;
+  }
+  .id-card .id-row span { color: #C7B07A; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+  .id-card .id-row b { color: var(--paper); font-weight: 700; display: block; font-family: 'Roboto', sans-serif; font-size: 12px; }
+
+  /* Activity feed */
+  .feed-item {
+    display:flex; gap: 14px; align-items: flex-start;
+    padding: 14px 0; border-bottom: 1px solid var(--line);
+  }
+  .feed-item:last-child { border-bottom: none; }
+  .feed-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--teal-50); color: var(--teal-700);
+    flex-shrink: 0;
+  }
+  .feed-icon.terra { background: var(--terra-soft); color: #7A3318; }
+  .feed-icon.gold  { background: var(--gold-soft); color: #6F4E16; }
+  .feed-icon.green { background: var(--green-soft); color: var(--green); }
+  .feed-icon.rose  { background: var(--rose-soft); color: var(--rose); }
+  .feed-body { flex: 1; min-width: 0; }
+  .feed-body .ttl {
+    font-weight: 600; color: var(--ink);
+    font-size: 13.5px; margin-bottom: 2px;
+  }
+  .feed-body .desc { color: var(--muted); font-size: 12.5px; }
+  .feed-time { color: var(--muted-2); font-size: 11.5px; font-family:'JetBrains Mono', monospace; flex-shrink: 0; }
+
+  /* Empty / placeholder */
+  .empty-mini {
+    text-align: center; padding: 28px 16px;
+    color: var(--muted); font-size: 12.5px;
+  }
+
+  /* Progress ring (SVG-based, used in Benefits) */
+  .ring-wrap { display:flex; align-items:center; gap: 18px; }
+  .ring-wrap .ring-meta .num {
+    font-family:'Merriweather', serif; font-weight: 500; font-size: 28px; color: var(--ink); line-height: 1;
+  }
+  .ring-wrap .ring-meta .max {
+    color: var(--muted); font-size: 12.5px; margin-top: 4px;
+  }
+
+  /* Tabs (within product) */
+  .tabset {
+    display:flex; gap: 2px; border-bottom: 1px solid var(--line);
+    margin-bottom: 18px;
+  }
+  .tabset button {
+    padding: 11px 16px;
+    border: none; background: transparent;
+    font: 600 12.5px 'Roboto', sans-serif;
+    color: var(--muted); cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .tabset button.active {
+    color: var(--teal-700);
+    border-bottom-color: var(--terra);
+  }
+  .tabset button:hover:not(.active) { color: var(--ink-2); }
+
+  /* Filter row */
+  .filter-row {
+    display:flex; gap: 10px; align-items: center; flex-wrap: wrap;
+    padding: 12px 14px; background: var(--paper-2);
+    border: 1px solid var(--line); border-radius: 10px;
+    margin-bottom: 16px;
+  }
+  .filter-row .search {
+    flex:1; min-width: 240px;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 8px; padding: 8px 12px; display:flex; align-items:center; gap:8px;
+  }
+  .filter-row .search input {
+    flex:1; border: none; background: transparent; outline: none;
+    font: 500 13px 'Roboto', sans-serif; color: var(--ink);
+  }
+  .filter-row select {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 8px; padding: 8px 12px;
+    font: 500 12.5px 'Roboto', sans-serif; color: var(--ink-2);
+  }
+
+  /* Provider card */
+  .provider-card {
+    display:flex; gap: 14px; padding: 16px;
+    border: 1px solid var(--line); border-radius: 12px;
+    background: var(--card); transition: all .15s ease;
+  }
+  .provider-card:hover { border-color: var(--teal-100); box-shadow: var(--shadow-sm); }
+  .provider-card.selected { border-color: var(--teal); background: var(--teal-50); }
+  .provider-avatar {
+    width: 56px; height: 56px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--teal-50), var(--paper-2));
+    color: var(--teal-700); display:flex; align-items:center; justify-content:center;
+    font-family:'Merriweather', serif; font-weight: 600; font-size: 20px;
+    flex-shrink: 0; border: 1px solid var(--line);
+  }
+  .provider-card h5 {
+    font: 600 14px 'Roboto', sans-serif; color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .provider-card .specialty { color: var(--terra); font-size: 12px; font-weight: 600; }
+  .provider-card .meta { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+
+  /* Map placeholder */
+  .map-bg {
+    background:
+      linear-gradient(135deg, transparent 49.5%, rgba(199,151,60,.08) 50%, transparent 50.5%),
+      linear-gradient(45deg, transparent 49.5%, rgba(199,151,60,.08) 50%, transparent 50.5%),
+      radial-gradient(circle at 30% 40%, rgba(26,111,115,.1) 0, transparent 12%),
+      radial-gradient(circle at 70% 60%, rgba(199,97,61,.12) 0, transparent 8%),
+      radial-gradient(circle at 55% 30%, rgba(26,111,115,.1) 0, transparent 9%),
+      var(--paper-2);
+    background-size: 24px 24px, 24px 24px, auto, auto, auto, auto;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    min-height: 320px;
+    position: relative;
+  }
+  .map-pin {
+    position: absolute; transform: translate(-50%, -100%);
+    background: var(--terra); color: white;
+    width: 28px; height: 28px; border-radius: 50% 50% 50% 4px;
+    transform: translate(-50%, -100%) rotate(-45deg);
+    display:flex; align-items:center; justify-content:center;
+    font: 700 11px 'Roboto', sans-serif;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  }
+  .map-pin span { transform: rotate(45deg); display:block; }
+  .map-pin.teal { background: var(--teal); }
+  .map-pin.gold { background: var(--gold); }
+
+  /* Settings layout */
+  .settings-layout { display: grid; grid-template-columns: 240px 1fr; gap: 24px; }
+  .settings-nav {
+    display:flex; flex-direction:column; gap: 2px;
+    padding: 6px; background: var(--card);
+    border: 1px solid var(--line); border-radius: 12px;
+    height: fit-content; position: sticky; top: 130px;
+  }
+  .settings-nav a {
+    text-decoration: none; padding: 10px 12px;
+    border-radius: 8px;
+    font: 600 13px 'Roboto', sans-serif; color: var(--ink-2);
+    display:flex; align-items:center; gap: 10px;
+  }
+  .settings-nav a.active { background: var(--teal-50); color: var(--teal-700); }
+  .settings-nav a:hover:not(.active) { background: var(--paper-2); }
+
+  /* Toggle switch */
+  .toggle {
+    display:inline-flex; align-items:center;
+    width: 40px; height: 22px;
+    background: var(--line);
+    border-radius: 999px; position: relative;
+    cursor: pointer; transition: background .15s ease;
+  }
+  .toggle::after {
+    content:""; position:absolute; top: 2px; left: 2px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: white;
+    transition: left .15s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,.15);
+  }
+  .toggle.on { background: var(--teal); }
+  .toggle.on::after { left: 20px; }
+
+  .setting-row {
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 14px 0; border-bottom: 1px solid var(--line);
+  }
+  .setting-row:last-child { border-bottom: none; }
+  .setting-row .desc { font-size: 12.5px; color: var(--muted); margin-top: 2px; max-width: 480px; }
+  .setting-row .ttl { font-weight: 600; color: var(--ink); font-size: 13.5px; }
+
+  /* Document list */
+  .doc-row {
+    display:flex; align-items:center; gap: 14px;
+    padding: 14px; border-radius: 10px;
+    transition: background .12s ease;
+    cursor: pointer;
+  }
+  .doc-row:hover { background: var(--paper-2); }
+  .doc-icon {
+    width: 40px; height: 48px; flex-shrink: 0;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 4px; position: relative;
+    display:flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 4px;
+    color: var(--rose); font: 700 8px 'Roboto', sans-serif;
+  }
+  .doc-icon::before {
+    content:""; position: absolute; top:0; right:0;
+    width: 10px; height: 10px;
+    background: linear-gradient(225deg, var(--paper-2) 50%, var(--card) 50%);
+    border-left: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .doc-icon.gold { color: var(--gold); }
+  .doc-icon.teal { color: var(--teal); }
+  .doc-row .doc-meta { flex: 1; }
+  .doc-row .doc-ttl { font-weight: 600; color: var(--ink); font-size: 13.5px; }
+  .doc-row .doc-sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+  /* Messages */
+  .msg-layout { display:grid; grid-template-columns: 320px 1fr; gap: 0; height: 640px; }
+  .msg-list {
+    border: 1px solid var(--line); border-right: none;
+    border-radius: 12px 0 0 12px;
+    background: var(--card);
+    overflow: hidden;
+    display:flex; flex-direction:column;
+  }
+  .msg-list-head {
+    padding: 14px 16px; border-bottom: 1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .msg-list-items { flex:1; overflow:auto; }
+  .msg-item {
+    padding: 14px 16px; border-bottom: 1px solid var(--line);
+    cursor: pointer;
+  }
+  .msg-item:hover { background: var(--paper-2); }
+  .msg-item.active { background: var(--teal-50); border-left: 3px solid var(--terra); padding-left: 13px; }
+  .msg-item .from { font-weight: 700; color: var(--ink); font-size: 13px; }
+  .msg-item .subj { font-size: 12.5px; color: var(--ink-2); margin-top: 4px; }
+  .msg-item .preview { font-size: 11.5px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+  .msg-item .when { font-size: 10.5px; color: var(--muted-2); font-family:'JetBrains Mono', monospace; }
+  .msg-item.unread .from::before {
+    content: "•"; color: var(--terra); font-size: 18px; vertical-align: middle; margin-right: 4px;
+  }
+  .msg-detail {
+    border: 1px solid var(--line);
+    border-radius: 0 12px 12px 0;
+    background: var(--card);
+    display:flex; flex-direction:column;
+  }
+  .msg-detail-head {
+    padding: 18px 24px; border-bottom: 1px solid var(--line);
+  }
+  .msg-detail-body {
+    padding: 24px; flex: 1; overflow:auto;
+    color: var(--ink-2); font-size: 14px; line-height: 1.7;
+  }
+  .msg-compose {
+    padding: 16px 24px; border-top: 1px solid var(--line);
+    background: var(--paper-2);
+    display:flex; gap: 10px; align-items: center;
+  }
+  .msg-compose input {
+    flex: 1; border: 1px solid var(--line);
+    background: var(--card); border-radius: 999px;
+    padding: 10px 16px; font: 500 13px 'Roboto', sans-serif;
+    outline: none;
+  }
+
+  /* Admin portal */
+  .admin-banner {
+    background: linear-gradient(90deg, #4A2A1A, #6E3F26);
+    color: var(--paper);
+    padding: 12px 28px; font-size: 12.5px;
+    display:flex; align-items:center; justify-content:space-between;
+    border-bottom: 1px solid #5A3520;
+  }
+  .admin-banner .label-eyebrow { color: var(--gold); }
+
+  /* ===== Supplementary styles for screens 8, 9, 10 ===== */
+
+  /* App shell layout primitives */
+  .app-shell { background: var(--paper); min-height: 100vh; display:flex; flex-direction:column; }
+  .app-main { max-width: 1280px; margin: 0 auto; padding: 28px 28px 60px; width: 100%; flex: 1; }
+
+  /* topnav (alias of top-nav) */
+  .topnav {
+    background: var(--card); border-bottom: 1px solid var(--line);
+    padding: 14px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap: 24px; position: sticky; top: 48px; z-index: 5;
+  }
+  .topnav-links { display:flex; gap: 4px; align-items:center; flex: 1; justify-content:center; }
+  .topnav-links a {
+    text-decoration: none; color: var(--ink-2);
+    font: 500 13px 'Roboto', sans-serif;
+    padding: 8px 12px; border-radius: 8px;
+    position:relative;
+    transition: background .15s ease;
+  }
+  .topnav-links a:hover { background: var(--paper-2); }
+  .topnav-links a.cur, .topnav-links a.active {
+    color: var(--teal-700); background: var(--teal-50);
+  }
+  .topnav-right { display:flex; align-items:center; gap: 10px; }
+  .icon-btn .dot-badge {
+    position:absolute; top: 2px; right: 2px;
+    background: var(--terra); color: white;
+    font: 700 9px 'Roboto', sans-serif;
+    border-radius: 999px; padding: 1px 5px;
+    box-shadow: 0 0 0 2px var(--card);
+  }
+
+  /* page-head (alias of page-header, with em italic) */
+  .page-head {
+    display:flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 24px; gap: 24px; flex-wrap: wrap;
+  }
+  .page-head .page-title em {
+    font-style: italic; color: var(--terra); font-weight: 500;
+  }
+  .page-actions { display:flex; gap: 8px; align-items:center; flex-wrap: wrap; }
+
+  /* Kicker eyebrow & feat chip layout */
+  .kicker {
+    font: 600 11px 'Roboto', sans-serif;
+    text-transform: uppercase; letter-spacing: .1em;
+    color: var(--muted-2);
+    display:flex; align-items:center; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+
+  /* Muted helper text */
+  .muted-text { color: var(--muted); }
+
+  /* Definition pair */
+  .lbl {
+    font: 600 10.5px 'Roboto', sans-serif;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted-2);
+    margin-bottom: 3px;
+  }
+  .val { font: 500 14px 'Roboto', sans-serif; color: var(--ink); }
+  .val.mono { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 13px; }
+
+  /* Two-column layout */
+  .two-col {
+    display:grid; grid-template-columns: 1.6fr 1fr; gap: 24px;
+  }
+  .sidebar { display:flex; flex-direction:column; gap: 16px; }
+
+  /* Card body padding default (inherits from existing .card) */
+  .card-body { padding: 22px 24px; }
+  .card-head { padding: 18px 24px; border-bottom: 1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .card-head h3 { font: 700 15px 'Roboto', sans-serif; margin: 0; color: var(--ink); }
+
+  /* Form bits */
+  .form-row { margin-bottom: 16px; }
+  .form-row > label {
+    display:block; font: 600 11px 'Roboto', sans-serif;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted-2); margin-bottom: 6px;
+  }
+  select.field, input.field {
+    width: 100%; box-sizing: border-box;
+    border: 1px solid var(--line); background: var(--card);
+    border-radius: 8px; padding: 10px 12px;
+    font: 500 13px 'Roboto', sans-serif; color: var(--ink);
+    outline: none;
+  }
+  select.field:focus, input.field:focus {
+    border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-50);
+  }
+
+  /* ID card large variant + back face */
+  .idcard-lg {
+    width: 100%; aspect-ratio: 1.586/1;
+    padding: 24px;
+    border-radius: 14px;
+    color: white;
+    background: linear-gradient(135deg, #0080A3 0%, #19566A 60%, #0F3541 100%);
+    box-shadow: 0 14px 30px -12px rgba(14,42,44,.35), 0 2px 4px rgba(0,0,0,.1);
+    display:flex; flex-direction:column; gap: 14px;
+    position: relative; overflow: hidden;
+  }
+  .idcard-lg::before {
+    content:""; position:absolute; right:-40px; top:-40px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,151,60,.18), transparent 70%);
+  }
+  .idcard-top { display:flex; align-items:center; justify-content:space-between; }
+  .idcard-brand {
+    display:flex; align-items:center; gap: 8px;
+    font: 600 13px 'Roboto', sans-serif; color: white;
+  }
+  .idcard-brand .brand-dot { width:10px; height:10px; border-radius:50%; background: white; }
+  .idcard-name {
+    font: 500 22px 'Merriweather', serif; font-style: italic;
+    color: white; margin-top: 4px;
+  }
+  .idcard-grid {
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px 18px;
+    margin-top: auto;
+  }
+  .idcard-grid .lbl { color: rgba(255,255,255,.55); }
+  .idcard-grid .val { color: white; font-size: 13px; }
+  .idcard-grid .val.mono { color: white; font-size: 12.5px; }
+  .idcard-foot {
+    display:flex; justify-content:space-between;
+    font: 500 10.5px 'Roboto', sans-serif;
+    color: rgba(255,255,255,.6);
+    border-top: 1px solid rgba(255,255,255,.1);
+    padding-top: 10px;
+  }
+  .idcard-back {
+    background: linear-gradient(135deg, #0F3541 0%, #0080A3 100%);
+  }
+  .idcard-back-head {
+    font: 600 11px 'Roboto', sans-serif;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--gold);
+  }
+  .idcard-back-grid {
+    display:grid; grid-template-columns: repeat(2, 1fr); gap: 10px 18px;
+    margin-top: 4px;
+  }
+  .idcard-back-grid .lbl { color: rgba(255,255,255,.55); }
+  .idcard-back-grid .val { color: white; font-size: 12.5px; }
+  .idcard-back-grid .val.mono { color: white; }
+
+  /* Quantity selector */
+  .qty-row { display:flex; align-items:center; gap: 8px; }
+  .qty-btn {
+    width: 32px; height: 32px;
+    border: 1px solid var(--line); background: var(--card);
+    border-radius: 50%; cursor: pointer;
+    font: 600 16px 'Roboto', sans-serif; color: var(--ink-2);
+  }
+  .qty-btn:hover { background: var(--paper-2); }
+  .qty-num { font-size: 16px; min-width: 28px; text-align: center; font-weight: 600; }
+
+  /* Address confirmation */
+  .addr-confirm {
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 14px 16px; background: var(--paper-2);
+    border-radius: 10px; gap: 16px;
+  }
+
+  /* Material link list rows */
+  .material-link {
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 14px 22px; text-decoration:none; color: var(--ink);
+    border-bottom: 1px solid var(--line);
+    transition: background .12s ease;
+  }
+  .material-link:last-child { border-bottom: none; }
+  .material-link:hover { background: var(--paper-2); }
+
+  /* Settings: set-link nav (alias for settings-nav a) + cur state */
+  .set-link {
+    text-decoration: none; padding: 10px 12px;
+    border-radius: 8px;
+    font: 600 13px 'Roboto', sans-serif; color: var(--ink-2);
+    display:flex; align-items:center; gap: 8px;
+    flex-wrap: wrap;
+  }
+  .set-link:hover { background: var(--paper-2); }
+  .set-link.cur { background: var(--teal-50); color: var(--teal-700); }
+  .set-link .feat { margin-left: auto; }
+
+  /* settings-nav: add same column padding feel */
+  .settings-nav { padding: 8px; }
+  .settings-content { display:flex; flex-direction: column; gap: 18px; }
+
+  /* setting-row override for new layout: 4 columns */
+  .setting-row {
+    display:grid; grid-template-columns: 1.6fr auto auto;
+    gap: 16px; align-items: center;
+    padding: 14px 22px;
+  }
+  .setting-toggles { display:flex; gap: 6px; flex-wrap: wrap; align-items:center; }
+
+  /* HTML toggle (input + span pattern) */
+  .toggle { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle .toggle-track {
+    position: absolute; cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--line); border-radius: 999px;
+    transition: background .15s ease;
+  }
+  .toggle .toggle-track::after {
+    content:""; position:absolute; top: 2px; left: 2px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: white;
+    transition: left .15s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,.15);
+  }
+  .toggle input:checked + .toggle-track { background: var(--teal); }
+  .toggle input:checked + .toggle-track::after { left: 20px; }
+
+  /* Profile info grid */
+  .profile-grid {
+    display:grid; grid-template-columns: repeat(2, 1fr); gap: 18px 24px;
+  }
+
+  /* Language pill */
+  .lang-pill {
+    border: 1px solid var(--line); background: var(--card);
+    border-radius: 999px; padding: 6px 14px;
+    font: 600 12px 'Roboto', sans-serif; color: var(--ink-2);
+    cursor: pointer;
+  }
+  .lang-pill:hover { background: var(--paper-2); }
+  .lang-pill.cur { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* Dependent / authorized rep row */
+  .dep-row {
+    display:grid;
+    grid-template-columns: 44px 1fr auto auto;
+    gap: 14px; align-items: center;
+    padding: 12px 0; border-bottom: 1px solid var(--line);
+  }
+  .dep-row:last-child { border-bottom: none; }
+  .avatar-md {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal), var(--teal-700));
+    color: white;
+    font: 700 14px 'Roboto', sans-serif;
+    display:inline-flex; align-items:center; justify-content:center;
+    border: 1px solid var(--line-2);
+  }
+
+  /* Connected apps grid */
+  .app-grid {
+    display:grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+  }
+  .app-tile {
+    display:flex; align-items:center; gap: 12px;
+    padding: 14px; border: 1px solid var(--line);
+    border-radius: 10px; background: var(--paper-2);
+  }
+  .app-tile-ico {
+    width: 40px; height: 40px; border-radius: 10px;
+    color: white; font: 700 13px 'Roboto', sans-serif;
+    display:inline-flex; align-items:center; justify-content:center;
+    flex-shrink: 0;
+  }
+
+  /* ===== ADMIN PORTAL ===== */
+  .admin-shell { background: #f5efe2; }
+  .admin-banner {
+    background: linear-gradient(90deg, #4A2A1A, #6E3F26);
+    color: var(--paper);
+    padding: 10px 28px; font-size: 12.5px;
+    display:flex; align-items:center; justify-content:space-between;
+    border-bottom: 1px solid #5A3520;
+  }
+  .admin-banner-l { display:flex; align-items:center; gap: 12px; }
+  .admin-banner-r { display:flex; align-items:center; gap: 14px; }
+  .admin-shield {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.18);
+    display:inline-flex; align-items:center; justify-content:center;
+    color: var(--gold);
+  }
+  .admin-topnav { background: #2C1A12; border-bottom: 1px solid #3A2418; padding: 12px 28px; top: 50px;}
+  .admin-topnav .brand-mark { color: var(--paper); }
+  .admin-topnav .brand-mark .brand-dot { background: var(--gold); }
+  .admin-topnav .topnav-links a { color: rgba(255,255,255,.7); }
+  .admin-topnav .topnav-links a:hover { background: rgba(255,255,255,.06); }
+  .admin-topnav .topnav-links a.cur { background: rgba(200,151,60,.16); color: var(--gold); }
+  .admin-topnav .icon-btn { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.15); color: white; }
+
+  .admin-foot {
+    background: #2C1A12; border-top: 1px solid #3A2418; color: rgba(255,255,255,.7);
+  }
+  .admin-foot a { color: rgba(255,255,255,.7); }
+  .admin-foot a:hover { color: var(--gold); }
+  .admin-foot .powered { color: rgba(255,255,255,.5); }
+  .admin-foot .powered b { color: var(--gold); }
+
+  .admin-card { border-color: #d8cdb1; }
+
+  /* admin search row */
+  .admin-search-row { display:flex; gap: 10px; align-items:center; flex-wrap: wrap; }
+  .search-wrap {
+    flex: 1; min-width: 280px;
+    position: relative;
+  }
+  .search-wrap .ico {
+    position: absolute; left: 12px; top: 50%;
+    transform: translateY(-50%); color: var(--muted-2);
+    pointer-events: none;
+  }
+  .search-wrap input.field { padding-left: 36px; }
+
+  .admin-tbl tr.row-hot { background: var(--gold-soft); }
+  .admin-tbl tr.row-hot:hover { background: var(--gold-soft); }
+
+  .impersonate-note {
+    margin-top: 18px; padding: 14px;
+    background: var(--paper-2);
+    border: 1px dashed var(--terra); border-radius: 10px;
+    font-size: 12.5px; color: var(--ink-2);
+    display:flex; gap: 12px; align-items: flex-start;
+  }
+  .impersonate-note b { color: var(--ink); }
+
+  /* Admin tile grid */
+  .admin-grid {
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  .admin-tile {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px;
+    display:flex; flex-direction: column; gap: 10px;
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .admin-tile:hover { transform: translateY(-2px); box-shadow: 0 8px 20px -8px rgba(14,42,44,.18); }
+  .admin-tile-ico {
+    width: 40px; height: 40px; border-radius: 10px;
+    color: white;
+    display:inline-flex; align-items:center; justify-content:center;
+  }
+  .admin-tile h4 {
+    font: 700 14.5px 'Roboto', sans-serif;
+    margin: 4px 0 0; color: var(--ink);
+    display:flex; align-items:center; gap: 8px;
+  }
+  .admin-tile p {
+    font-size: 12.5px; color: var(--muted);
+    margin: 0; line-height: 1.5;
+  }
+
+  /* KPI row */
+  .kpi-row {
+    display:grid; grid-template-columns: repeat(5, 1fr); gap: 14px;
+  }
+  .kpi {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display:flex; flex-direction: column; gap: 4px;
+  }
+  .kpi-label {
+    font: 600 11px 'Roboto', sans-serif;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted-2);
+  }
+  .kpi-val {
+    font: 700 24px 'JetBrains Mono', monospace;
+    color: var(--ink); letter-spacing: -.01em;
+  }
+  .kpi-delta {
+    font: 600 11px 'JetBrains Mono', monospace;
+    color: var(--muted);
+  }
+  .kpi-delta.up { color: #4A7C57; }
+  .kpi-delta.down { color: var(--terra); }
+
+  /* Bar chart */
+  .bars { display:flex; flex-direction: column; gap: 10px; }
+  .bar-row {
+    display:grid;
+    grid-template-columns: 140px 1fr 80px;
+    gap: 12px; align-items: center;
+    font-size: 12.5px;
+  }
+  .bar-lbl { color: var(--ink-2); font-weight: 500; }
+  .bar {
+    height: 18px; background: var(--paper-2);
+    border-radius: 4px; overflow: hidden;
+  }
+  .bar span {
+    display:block; height: 100%;
+    background: linear-gradient(90deg, var(--teal), #0E98BE);
+    border-radius: 4px;
+  }
+  .bar-num { font-family: 'JetBrains Mono', monospace; color: var(--muted); text-align: right; font-size: 11.5px; }
+
+  /* Funnel */
+  .funnel { display:flex; flex-direction: column; gap: 8px; }
+  .funnel-step {
+    display:grid; grid-template-columns: 200px 1fr 160px;
+    gap: 14px; align-items: center;
+    font-size: 12.5px;
+  }
+  .funnel-step .fl-name { color: var(--ink); font-weight: 600; }
+  .funnel-step .fl-bar {
+    height: 28px; width: var(--w);
+    background: var(--c);
+    border-radius: 6px;
+    transition: width .3s ease;
+  }
+  .funnel-step .fl-num { font-family: 'JetBrains Mono', monospace; color: var(--muted); font-size: 12px; }
+
+  /* Util responsive */
+  @media (max-width: 1100px) {
+    .grid-4 { grid-template-columns: repeat(2,1fr); }
+    .grid-3 { grid-template-columns: repeat(2,1fr); }
+    .signin-wrap { grid-template-columns: 1fr; }
+    .signin-art { padding: 36px 28px; }
+    .signin-form-pane { padding: 36px 28px; }
+    .msg-layout { grid-template-columns: 1fr; height: auto; }
+    .settings-layout { grid-template-columns: 1fr; }
+    .settings-nav { position: static; flex-direction: row; overflow:auto; }
+    .two-col { grid-template-columns: 1fr; }
+    .admin-grid { grid-template-columns: repeat(2, 1fr); }
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .app-grid { grid-template-columns: 1fr; }
+    .profile-grid { grid-template-columns: 1fr; }
+    .idcard-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  /* ===== SIGN-IN: WF mobile style override ===== */
+  /* Scoped to #signin only; other screens keep their current Northwind aesthetic. */
+
+  #signin {
+    --wf-primary:    #0080A3;
+    --wf-primary-2:  #0E98BE;
+    --wf-shade1:     #19566A;
+    --wf-shade2:     #0F3541;
+    --wf-bg:         #F2F8FA;
+    --wf-surface:    #ffffff;
+    --wf-line:       #D9E3E7;
+    --wf-line-2:     #e8edf0;
+    --wf-text:       #161B1F;
+    --wf-text-2:     #282F35;
+    --wf-text-3:     #4E5961;
+    --wf-text-4:     #78868E;
+    --wf-text-5:     #A6B4BA;
+    --wf-success:    #73BE5E;
+    --wf-success-d:  #317A20;
+    --wf-destruct:   #923133;
+  }
+
+  /* Layout shell */
+  #signin .signin-wrap {
+    min-height: calc(100vh - 48px);
+    grid-template-columns: 1.05fr 1fr;
+    background: var(--wf-bg);
+  }
+
+  /* Left brand panel — WF deep teal with subtle radial highlights */
+  #signin .signin-art {
+    background:
+      radial-gradient(800px 500px at 80% 20%, rgba(14,152,190,.22), transparent 60%),
+      radial-gradient(600px 400px at 10% 90%, rgba(0,128,163,.18), transparent 60%),
+      linear-gradient(160deg, var(--wf-shade2) 0%, #0B2932 50%, var(--wf-shade1) 100%);
+    color: #ffffff;
+    padding: 56px 64px;
+  }
+  #signin .signin-art::before {
+    border-color: rgba(255,255,255,.06);
+    box-shadow:
+      inset 0 0 0 80px rgba(255,255,255,0),
+      inset 0 0 0 81px rgba(255,255,255,.05),
+      inset 0 0 0 160px rgba(255,255,255,0),
+      inset 0 0 0 161px rgba(255,255,255,.03);
+  }
+
+  /* Brand head (Northwind Health) */
+  #signin .signin-art-head {
+    font-family: 'Merriweather', Georgia, serif;
+    font-weight: 700; font-size: 20px;
+    color: #ffffff; letter-spacing: -.005em;
+  }
+  #signin .signin-art-head em {
+    font-family: 'Merriweather', Georgia, serif;
+    font-style: italic; font-weight: 300;
+    color: #B0DEEA;
+  }
+  #signin .signin-art-head .brand-mark {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--wf-primary), var(--wf-primary-2));
+    color: #ffffff;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.12);
+  }
+
+  /* Hero quote */
+  #signin .signin-art-quote .pre {
+    font: 700 11px 'Roboto', system-ui, sans-serif;
+    text-transform: uppercase; letter-spacing: .12em;
+    color: var(--wf-primary-2);
+  }
+  #signin .signin-art-quote .pre::before { background: var(--wf-primary-2); }
+  #signin .signin-art-quote h2 {
+    font-family: 'Merriweather', Georgia, serif;
+    font-weight: 300; font-size: 38px; line-height: 1.18;
+    letter-spacing: -.005em; color: #ffffff;
+  }
+  #signin .signin-art-quote h2 em {
+    color: var(--wf-primary-2);
+    font-family: 'Merriweather', Georgia, serif;
+    font-weight: 300; font-style: italic;
+  }
+  #signin .signin-art-quote .by {
+    font-family: 'Roboto', system-ui, sans-serif;
+    font-size: 13.5px; line-height: 1.55;
+    color: #B0DEEA; margin-top: 22px;
+  }
+
+  /* Bottom badges */
+  #signin .signin-art-foot {
+    font: 500 11px 'Roboto', system-ui, sans-serif;
+    color: #7AA9B5;
+  }
+  #signin .signin-art-foot span::before { background: var(--wf-success); }
+
+  /* Form pane */
+  #signin .signin-form-pane {
+    background: var(--wf-bg);
+    padding: 48px 64px;
+  }
+  #signin .signin-form { max-width: 380px; }
+
+  /* Eyebrow & header */
+  #signin .signin-form .eyebrow {
+    font: 700 12px 'Roboto', system-ui, sans-serif;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--wf-primary);
+  }
+  #signin .signin-form .eyebrow::before { background: var(--wf-primary); }
+  #signin .signin-form h1 {
+    font-family: 'Merriweather', Georgia, serif;
+    font-weight: 300; font-size: 32px; line-height: 1.18;
+    letter-spacing: -.005em; color: var(--wf-text);
+  }
+  #signin .signin-form h1 em {
+    font-family: 'Merriweather', Georgia, serif;
+    font-weight: 300; font-style: italic; color: var(--wf-primary);
+  }
+  #signin .signin-form .lede {
+    font-family: 'Roboto', system-ui, sans-serif;
+    color: var(--wf-text-3); font-size: 14px;
+    margin-bottom: 28px;
+  }
+
+  /* Language toggle — WF iOS-style segmented */
+  #signin .lang-toggle {
+    background: var(--wf-line);
+    border: none; border-radius: 8px; padding: 2px;
+  }
+  #signin .lang-toggle button {
+    font: 500 12px 'Roboto', system-ui, sans-serif;
+    color: var(--wf-text-2);
+    border-radius: 7px;
+    padding: 4px 12px;
+  }
+  #signin .lang-toggle button.active {
+    background: var(--wf-primary); color: #ffffff;
+    font-weight: 600;
+  }
+
+  /* Form fields — WF Android filled-box style */
+  #signin .signin-form .field {
+    margin-bottom: 14px;
+    font-family: 'Roboto', system-ui, sans-serif;
+  }
+  #signin .signin-form .field label {
+    display: none; /* visually hidden — label appears inside the field */
+  }
+  #signin .signin-form .field {
+    position: relative;
+  }
+  #signin .signin-form .field::before {
+    content: attr(data-label);
+    position: absolute; top: 8px; left: 16px;
+    font: 400 12px 'Roboto', system-ui, sans-serif;
+    color: var(--wf-text-3);
+    pointer-events: none;
+    z-index: 1;
+  }
+  #signin .signin-form .field input {
+    width: 100%; box-sizing: border-box;
+    background: var(--wf-line);
+    border: none;
+    border-bottom: 1px solid var(--wf-text-3);
+    border-radius: 4px 4px 0 0;
+    height: 56px;
+    padding: 22px 16px 8px;
+    font: 400 16px 'Roboto', system-ui, sans-serif;
+    color: var(--wf-text-2);
+    outline: none;
+    transition: border-color .15s ease;
+  }
+  #signin .signin-form .field input::placeholder {
+    color: var(--wf-text-3); opacity: .8;
+  }
+  #signin .signin-form .field input:focus {
+    border-bottom: 2px solid var(--wf-primary);
+    padding-bottom: 7px;
+  }
+
+  /* Remember + forgot row */
+  #signin .signin-form .row-between { margin: 8px 0 22px; }
+  #signin .signin-form .checkbox {
+    font: 400 13px 'Roboto', system-ui, sans-serif;
+    color: var(--wf-text-3);
+  }
+  #signin .signin-form .checkbox input[type="checkbox"] {
+    accent-color: var(--wf-primary);
+  }
+  #signin .signin-form .row-between a {
+    color: var(--wf-primary); font-weight: 500;
+    font: 500 13px 'Roboto', system-ui, sans-serif;
+  }
+
+  /* Primary submit — WF pill button */
+  #signin .signin-form .submit-btn {
+    width: 100%;
+    background: var(--wf-primary-2);
+    color: #ffffff;
+    border: none;
+    border-radius: 30px;
+    height: 51px; padding: 0;
+    font: 500 16px system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.32px;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: background .15s ease;
+    box-shadow: 0 2px 6px rgba(0,128,163,.18);
+  }
+  #signin .signin-form .submit-btn:hover { background: var(--wf-primary); }
+
+  /* Register prompt */
+  #signin .signin-form .register-prompt {
+    text-align: center; margin-top: 24px;
+    font: 400 13px 'Roboto', system-ui, sans-serif;
+    color: var(--wf-text-3);
+  }
+  #signin .signin-form .register-prompt a {
+    color: var(--wf-primary); font-weight: 500;
+    text-decoration: none;
+  }
+  #signin .signin-form .register-prompt a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════
+     PROTOTYPE TAB BAR (reviewer scaffolding)
+     ════════════════════════════════════════════════════════════ -->
+<div class="proto-bar">
+  <div class="proto-tabs" id="protoTabs">
+    <button class="proto-tab active" data-tgt="signin"><span class="num">01</span>Sign In</button>
+    <button class="proto-tab" data-tgt="dashboard"><span class="num">02</span>Dashboard</button>
+    <button class="proto-tab" data-tgt="benefits"><span class="num">03</span>Benefits</button>
+    <button class="proto-tab" data-tgt="claims"><span class="num">04</span>Claims &amp; Auths</button>
+    <button class="proto-tab" data-tgt="providers"><span class="num">05</span>Providers &amp; PCP</button>
+    <button class="proto-tab" data-tgt="documents"><span class="num">06</span>Documents &amp; Forms</button>
+    <button class="proto-tab" data-tgt="messages"><span class="num">07</span>Messages</button>
+    <button class="proto-tab" data-tgt="idcard"><span class="num">08</span>ID Card &amp; Materials</button>
+    <button class="proto-tab" data-tgt="settings"><span class="num">09</span>Profile &amp; Settings</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SCREEN 01 — SIGN IN
+     Features: #1 Registration/Login/Reset · #4 White-label · #17 Language ·
+              #19 Inbound SSO · #26 WCAG 2.1 / 508
+     ════════════════════════════════════════════════════════════ -->
+<section class="screen active" id="signin">
+  <div class="signin-wrap">
+    <!-- Brand / story panel -->
+    <div class="signin-art">
+      <div class="signin-art-head">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88" fill="currentColor"/>
+          </svg>
+        </div>
+        Northwind <em>Health</em>
+      </div>
+
+      <div class="signin-art-quote">
+        <div class="pre">Welcome back</div>
+        <h2>Your plan, <em>at hand.</em><br>Less paper. More clarity.</h2>
+        <p class="by">Track benefits, file claims, message your plan, and download what you need —
+          all in one place. The new member experience from Northwind Health.</p>
+      </div>
+
+      <div class="signin-art-foot">
+        <span>WCAG 2.1 AA &amp; Section 508</span>
+        <span>HIPAA compliant</span>
+        <span>SOC 2 Type II</span>
+      </div>
+    </div>
+
+    <!-- Form panel -->
+    <div class="signin-form-pane">
+      <form class="signin-form" onsubmit="event.preventDefault(); show('dashboard');">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+          <div class="lang-toggle" title="Language preference — feature #17">
+            <button type="button" class="active">EN</button>
+            <button type="button">ES</button>
+          </div>
+        </div>
+
+        <div class="eyebrow">Member Portal</div>
+        <h1>Sign in to your <em>account</em></h1>
+        <p class="lede">Welcome back. Choose how you'd like to access your plan.</p>
+
+        <div class="field" data-label="Username or Member ID">
+          <label for="si-user">Username or Member ID</label>
+          <input type="text" id="si-user" placeholder="e.g. j.morales or NW-44820173" autocomplete="username">
+        </div>
+
+        <div class="field" data-label="Password">
+          <label for="si-pass">Password</label>
+          <input type="password" id="si-pass" placeholder="••••••••••••" autocomplete="current-password">
+        </div>
+
+        <div class="row-between">
+          <label class="checkbox">
+            <input type="checkbox" checked> Remember this device
+          </label>
+          <a href="#" onclick="event.preventDefault();">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary submit-btn">
+          Sign in to Northwind Health
+        </button>
+
+        <p class="register-prompt">
+          New here? <a href="#" onclick="event.preventDefault();">Register your account</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     SCREEN 02 — DASHBOARD / HOME
+     Features: #2 Nav · #3 Customizable tiles · #4 White-label ·
+              #16 Notifications · #22 ID card tile · #24 Alerts
+     ════════════════════════════════════════════════════════════ -->
+<section class="screen" id="dashboard">
+  <div class="app">
+    <!-- Alert banner — feature #24 -->
+    <div class="alert-banner">
+      <div class="alert-text">
+        <span class="pulse"></span>
+        <span><b>Open enrollment closes Dec 15.</b> Review your 2027 plan options before the deadline.</span>
+      </div>
+      <div class="alert-actions">
+        <a href="#">Review plan options →</a>
+        <button class="close" aria-label="Dismiss">×</button>
+      </div>
+    </div>
+
+    <!-- Top nav (white-label + customizable links) — features #2, #3, #4 -->
+    <div class="app-top">
+      <div class="app-top-inner">
+        <div class="brand">
+          <div class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--gold)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88" fill="var(--gold)"/></svg></div>
+        </div>
+        <nav class="top-nav">
+          <a href="#" class="active" onclick="event.preventDefault(); show('dashboard')">Home</a>
+          <a href="#" onclick="event.preventDefault(); show('benefits')">Benefits</a>
+          <a href="#" onclick="event.preventDefault(); show('claims')">Claims</a>
+          <a href="#" onclick="event.preventDefault(); show('providers')">Providers</a>
+          <a href="#" onclick="event.preventDefault(); show('documents')">Documents</a>
+          <a href="#" onclick="event.preventDefault(); show('messages')">Messages<span class="dot-badge">3</span></a>
+          <a href="#" onclick="event.preventDefault(); show('idcard')">ID Card</a>
+        </nav>
+        <div class="top-utils">
+          <div class="lang-toggle">
+            <button class="active">EN</button>
+            <button>ES</button>
+          </div>
+          <button class="icon-btn" title="Notifications — #16" aria-label="Notifications">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+            <span class="dot"></span>
+          </button>
+          <button class="icon-btn" title="Help &amp; FAQ" aria-label="Help">
+            <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 5.8 1c0 2-3 2-3 4"/><path d="M12 17h.01"/></svg>
+          </button>
+          <div class="avatar" onclick="show('settings')" title="Profile &amp; Settings">JM</div>
+        </div>
+      </div>
+    </div>
+
+    <main class="page">
+      <!-- Greeting -->
+      <div class="page-header">
+        <div>
+          <div class="label-eyebrow" style="margin-bottom:8px">Tuesday · May 5, 2026</div>
+          <h1 class="greet">Good afternoon, <em>Julia.</em></h1>
+          <p class="greet-sub">Here's a snapshot of your coverage, recent activity, and things waiting for you!</p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <button class="btn btn-ghost btn-sm">
+            <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            Customize tiles
+          </button>
+        </div>
+      </div>
+
+      <!-- Hero accumulator card — feature #5 preview -->
+      <div class="hero-card mb-4">
+        <div style="display:flex; justify-content:space-between; align-items: flex-start;">
+          <div>
+            <div class="label-eyebrow">2026 medical plan · Northwind PPO Gold</div>
+            <div class="serif" style="font-size:24px; font-weight:500; margin-top:6px; color:var(--paper);">
+              You've used <em style="color:var(--gold);">42%</em> of your in-network deductible.
+            </div>
+          </div>
+          <div style="display:flex; gap:10px;">
+          </div>
+        </div>
+
+        <div class="accum-grid">
+          <div class="accum">
+            <h4>Deductible — In-network</h4>
+            <div class="num">$1,260<span class="max">/ $3,000</span></div>
+            <div class="accum-bar"><div class="accum-bar-fill" style="width:42%"></div></div>
+            <div class="small">$1,740 remaining · benefit period ends Dec 31, 2026</div>
+          </div>
+          <div class="accum">
+            <h4>Out-of-pocket maximum</h4>
+            <div class="num">$2,180<span class="max">/ $7,500</span></div>
+            <div class="accum-bar"><div class="accum-bar-fill" style="width:29%"></div></div>
+            <div class="small">$5,320 remaining · resets Jan 1, 2027</div>
+          </div>
+        </div>
+
+        <div class="hero-quick-row">
+          <button class="hero-quick" onclick="show('claims')">
+            <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+            See what's applied
+          </button>
+          <button class="hero-quick" onclick="show('benefits')">
+            <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            View benefit details
+          </button>
+          <button class="hero-quick" onclick="show('providers')">
+            <svg class="ico ico-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            Find in-network care
+          </button>
+        </div>
+      </div>
+
+      <!-- Tiles row — customizable per #3 -->
+      <div class="grid-4 mb-4">
+        <!-- Claims preview tile — #9 -->
+        <div class="tile">
+          <h4>Recent claims</h4>
+          <div class="big">$684<span class="unit">awaiting EOB</span></div>
+          <div class="sub">3 claims processed in the last 30 days</div>
+          <div class="tile-foot">
+            <button class="btn-link" onclick="show('claims')">View claims</button>
+          </div>
+        </div>
+
+        <!-- PCP tile — #14 -->
+        <div class="tile">
+          <h4>Your PCP</h4>
+          <div style="display:flex; align-items:center; gap:10px; margin-top:4px;">
+            <div class="provider-avatar" style="width:42px;height:42px;font-size:14px;border-radius:10px;">RS</div>
+            <div>
+              <div style="font-weight:600; font-size:13.5px;">Dr. Rachel Stone, MD</div>
+              <div class="small text-mute">Family Medicine · Seattle</div>
+            </div>
+          </div>
+          <div class="tile-foot">
+            <button class="btn-link" onclick="show('providers')">Update PCP</button>
+          </div>
+        </div>
+
+        <!-- Documents tile — #6 -->
+        <div class="tile">
+          <h4>Documents</h4>
+          <div class="big">2<span class="unit">new this week</span></div>
+          <div class="sub">EOB statements &amp; care plan letter</div>
+          <div class="tile-foot">
+            <button class="btn-link" onclick="show('documents')">Open Document Center</button>
+          </div>
+        </div>
+
+        <!-- ID Card tile — #22 -->
+        <div class="tile">
+          <h4>Member ID Card</h4>
+          <div class="id-card mt-2">
+            <div class="id-top">
+              <div>
+                <div class="id-plan">Northwind PPO Gold</div>
+                <div class="id-num">NW · 4482 · 0173 · 02</div>
+              </div>
+              <div style="text-align:right; font-size:9px; letter-spacing:.1em; color:#C7B07A; font-weight:600;">RxBIN<br><b style="color:var(--paper); font-size:11px;">003858</b></div>
+            </div>
+            <div class="id-row">
+              <div><span>Member</span><b>Julia Morales</b></div>
+              <div><span>Group</span><b>NW-EPaaS-22</b></div>
+            </div>
+          </div>
+          <div class="tile-foot" style="display:flex; gap:8px;">
+            <button class="btn btn-ghost btn-sm">Download</button>
+            <button class="btn btn-ghost btn-sm" onclick="show('idcard')">Request new</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two-column: Activity & Quick actions -->
+      <div class="grid-2">
+        <!-- Activity feed -->
+        <div class="card">
+          <div class="card-head">
+            <h3>Recent Activity</h3>
+            <span class="meta">Last 7 days</span>
+          </div>
+          <div class="card-pad" style="padding-top:0; padding-bottom:6px;">
+            <div class="feed-item">
+              <div class="feed-icon green"><svg class="ico" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+              <div class="feed-body">
+                <div class="ttl">Claim CLM-2026-04482 has been processed</div>
+                <div class="desc">Dr. Stone, office visit on Apr 28 · You owe $42.00</div>
+              </div>
+              <div class="feed-time">2h ago</div>
+            </div>
+            <div class="feed-item">
+              <div class="feed-icon"><svg class="ico" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
+              <div class="feed-body">
+                <div class="ttl">New EOB available for claim CLM-2026-04321</div>
+                <div class="desc">Lakeshore Imaging · radiology · processed Apr 25</div>
+              </div>
+              <div class="feed-time">Yesterday</div>
+            </div>
+            <div class="feed-item">
+              <div class="feed-icon terra"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+              <div class="feed-body">
+                <div class="ttl">Message from Member Services — re: prior authorization</div>
+                <div class="desc">Caitlin K. replied to your question about referral AUTH-2026-118</div>
+              </div>
+              <div class="feed-time">2d ago</div>
+            </div>
+            <div class="feed-item">
+              <div class="feed-icon gold"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7v10a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4V7"/><path d="m9 11 3 3 8-8"/></svg></div>
+              <div class="feed-body">
+                <div class="ttl">Authorized Representative request approved</div>
+                <div class="desc">Mark Morales now has access to manage your account · feature #27</div>
+              </div>
+              <div class="feed-time">Apr 30</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick actions / Things to do -->
+        <div class="card">
+          <div class="card-head">
+            <h3>3 things waiting for you</h3>
+            <span class="chip chip-terra"><span class="dot"></span>Action needed</span>
+          </div>
+          <div class="card-pad" style="padding-top:14px;">
+            <div style="border:1px solid var(--line); border-radius:10px; padding:14px; margin-bottom:10px; display:flex; gap:14px; align-items:flex-start;">
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--terra-soft);color:var(--terra);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0z"/></svg>
+              </div>
+              <div style="flex:1;">
+                <div style="font-weight:600; color:var(--ink);">Coordination of benefits questionnaire</div>
+                <div class="small text-mute mt-2">We need to know if you have other coverage. Takes about 90 seconds.</div>
+                <button class="btn btn-accent btn-sm mt-3">Complete now</button>
+              </div>
+            </div>
+
+            <div style="border:1px solid var(--line); border-radius:10px; padding:14px; margin-bottom:10px; display:flex; gap:14px; align-items:flex-start;">
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--gold-soft);color:#6F4E16;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
+              </div>
+              <div style="flex:1;">
+                <div style="font-weight:600; color:var(--ink);">Sign your 2026 HIPAA consent</div>
+                <div class="small text-mute mt-2">Review and e-sign — required for paperless statements.</div>
+                <button class="btn btn-ghost btn-sm mt-3">Review &amp; sign</button>
+              </div>
+            </div>
+
+            <div style="border:1px solid var(--line); border-radius:10px; padding:14px; display:flex; gap:14px; align-items:flex-start;">
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--teal-50);color:var(--teal-700);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </div>
+              <div style="flex:1;">
+                <div style="font-weight:600; color:var(--ink);">Annual wellness visit reminder</div>
+                <div class="small text-mute mt-2">Covered at 100% — schedule with Dr. Stone or another in-network PCP.</div>
+                <button class="btn btn-ghost btn-sm mt-3" onclick="show('providers')">Find a provider</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <div class="app-foot">
+      <div class="app-foot-inner">
+        <div>
+          <a href="#">FAQ &amp; Forms</a><a href="#">Accessibility</a><a href="#">Privacy / HIPAA</a><a href="#">Contact &amp; Help</a>
+        </div>
+        <div class="powered">© 2026 Northwind Health · Powered by <b>Wellframe Web</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     SCREEN 03 — BENEFITS & ACCUMULATORS
+     Features: #5 Benefits, accumulators, COB · #2 Nav
+     ════════════════════════════════════════════════════════════ -->
+<section class="screen" id="benefits">
+  <div class="app">
+    <div class="app-top">
+      <div class="app-top-inner">
+        <div class="brand"><div class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--gold)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88" fill="var(--gold)"/></svg></div></div>
+        <nav class="top-nav">
+          <a href="#" onclick="event.preventDefault(); show('dashboard')">Home</a>
+          <a href="#" class="active">Benefits</a>
+          <a href="#" onclick="event.preventDefault(); show('claims')">Claims</a>
+          <a href="#" onclick="event.preventDefault(); show('providers')">Providers</a>
+          <a href="#" onclick="event.preventDefault(); show('documents')">Documents</a>
+          <a href="#" onclick="event.preventDefault(); show('messages')">Messages<span class="dot-badge">3</span></a>
+          <a href="#" onclick="event.preventDefault(); show('idcard')">ID Card</a>
+        </nav>
+        <div class="top-utils">
+          <div class="lang-toggle"><button class="active">EN</button><button>ES</button></div>
+          <button class="icon-btn" aria-label="Notifications"><svg class="ico" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button>
+          <div class="avatar" onclick="show('settings')">JM</div>
+        </div>
+      </div>
+    </div>
+
+    <main class="page">
+      <div class="breadcrumb">Home <span class="sep">/</span> <span class="current">Benefits</span></div>
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Your <span class="em">benefits</span></h1>
+          <p class="page-sub">Coverage, accumulators, and what counts toward your deductible — across every policy you carry with us.</p>
+        </div>
+</div>
+
+      <!-- Policy tabs — feature #5 multi-policy -->
+      <div class="tabset">
+        <button class="active">Medical · PPO Gold</button>
+        <button>Dental · Premier</button>
+        <button>Vision · 20/20</button>
+        <button>Pharmacy · Rx Standard</button>
+      </div>
+
+      <!-- Accumulator rings -->
+      <div class="grid-3 mb-4">
+        <div class="card card-pad">
+          <div class="label-eyebrow mb-3">Deductible — In-network</div>
+          <div class="ring-wrap">
+            <svg width="92" height="92" viewBox="0 0 92 92">
+              <circle cx="46" cy="46" r="38" fill="none" stroke="#EFE7D2" stroke-width="10"/>
+              <circle cx="46" cy="46" r="38" fill="none" stroke="#0080A3" stroke-width="10"
+                      stroke-dasharray="238.76" stroke-dashoffset="138.48"
+                      stroke-linecap="round" transform="rotate(-90 46 46)"/>
+              <text x="46" y="50" text-anchor="middle" font-family="Merriweather, serif" font-size="20" font-weight="500" fill="#0F3541">42%</text>
+            </svg>
+            <div class="ring-meta">
+              <div class="num">$1,260</div>
+              <div class="max">of $3,000 met</div>
+              <div class="small text-mute mt-2">$1,740 left in 2026</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-pad">
+          <div class="label-eyebrow mb-3">Out-of-pocket max — In-network</div>
+          <div class="ring-wrap">
+            <svg width="92" height="92" viewBox="0 0 92 92">
+              <circle cx="46" cy="46" r="38" fill="none" stroke="#EFE7D2" stroke-width="10"/>
+              <circle cx="46" cy="46" r="38" fill="none" stroke="#0E98BE" stroke-width="10"
+                      stroke-dasharray="238.76" stroke-dashoffset="169.52"
+                      stroke-linecap="round" transform="rotate(-90 46 46)"/>
+              <text x="46" y="50" text-anchor="middle" font-family="Merriweather, serif" font-size="20" font-weight="500" fill="#0F3541">29%</text>
+            </svg>
+            <div class="ring-meta">
+              <div class="num">$2,180</div>
+              <div class="max">of $7,500 met</div>
+              <div class="small text-mute mt-2">$5,320 left in 2026</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-pad">
+          <div class="label-eyebrow mb-3">Out-of-network spend</div>
+          <div class="ring-wrap">
+            <svg width="92" height="92" viewBox="0 0 92 92">
+              <circle cx="46" cy="46" r="38" fill="none" stroke="#EFE7D2" stroke-width="10"/>
+              <circle cx="46" cy="46" r="38" fill="none" stroke="#73BE5E" stroke-width="10"
+                      stroke-dasharray="238.76" stroke-dashoffset="227.32"
+                      stroke-linecap="round" transform="rotate(-90 46 46)"/>
+              <text x="46" y="50" text-anchor="middle" font-family="Merriweather, serif" font-size="20" font-weight="500" fill="#0F3541">5%</text>
+            </svg>
+            <div class="ring-meta">
+              <div class="num">$240</div>
+              <div class="max">of $5,000 OON ded</div>
+              <div class="small text-mute mt-2">In-network preferred for lowest cost</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coverage detail -->
+      <div class="grid-2 mb-4">
+        <div class="card">
+          <div class="card-head">
+            <h3>Cost-sharing at a glance</h3>
+            <span class="meta">Benefit period: Jan 1 – Dec 31, 2026</span>
+          </div>
+          <div style="padding: 4px 0 14px;">
+            <table class="tbl" style="border-radius:0;">
+              <thead><tr><th>Service</th><th>In-network</th><th>Out-of-network</th></tr></thead>
+              <tbody>
+                <tr><td>Primary care visit</td><td><b class="text-teal">$25 copay</b></td><td>40% after ded</td></tr>
+                <tr><td>Specialist visit</td><td><b class="text-teal">$50 copay</b></td><td>40% after ded</td></tr>
+                <tr><td>Preventive care</td><td><b class="text-teal">$0 — 100% covered</b></td><td>40% after ded</td></tr>
+                <tr><td>Urgent care</td><td>$75 copay</td><td>$75 copay</td></tr>
+                <tr><td>Emergency room</td><td>$300 copay</td><td>$300 copay</td></tr>
+                <tr><td>Inpatient hospital</td><td>20% after ded</td><td>40% after ded</td></tr>
+                <tr><td>Outpatient surgery</td><td>20% after ded</td><td>40% after ded</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col">
+          <!-- Coordination of Benefits -->
+          <div class="card">
+            <div class="card-head">
+              <h3>Coordination of Benefits</h3>
+              <span class="chip chip-terra"><span class="dot"></span>Action needed</span>
+            </div>
+            <div class="card-pad">
+              <p class="small text-mute mb-3">Tell us about any other coverage you have so we can pay claims correctly. This is the COB questionnaire (feature #5).</p>
+              <div class="setting-row" style="padding-top:0;">
+                <div>
+                  <div class="ttl">Do you have other health insurance?</div>
+                  <div class="desc">Last asked April 12, 2025 — please update if anything changed.</div>
+                </div>
+                <button class="btn btn-accent btn-sm">Update COB</button>
+              </div>
+              <div class="setting-row">
+                <div>
+                  <div class="ttl">Medicare eligibility</div>
+                  <div class="desc">Are you or any covered dependent enrolled in Medicare?</div>
+                </div>
+                <span class="chip chip-paper">Not enrolled</span>
+              </div>
+              <div class="setting-row" style="border-bottom:none; padding-bottom:0;">
+                <div>
+                  <div class="ttl">Workers' compensation case</div>
+                  <div class="desc">Open case affecting any current treatment?</div>
+                </div>
+                <span class="chip chip-paper">No active cases</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Eligibility summary -->
+          <div class="card">
+            <div class="card-head">
+              <h3>Who's covered</h3>
+              <span class="meta">3 covered lives</span>
+            </div>
+            <div class="card-pad">
+              <div class="setting-row" style="padding-top:0;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <div class="provider-avatar" style="width:38px;height:38px;font-size:13px;border-radius:10px;">JM</div>
+                  <div>
+                    <div class="ttl">Julia Morales <span class="chip chip-teal" style="margin-left:8px;">Subscriber</span></div>
+                    <div class="desc">Effective Jan 1, 2024 · Member ID NW-44820173-01</div>
+                  </div>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <div class="provider-avatar" style="width:38px;height:38px;font-size:13px;border-radius:10px;background:var(--terra-soft);color:#7A3318;">MM</div>
+                  <div>
+                    <div class="ttl">Mark Morales <span class="chip chip-paper" style="margin-left:8px;">Spouse</span></div>
+                    <div class="desc">Effective Jan 1, 2024 · NW-44820173-02</div>
+                  </div>
+                </div>
+              </div>
+              <div class="setting-row" style="border-bottom:none; padding-bottom:0;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <div class="provider-avatar" style="width:38px;height:38px;font-size:13px;border-radius:10px;background:var(--gold-soft);color:#6F4E16;">EM</div>
+                  <div>
+                    <div class="ttl">Elena Morales <span class="chip chip-paper" style="margin-left:8px;">Dependent · age 11</span></div>
+                    <div class="desc">Effective Jan 1, 2024 · NW-44820173-03</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="app-foot">
+      <div class="app-foot-inner">
+        <div><a href="#">FAQ &amp; Forms</a><a href="#">Accessibility</a><a href="#">Privacy / HIPAA</a><a href="#">Contact &amp; Help</a></div>
+        <div class="powered">© 2026 Northwind Health · Powered by <b>Wellframe Web</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     SCREEN 04 — CLAIMS & AUTHORIZATIONS
+     Features: #9 Claims summary · #10 Claim details · #11 EOB · #12 Auths/Referrals
+     ════════════════════════════════════════════════════════════ -->
+<section class="screen" id="claims">
+  <div class="app">
+    <div class="app-top">
+      <div class="app-top-inner">
+        <div class="brand"><div class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--gold)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88" fill="var(--gold)"/></svg></div></div>
+        <nav class="top-nav">
+          <a href="#" onclick="event.preventDefault(); show('dashboard')">Home</a>
+          <a href="#" onclick="event.preventDefault(); show('benefits')">Benefits</a>
+          <a href="#" class="active">Claims</a>
+          <a href="#" onclick="event.preventDefault(); show('providers')">Providers</a>
+          <a href="#" onclick="event.preventDefault(); show('documents')">Documents</a>
+          <a href="#" onclick="event.preventDefault(); show('messages')">Messages<span class="dot-badge">3</span></a>
+          <a href="#" onclick="event.preventDefault(); show('idcard')">ID Card</a>
+        </nav>
+        <div class="top-utils">
+          <div class="lang-toggle"><button class="active">EN</button><button>ES</button></div>
+          <button class="icon-btn" aria-label="Notifications"><svg class="ico" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button>
+          <div class="avatar" onclick="show('settings')">JM</div>
+        </div>
+      </div>
+    </div>
+
+    <main class="page">
+      <div class="breadcrumb">Home <span class="sep">/</span> <span class="current">Claims &amp; authorizations</span></div>
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Claims, EOBs &amp; <span class="em">authorizations</span></h1>
+          <p class="page-sub">Filter, drill into details, and download EOBs as PDF — for every claim across medical, dental, pharmacy, and vision.</p>
+        </div>
+</div>
+
+      <!-- Sub-tabs -->
+      <div class="tabset">
+        <button class="active">Claims <span class="chip chip-paper" style="margin-left:6px; font-size:10px; padding: 1px 6px;">42</span></button>
+        <button>Authorizations <span class="chip chip-paper" style="margin-left:6px; font-size:10px; padding: 1px 6px;">3</span></button>
+        <button>Referrals <span class="chip chip-paper" style="margin-left:6px; font-size:10px; padding: 1px 6px;">1</span></button>
+        <button>Pharmacy claims</button>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-row">
+        <div class="search">
+          <svg class="ico ico-sm" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input placeholder="Search by claim ID, provider, or patient name…">
+        </div>
+        <select><option>All patients</option><option>Julia Morales</option><option>Mark Morales</option><option>Elena Morales</option></select>
+        <select><option>All status</option><option>Processed</option><option>Pending</option><option>Denied</option></select>
+        <select><option>Last 90 days</option><option>Year to date</option><option>2025</option><option>Custom range</option></select>
+        <button class="btn btn-ghost btn-sm">
+          <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Export
+        </button>
+      </div>
+
+      <!-- Claims table with selected/expanded row -->
+      <div class="card">
+        <table class="tbl" style="border-radius:0;">
+          <thead>
+            <tr>
+              <th style="width:140px;">Claim ID</th>
+              <th>Provider</th>
+              <th>Service date</th>
+              <th>Patient</th>
+              <th>Type</th>
+              <th style="text-align:right;">Plan paid</th>
+              <th style="text-align:right;">You owe</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="num">CLM-2026-04482</span></td>
+              <td><b>Dr. Rachel Stone</b><div class="small text-mute">Family Medicine</div></td>
+              <td><span class="num">Apr 28, 2026</span></td>
+              <td>Julia Morales</td>
+              <td>Office visit</td>
+              <td style="text-align:right;"><span class="num">$148.00</span></td>
+              <td style="text-align:right;"><span class="num"><b>$42.00</b></span></td>
+              <td><span class="chip chip-green"><span class="dot"></span>Processed</span></td>
+              <td><button class="btn btn-ghost btn-sm">View EOB</button></td>
+            </tr>
+
+            <!-- Expanded detail row -->
+            <tr>
+              <td colspan="9" style="background: var(--paper-2); border-left:3px solid var(--terra); padding: 0;">
+                <div style="padding: 22px 26px;">
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:24px; flex-wrap:wrap;">
+                    <div style="flex:1; min-width: 280px;">
+                      <div class="label-eyebrow mb-2">Claim breakdown</div>
+                      <div class="serif" style="font-size:22px; font-weight:500; color: var(--ink); margin-bottom:14px;">
+                        Office visit — Dr. Rachel Stone
+                      </div>
+                      <div class="grid-2 gap-md">
+                        <div>
+                          <div class="small text-mute">Date of service</div>
+                          <div style="font-weight:600;">April 28, 2026</div>
+                        </div>
+                        <div>
+                          <div class="small text-mute">Place of service</div>
+                          <div style="font-weight:600;">Office (POS 11)</div>
+                        </div>
+                        <div>
+                          <div class="small text-mute">Network status</div>
+                          <div style="font-weight:600;" class="text-teal">In-network</div>
+                        </div>
+                        <div>
+                          <div class="small text-mute">Procedure code</div>
+                          <div style="font-weight:600;" class="mono">CPT 99213</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style="flex:1.2; min-width:300px; background: var(--card); border:1px solid var(--line); border-radius:12px; padding: 18px 20px;">
+                      <div class="label-eyebrow mb-2">How this was paid</div>
+                      <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid var(--line);">
+                        <span class="small text-mute">Provider charged</span>
+                        <span class="num">$215.00</span>
+                      </div>
+                      <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid var(--line);">
+                        <span class="small text-mute">Network discount</span>
+                        <span class="num text-teal">−$67.00</span>
+                      </div>
+                      <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid var(--line);">
+                        <span class="small text-mute">Allowed amount</span>
+                        <span class="num">$148.00</span>
+                      </div>
+                      <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid var(--line);">
+                        <span class="small text-mute">Plan paid</span>
+                        <span class="num">$106.00</span>
+                      </div>
+                      <div style="display:flex; justify-content:space-between; padding: 8px 0;">
+                        <span style="font-weight:700; color: var(--ink);">Your responsibility</span>
+                        <span class="num" style="font-weight:700; color: var(--terra);">$42.00</span>
+                      </div>
+                      <div class="small text-mute" style="margin-top:8px;">Applied to deductible: $0 · Copay: $25 · Coinsurance: $17</div>
+                    </div>
+                  </div>
+
+                  <div style="display:flex; gap: 10px; margin-top: 18px;">
+                    <button class="btn btn-primary btn-sm">
+                      <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                      Download EOB (PDF)
+                    </button>
+                    <button class="btn btn-ghost btn-sm">Print</button>
+                    <button class="btn btn-ghost btn-sm" onclick="show('documents')">Submit appeal</button>
+                    <div style="flex:1;"></div>
+                    <button class="btn btn-ghost btn-sm">Hide details</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td><span class="num">CLM-2026-04321</span></td>
+              <td><b>Lakeshore Imaging</b><div class="small text-mute">Diagnostic radiology</div></td>
+              <td><span class="num">Apr 25, 2026</span></td>
+              <td>Julia Morales</td>
+              <td>X-ray</td>
+              <td style="text-align:right;"><span class="num">$284.00</span></td>
+              <td style="text-align:right;"><span class="num"><b>$0.00</b></span></td>
+              <td><span class="chip chip-green"><span class="dot"></span>Processed</span></td>
+              <td><button class="btn btn-ghost btn-sm">View detail</button></td>
+            </tr>
+            <tr>
+              <td><span class="num">CLM-2026-04203</span></td>
+              <td><b>Dr. Daniel Park</b><div class="small text-mute">Cardiology</div></td>
+              <td><span class="num">Apr 18, 2026</span></td>
+              <td>Mark Morales</td>
+              <td>Specialist visit</td>
+              <td style="text-align:right;"><span class="num">$216.00</span></td>
+              <td style="text-align:right;"><span class="num"><b>$50.00</b></span></td>
+              <td><span class="chip chip-green"><span class="dot"></span>Processed</span></td>
+              <td><button class="btn btn-ghost btn-sm">View detail</button></td>
+            </tr>
+            <tr>
+              <td><span class="num">CLM-2026-04018</span></td>
+              <td><b>Highland Pediatrics</b><div class="small text-mute">Pediatrics</div></td>
+              <td><span class="num">Apr 11, 2026</span></td>
+              <td>Elena Morales</td>
+              <td>Wellness visit</td>
+              <td style="text-align:right;"><span class="num">$185.00</span></td>
+              <td style="text-align:right;"><span class="num"><b>$0.00</b></span></td>
+              <td><span class="chip chip-green"><span class="dot"></span>Processed</span></td>
+              <td><button class="btn btn-ghost btn-sm">View detail</button></td>
+            </tr>
+            <tr>
+              <td><span class="num">CLM-2026-03891</span></td>
+              <td><b>Northwest Pharmacy</b><div class="small text-mute">Rx · Pharmacy</div></td>
+              <td><span class="num">Apr 03, 2026</span></td>
+              <td>Julia Morales</td>
+              <td>Generic Rx</td>
+              <td style="text-align:right;"><span class="num">$24.00</span></td>
+              <td style="text-align:right;"><span class="num"><b>$10.00</b></span></td>
+              <td><span class="chip chip-gold"><span class="dot"></span>Pending EOB</span></td>
+              <td><button class="btn btn-ghost btn-sm">View detail</button></td>
+            </tr>
+            <tr>
+              <td><span class="num">CLM-2026-03742</span></td>
+              <td><b>Cascadia Dental</b><div class="small text-mute">Dental</div></td>
+              <td><span class="num">Mar 28, 2026</span></td>
+              <td>Mark Morales</td>
+              <td>Cleaning</td>
+              <td style="text-align:right;"><span class="num">$140.00</span></td>
+              <td style="text-align:right;"><span class="num"><b>$0.00</b></span></td>
+              <td><span class="chip chip-green"><span class="dot"></span>Processed</span></td>
+              <td><button class="btn btn-ghost btn-sm">View detail</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="padding: 12px 16px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--line);">
+          <div class="small text-mute">Showing 6 of 42 claims</div>
+          <div style="display:flex; gap: 4px;">
+            <button class="btn btn-ghost btn-sm">‹</button>
+            <button class="btn btn-primary btn-sm" style="padding:4px 10px;">1</button>
+            <button class="btn btn-ghost btn-sm" style="padding:4px 10px;">2</button>
+            <button class="btn btn-ghost btn-sm" style="padding:4px 10px;">3</button>
+            <button class="btn btn-ghost btn-sm" style="padding:4px 10px;">…</button>
+            <button class="btn btn-ghost btn-sm" style="padding:4px 10px;">7</button>
+            <button class="btn btn-ghost btn-sm">›</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Authorizations preview row -->
+      <div style="margin-top:30px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 14px;">
+          <h2 class="serif" style="font-size: 22px; font-weight:500; color: var(--ink);">Active authorizations &amp; referrals</h2>
+          <button class="btn btn-ghost btn-sm">View all</button>
+        </div>
+        <div class="grid-3">
+          <div class="card card-pad" style="border-left: 3px solid var(--green);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <span class="chip chip-green"><span class="dot"></span>Approved</span>
+              <span class="num small text-mute">AUTH-2026-118</span>
+            </div>
+            <div class="serif mt-3" style="font-size: 17px; font-weight:500;">Physical therapy — 8 visits</div>
+            <div class="small text-mute mt-2">Dr. Stone → Cascade PT &amp; Sports · 6 of 8 used</div>
+            <div class="small mt-3"><b class="text-mute">Valid:</b> Mar 1 – Aug 31, 2026</div>
+          </div>
+          <div class="card card-pad" style="border-left: 3px solid var(--gold);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <span class="chip chip-gold"><span class="dot"></span>Pending review</span>
+              <span class="num small text-mute">AUTH-2026-204</span>
+            </div>
+            <div class="serif mt-3" style="font-size: 17px; font-weight:500;">MRI — lumbar spine</div>
+            <div class="small text-mute mt-2">Dr. Park requested · Submitted Apr 30</div>
+            <div class="small mt-3"><b class="text-mute">Status:</b> Medical review in progress</div>
+          </div>
+          <div class="card card-pad" style="border-left: 3px solid var(--teal);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <span class="chip chip-teal"><span class="dot"></span>Referral active</span>
+              <span class="num small text-mute">REF-2026-088</span>
+            </div>
+            <div class="serif mt-3" style="font-size: 17px; font-weight:500;">Cardiology consult</div>
+            <div class="small text-mute mt-2">Dr. Stone → Dr. Park · 1 of 3 visits used</div>
+            <div class="small mt-3"><b class="text-mute">Valid:</b> through Jul 12, 2026</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="app-foot">
+      <div class="app-foot-inner">
+        <div><a href="#">FAQ &amp; Forms</a><a href="#">Accessibility</a><a href="#">Privacy / HIPAA</a><a href="#">Contact &amp; Help</a></div>
+        <div class="powered">© 2026 Northwind Health · Powered by <b>Wellframe Web</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     SCREEN 05 — PROVIDERS & PCP
+     Features: #13 Provider search · #14 PCP management
+     ════════════════════════════════════════════════════════════ -->
+<section class="screen" id="providers">
+  <div class="app">
+    <div class="app-top">
+      <div class="app-top-inner">
+        <div class="brand"><div class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--gold)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88" fill="var(--gold)"/></svg></div></div>
+        <nav class="top-nav">
+          <a href="#" onclick="event.preventDefault(); show('dashboard')">Home</a>
+          <a href="#" onclick="event.preventDefault(); show('benefits')">Benefits</a>
+          <a href="#" onclick="event.preventDefault(); show('claims')">Claims</a>
+          <a href="#" class="active">Providers</a>
+          <a href="#" onclick="event.preventDefault(); show('documents')">Documents</a>
+          <a href="#" onclick="event.preventDefault(); show('messages')">Messages<span class="dot-badge">3</span></a>
+          <a href="#" onclick="event.preventDefault(); show('idcard')">ID Card</a>
+        </nav>
+        <div class="top-utils">
+          <div class="lang-toggle"><button class="active">EN</button><button>ES</button></div>
+          <button class="icon-btn" aria-label="Notifications"><svg class="ico" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button>
+          <div class="avatar" onclick="show('settings')">JM</div>
+        </div>
+      </div>
+    </div>
+
+    <main class="page">
+      <div class="breadcrumb">Home <span class="sep">/</span> <span class="current">Find care &amp; PCP</span></div>
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Find <span class="em">care</span> in your network</h1>
+          <p class="page-sub">Search providers by name, specialty, or facility — and update your primary care physician any time.</p>
+        </div>
+</div>
+
+      <!-- Current PCP card — feature #14 -->
+      <div class="card mb-4" style="background: linear-gradient(135deg, var(--paper-2), var(--card)); border-left: 3px solid var(--terra);">
+        <div class="card-pad" style="display:flex; align-items:center; gap: 22px; padding: 22px 26px;">
+          <div class="provider-avatar" style="width: 72px; height:72px; font-size: 26px; border-radius: 16px;">RS</div>
+          <div style="flex:1;">
+            <div class="label-eyebrow">Your Primary Care Physician</div>
+            <div class="serif" style="font-size: 26px; font-weight: 500; color: var(--ink); margin-top: 4px;">Dr. Rachel Stone, MD</div>
+            <div class="small text-mute mt-2">Family Medicine · Northwind Internal Medicine Group · Seattle, WA</div>
+            <div style="display:flex; gap: 16px; margin-top: 12px; font-size: 12.5px;">
+              <span><b>★ 4.8</b> · 312 reviews</span>
+              <span class="chip chip-green"><span class="dot"></span>Accepting new patients</span>
+              <span class="chip chip-teal">Telehealth available</span>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap: 8px;">
+            <button class="btn btn-primary btn-sm">Schedule visit</button>
+            <button class="btn btn-ghost btn-sm">Change PCP</button>
+            <button class="btn btn-ghost btn-sm" onclick="show('messages')">Message Dr. Stone</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search filters -->
+      <div class="filter-row mb-4">
+        <div class="search">
+          <svg class="ico ico-sm" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input value="Cardiologist" placeholder="Doctor, specialty, or facility…">
+        </div>
+        <select><option>Within 10 miles</option><option>5 miles</option><option>25 miles</option></select>
+        <select><option>Northwind PPO Gold</option><option>Northwind HMO Bronze</option></select>
+        <select><option>All facility types</option><option>Hospital</option><option>Outpatient clinic</option><option>Urgent care</option></select>
+        <select><option>All languages</option><option>Spanish</option><option>Mandarin</option><option>Vietnamese</option></select>
+        <button class="btn btn-primary btn-sm">Search</button>
+      </div>
+
+      <!-- Map + results split -->
+      <div class="grid-2 gap-lg">
+        <!-- Results list -->
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
+            <div class="serif" style="font-size: 18px; font-weight: 500;">12 cardiologists in-network near you</div>
+            <select style="background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font: 500 12px 'Roboto';">
+              <option>Sort: Distance</option><option>Sort: Rating</option><option>Sort: Accepting new</option>
+            </select>
+          </div>
+
+          <div class="col">
+            <div class="provider-card selected">
+              <div class="provider-avatar">DP</div>
+              <div style="flex:1;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                  <div>
+                    <h5>Dr. Daniel Park, MD</h5>
+                    <div class="specialty">Interventional Cardiology</div>
+                  </div>
+                  <span class="chip chip-green"><span class="dot"></span>0.8 mi</span>
+                </div>
+                <div class="meta">First Hill Cardiology · 1124 9th Ave, Seattle</div>
+                <div style="display:flex; gap:14px; margin-top: 8px; font-size: 12px; color: var(--ink-2);">
+                  <span><b>★ 4.9</b> · 248</span>
+                  <span class="chip chip-teal" style="font-size:10px; padding: 2px 7px;">Telehealth</span>
+                  <span class="chip chip-paper" style="font-size:10px; padding: 2px 7px;">English, Korean</span>
+                </div>
+                <div style="display:flex; gap: 6px; margin-top: 10px;">
+                  <button class="btn btn-primary btn-sm">Book a visit</button>
+                  <button class="btn btn-ghost btn-sm">Set as PCP</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="provider-card">
+              <div class="provider-avatar">AM</div>
+              <div style="flex:1;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                  <div>
+                    <h5>Dr. Aisha Mensah, DO</h5>
+                    <div class="specialty">General Cardiology</div>
+                  </div>
+                  <span class="chip chip-paper">1.4 mi</span>
+                </div>
+                <div class="meta">Cascade Heart Specialists · 220 Madison St</div>
+                <div style="display:flex; gap:14px; margin-top: 8px; font-size: 12px;">
+                  <span><b>★ 4.7</b> · 189</span>
+                  <span class="chip chip-green" style="font-size:10px; padding: 2px 7px;">Accepting new</span>
+                  <span class="chip chip-paper" style="font-size:10px; padding: 2px 7px;">English, Spanish</span>
+                </div>
+                <div style="display:flex; gap: 6px; margin-top: 10px;">
+                  <button class="btn btn-ghost btn-sm">View profile</button>
+                  <button class="btn btn-ghost btn-sm">Save</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="provider-card">
+              <div class="provider-avatar">JT</div>
+              <div style="flex:1;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                  <div>
+                    <h5>Dr. Joon Tanaka, MD</h5>
+                    <div class="specialty">Electrophysiology</div>
+                  </div>
+                  <span class="chip chip-paper">2.2 mi</span>
+                </div>
+                <div class="meta">Swedish Medical Center · Cherry Hill</div>
+                <div style="display:flex; gap:14px; margin-top: 8px; font-size: 12px;">
+                  <span><b>★ 4.6</b> · 412</span>
+                  <span class="chip chip-gold" style="font-size:10px; padding: 2px 7px;">Wait list</span>
+                  <span class="chip chip-paper" style="font-size:10px; padding: 2px 7px;">English, Japanese</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="provider-card">
+              <div class="provider-avatar">EV</div>
+              <div style="flex:1;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                  <div>
+                    <h5>Dr. Elena Vargas, MD</h5>
+                    <div class="specialty">Preventive Cardiology</div>
+                  </div>
+                  <span class="chip chip-paper">3.0 mi</span>
+                </div>
+                <div class="meta">Pacific Heart &amp; Vascular · Capitol Hill</div>
+                <div style="display:flex; gap:14px; margin-top: 8px; font-size: 12px;">
+                  <span><b>★ 4.8</b> · 156</span>
+                  <span class="chip chip-green" style="font-size:10px; padding: 2px 7px;">Accepting new</span>
+                  <span class="chip chip-teal" style="font-size:10px; padding: 2px 7px;">Telehealth</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map -->
+        <div>
+          <div class="map-bg">
+            <div class="map-pin teal" style="left: 38%; top: 42%;"><span>1</span></div>
+            <div class="map-pin" style="left: 56%; top: 30%;"><span>2</span></div>
+            <div class="map-pin gold" style="left: 64%; top: 58%;"><span>3</span></div>
+            <div class="map-pin teal" style="left: 30%; top: 70%;"><span>4</span></div>
+            <div class="map-pin teal" style="left: 78%; top: 24%;"><span>5</span></div>
+            <div style="position:absolute; bottom:14px; left: 14px; right: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; box-shadow: var(--shadow-sm); display:flex; gap: 12px; font-size: 12px;">
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></span>Accepting new patients</span>
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--terra);"></span>Selected</span>
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--gold);"></span>Wait list</span>
+              <div style="flex:1;"></div>
+              <button style="background: transparent; border: none; cursor: pointer; color: var(--teal-700); font-weight: 600; font-size: 12px;">Open in maps</button>
+            </div>
+          </div>
+
+          <div class="card mt-4 card-pad">
+            <div class="label-eyebrow mb-2">Selected provider</div>
+            <div class="serif" style="font-size: 18px; font-weight: 500;">Dr. Daniel Park — First Hill Cardiology</div>
+            <div class="small text-mute mt-2">Mon – Fri: 8:00 AM – 5:30 PM · Sat: 9:00 AM – noon</div>
+            <div class="small mt-2">📞 (206) 555-0142 · Accepts: Northwind PPO, HMO, EPO</div>
+            <div style="display:flex; gap: 6px; margin-top: 12px;">
+              <button class="btn btn-primary btn-sm">Book a visit</button>
+              <button class="btn btn-ghost btn-sm">Save</button>
+              <button class="btn btn-ghost btn-sm">Share</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="app-foot">
+      <div class="app-foot-inner">
+        <div><a href="#">FAQ &amp; Forms</a><a href="#">Accessibility</a><a href="#">Privacy / HIPAA</a><a href="#">Contact &amp; Help</a></div>
+        <div class="powered">© 2026 Northwind Health · Powered by <b>Wellframe Web</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     SCREEN 06 — DOCUMENTS, CUSTOM FORMS & GRIEVANCES
+     Features: #6 Document Center · #21 Custom Forms · #23 Grievance & Appeals
+     ════════════════════════════════════════════════════════════ -->
+<section class="screen" id="documents">
+  <div class="app">
+    <div class="app-top">
+      <div class="app-top-inner">
+        <div class="brand"><div class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--gold)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88" fill="var(--gold)"/></svg></div></div>
+        <nav class="top-nav">
+          <a href="#" onclick="event.preventDefault(); show('dashboard')">Home</a>
+          <a href="#" onclick="event.preventDefault(); show('benefits')">Benefits</a>
+          <a href="#" onclick="event.preventDefault(); show('claims')">Claims</a>
+          <a href="#" onclick="event.preventDefault(); show('providers')">Providers</a>
+          <a href="#" class="active">Documents</a>
+          <a href="#" onclick="event.preventDefault(); show('messages')">Messages<span class="dot-badge">3</span></a>
+          <a href="#" onclick="event.preventDefault(); show('idcard')">ID Card</a>
+        </nav>
+        <div class="top-utils">
+          <div class="lang-toggle"><button class="active">EN</button><button>ES</button></div>
+          <button class="icon-btn" aria-label="Notifications"><svg class="ico" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button>
+          <div class="avatar" onclick="show('settings')">JM</div>
+        </div>
+      </div>
+    </div>
+
+    <main class="page">
+      <div class="breadcrumb">Home <span class="sep">/</span> <span class="current">Documents &amp; forms</span></div>
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Documents, <span class="em">forms</span> &amp; appeals</h1>
+          <p class="page-sub">Everything we've sent you, every form you might need, and a place to file grievances or appeals — all together.</p>
+        </div>
+</div>
+
+      <div class="tabset">
+        <button class="active">Document Center</button>
+        <button>Custom forms</button>
+        <button>Grievances &amp; appeals</button>
+      </div>
+
+      <div class="grid-2 gap-lg">
+        <!-- Document Center main -->
+        <div>
+          <div class="filter-row mb-4">
+            <div class="search">
+              <svg class="ico ico-sm" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input placeholder="Search documents…">
+            </div>
+            <select><option>All categories</option></select>
+            <select><option>All time</option></select>
+          </div>
+
+          <!-- Group: EOBs -->
+          <div class="card mb-4">
+            <div class="card-head">
+              <h3>Explanation of Benefits</h3>
+              <span class="chip chip-paper">8 documents</span>
+            </div>
+            <div style="padding: 8px 8px 14px;">
+              <div class="doc-row">
+                <div class="doc-icon">PDF</div>
+                <div class="doc-meta">
+                  <div class="doc-ttl">EOB · Office visit — Dr. Stone <span class="chip chip-terra" style="margin-left:6px; font-size:10px;">New</span></div>
+                  <div class="doc-sub">Claim CLM-2026-04482 · Posted Apr 30, 2026</div>
+                </div>
+                <button class="btn btn-ghost btn-sm">Open</button>
+                <button class="icon-btn" aria-label="Download" style="width:32px;height:32px;">
+                  <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                </button>
+              </div>
+              <div class="doc-row">
+                <div class="doc-icon">PDF</div>
+                <div class="doc-meta">
+                  <div class="doc-ttl">EOB · Imaging — Lakeshore</div>
+                  <div class="doc-sub">Claim CLM-2026-04321 · Posted Apr 27, 2026</div>
+                </div>
+                <button class="btn btn-ghost btn-sm">Open</button>
+                <button class="icon-btn" aria-label="Download" style="width:32px;height:32px;">
+                  <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                </button>
+              </div>
+              <div class="doc-row">
+                <div class="doc-icon">PDF</div>
+                <div class="doc-meta">
+                  <div class="doc-ttl">EOB · Cardiology consult — Dr. Park</div>
+                  <div class="doc-sub">Claim CLM-2026-04203 · Posted Apr 22, 2026</div>
+                </div>
+                <button class="btn btn-ghost btn-sm">Open</button>
+                <button class="icon-btn" aria-label="Download" style="width:32px;height:32px;">
+                  <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Group: Plan documents -->
+          <div class="card mb-4">
+            <div class="card-head">
+              <h3>Plan documents</h3>
+              <span class="chip chip-paper">4 documents</span>
+            </div>
+            <div style="padding: 8px 8px 14px;">
+              <div class="doc-row">
+                <div class="doc-icon teal">PDF</div>
+                <div class="doc-meta">
+                  <div class="doc-ttl">2026 Member Handbook</div>
+                  <div class="doc-sub">Northwind PPO Gold · Updated Jan 1, 2026 · 84 pages</div>
+                </div>
+                <button class="btn btn-ghost btn-sm">Open</button>
+                <button class="icon-btn" aria-label="Download" style="width:32px;height:32px;">
+                  <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                </button>
+              </div>
+              <div class="doc-row">
+                <div class="doc-icon teal">PDF</div>
+                <div class="doc-meta">
+                  <div class="doc-ttl">Summary of Benefits &amp; Coverage (SBC)</div>
+                  <div class="doc-sub">2026 plan year · 8 pages</div>
+                </div>
+                <button class="btn btn-ghost btn-sm">Open</button>
+                <button class="icon-btn" aria-label="Download" style="width:32px;height:32px;">
+                  <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                </button>
+              </div>
+              <div class="doc-row">
+                <div class="doc-icon teal">PDF</div>
+                <div class="doc-meta">
+                  <div class="doc-ttl">Pharmacy formulary</div>
+                  <div class="doc-sub">2026 covered medications · Updated quarterly</div>
+                </div>
+                <button class="btn btn-ghost btn-sm">Open</button>
+                <button class="icon-btn" aria-label="Download" style="width:32px;height:32px;">
+                  <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Group: Letters from your plan -->
+          <div class="card">
+            <div class="card-head">
+              <h3>Letters from your plan</h3>
+              <span class="chip chip-paper">5 documents</span>
+            </div>
+            <div style="padding: 8px 8px 14px;">
+              <div class="doc-row">
+                <div class="doc-icon gold">PDF</div>
+                <div class="doc-meta">
+                  <div class="doc-ttl">Authorization approval — Physical Therapy</div>
+                  <div class="doc-sub">AUTH-2026-118 · Posted Mar 02, 2026</div>
+                </div>
+                <button class="btn btn-ghost btn-sm">Open</button>
+                <button class="icon-btn" aria-label="Download" style="width:32px;height:32px;">
+                  <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                </button>
+              </div>
+              <div class="doc-row">
+                <div class="doc-icon gold">PDF</div>
+                <div class="doc-meta">
+                  <div class="doc-ttl">Welcome packet — 2026 plan year</div>
+                  <div class="doc-sub">Posted Dec 15, 2025</div>
+                </div>
+                <button class="btn btn-ghost btn-sm">Open</button>
+                <button class="icon-btn" aria-label="Download" style="width:32px;height:32px;">
+                  <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar: Forms + Appeals + Notify -->
+        <div class="col">
+          <div class="card">
+            <div class="card-head">
+              <h3>Quick forms</h3>
+              <span class="meta">Custom plan forms</span>
+            </div>
+            <div class="card-pad">
+              <p class="small text-mute mb-3">Tasks your plan needs you to complete — built by Northwind, available right here.</p>
+              <div style="display:flex; flex-direction:column; gap: 8px;">
+                <button class="provider-card" style="text-align:left; cursor:pointer; border:1px solid var(--line); padding: 12px 14px;">
+                  <div class="provider-avatar" style="width:36px;height:36px;border-radius:10px;font-size:13px;">📋</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600;">Coordination of benefits</div>
+                    <div class="small text-mute">~2 minutes · Required annually</div>
+                  </div>
+                  <span class="chip chip-terra"><span class="dot"></span>Due</span>
+                </button>
+                <button class="provider-card" style="text-align:left; cursor:pointer; border:1px solid var(--line); padding: 12px 14px;">
+                  <div class="provider-avatar" style="width:36px;height:36px;border-radius:10px;font-size:13px;">📝</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600;">HIPAA authorization</div>
+                    <div class="small text-mute">e-Sign · Required for paperless</div>
+                  </div>
+                  <span class="chip chip-paper">Optional</span>
+                </button>
+                <button class="provider-card" style="text-align:left; cursor:pointer; border:1px solid var(--line); padding: 12px 14px;">
+                  <div class="provider-avatar" style="width:36px;height:36px;border-radius:10px;font-size:13px;">📞</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600;">Direct deposit / refund preference</div>
+                    <div class="small text-mute">Update banking on file</div>
+                  </div>
+                  <span class="chip chip-paper">Optional</span>
+                </button>
+                <button class="provider-card" style="text-align:left; cursor:pointer; border:1px solid var(--line); padding: 12px 14px;">
+                  <div class="provider-avatar" style="width:36px;height:36px;border-radius:10px;font-size:13px;">🆔</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600;">Subrogation questionnaire</div>
+                    <div class="small text-mute">When asked by claims dept</div>
+                  </div>
+                  <span class="chip chip-paper">As needed</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grievances & appeals — feature #23 -->
+          <div class="card">
+            <div class="card-head">
+              <h3>Grievances &amp; appeals</h3>
+              <span class="chip chip-paper">2 active</span>
+            </div>
+            <div class="card-pad">
+              <p class="small text-mute mb-3">Submit a complaint or appeal a decision. Track every step from submission to resolution.</p>
+
+              <div style="border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 10px;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                  <div>
+                    <div style="font-weight:600; color: var(--ink);">Appeal · Claim CLM-2025-09812</div>
+                    <div class="small text-mute mt-2">Submitted Apr 12 · Re: out-of-network billing</div>
+                  </div>
+                  <span class="chip chip-gold"><span class="dot"></span>Under review</span>
+                </div>
+                <div style="display:flex; gap: 14px; margin-top: 10px; align-items:center;">
+                  <div style="flex:1; height: 4px; background: var(--paper-3); border-radius: 2px; position:relative;">
+                    <div style="position:absolute; left:0; top:0; width: 66%; height:100%; background: var(--terra); border-radius: 2px;"></div>
+                  </div>
+                  <span class="small text-mute">Step 2 of 3</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-top: 6px; font-size: 11px; color: var(--muted-2);">
+                  <span>Submitted</span><span style="color:var(--terra); font-weight:600;">Reviewing</span><span>Decision</span>
+                </div>
+              </div>
+
+              <div style="border: 1px solid var(--line); border-radius: 10px; padding: 14px;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                  <div>
+                    <div style="font-weight:600; color: var(--ink);">Grievance · Provider experience</div>
+                    <div class="small text-mute mt-2">Submitted Mar 28 · Re: wait time at Northwest Pharmacy</div>
+                  </div>
+                  <span class="chip chip-green"><span class="dot"></span>Resolved</span>
+                </div>
+              </div>
+
+              <div style="display:flex; gap: 8px; margin-top: 14px;">
+                <button class="btn btn-accent btn-sm">
+                  <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                  File new appeal
+                </button>
+                <button class="btn btn-ghost btn-sm">File grievance</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notification preference -->
+          <div class="card card-pad" style="background: var(--paper-2); border-style: dashed;">
+            <div style="display:flex; gap: 14px; align-items: flex-start;">
+              <div style="width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg class="ico" viewBox="0 0 24 24" stroke="currentColor"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+              </div>
+              <div style="flex:1;">
+                <div style="font-weight:600; font-size: 13.5px;">Get email when a new document arrives</div>
+                <div class="small text-mute mt-2">We'll notify you at j.morales@example.com — feature #6</div>
+              </div>
+              <div class="toggle on"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="app-foot">
+      <div class="app-foot-inner">
+        <div><a href="#">FAQ &amp; Forms</a><a href="#">Accessibility</a><a href="#">Privacy / HIPAA</a><a href="#">Contact &amp; Help</a></div>
+        <div class="powered">© 2026 Northwind Health · Powered by <b>Wellframe Web</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     SCREEN 07 — MESSAGE CENTER
+     Features: #7 Message Center · #16 Notifications detail
+     ════════════════════════════════════════════════════════════ -->
+<section class="screen" id="messages">
+  <div class="app">
+    <div class="app-top">
+      <div class="app-top-inner">
+        <div class="brand"><div class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--gold)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88" fill="var(--gold)"/></svg></div></div>
+        <nav class="top-nav">
+          <a href="#" onclick="event.preventDefault(); show('dashboard')">Home</a>
+          <a href="#" onclick="event.preventDefault(); show('benefits')">Benefits</a>
+          <a href="#" onclick="event.preventDefault(); show('claims')">Claims</a>
+          <a href="#" onclick="event.preventDefault(); show('providers')">Providers</a>
+          <a href="#" onclick="event.preventDefault(); show('documents')">Documents</a>
+          <a href="#" class="active">Messages<span class="dot-badge">3</span></a>
+          <a href="#" onclick="event.preventDefault(); show('idcard')">ID Card</a>
+        </nav>
+        <div class="top-utils">
+          <div class="lang-toggle"><button class="active">EN</button><button>ES</button></div>
+          <button class="icon-btn" aria-label="Notifications"><svg class="ico" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button>
+          <div class="avatar" onclick="show('settings')">JM</div>
+        </div>
+      </div>
+    </div>
+
+    <main class="page">
+      <div class="breadcrumb">Home <span class="sep">/</span> <span class="current">Messages</span></div>
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Your <span class="em">Member Services</span> mailbox</h1>
+          <p class="page-sub">Direct, secure messaging with your plan — questions about claims, benefits, prior auth, anything.</p>
+        </div>
+        <div style="display:flex; gap: 10px; align-items:center;">
+          <button class="btn btn-accent">
+            <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            Compose
+          </button>
+        </div>
+      </div>
+
+      <div class="msg-layout">
+        <!-- Inbox list -->
+        <div class="msg-list">
+          <div class="msg-list-head">
+            <select style="border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; font: 600 12px 'Roboto';">
+              <option>Inbox · 24</option><option>Sent</option><option>Archive</option>
+            </select>
+            <div style="display:flex; gap: 4px;">
+              <button class="icon-btn" style="width:30px;height:30px;" aria-label="Search"><svg class="ico ico-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
+              <button class="icon-btn" style="width:30px;height:30px;" aria-label="Filter"><svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M22 3 2 3l8 9.5V19l4 2v-8.5L22 3z"/></svg></button>
+            </div>
+          </div>
+
+          <div class="msg-list-items">
+            <div class="msg-item active unread">
+              <div style="display:flex; justify-content:space-between; align-items: flex-start;">
+                <div class="from">Caitlin K. — Member Services</div>
+                <div class="when">2h</div>
+              </div>
+              <div class="subj">Re: Prior authorization — MRI lumbar spine</div>
+              <div class="preview">Hi Julia — quick update: Dr. Park's request for AUTH-2026-204 is now in medical review. We'll have a decision within 3 business days…</div>
+            </div>
+
+            <div class="msg-item unread">
+              <div style="display:flex; justify-content:space-between; align-items: flex-start;">
+                <div class="from">Northwind Pharmacy</div>
+                <div class="when">Yesterday</div>
+              </div>
+              <div class="subj">Your prescription is ready for refill</div>
+              <div class="preview">Lisinopril 10mg · Refill window opens May 8. Tap to schedule home delivery or pick a pharmacy…</div>
+            </div>
+
+            <div class="msg-item unread">
+              <div style="display:flex; justify-content:space-between; align-items: flex-start;">
+                <div class="from">Northwind Care Concierge</div>
+                <div class="when">Apr 30</div>
+              </div>
+              <div class="subj">Annual wellness visit — book before June</div>
+              <div class="preview">A friendly reminder: your preventive visit is covered at 100%. Here are 3 PCPs near you accepting appointments…</div>
+            </div>
+
+            <div class="msg-item">
+              <div style="display:flex; justify-content:space-between; align-items: flex-start;">
+                <div class="from">Member Services</div>
+                <div class="when">Apr 28</div>
+              </div>
+              <div class="subj">Authorized representative request approved</div>
+              <div class="preview">Mark Morales has been approved as your authorized representative effective immediately…</div>
+            </div>
+
+            <div class="msg-item">
+              <div style="display:flex; justify-content:space-between; align-items: flex-start;">
+                <div class="from">Northwind Billing</div>
+                <div class="when">Apr 22</div>
+              </div>
+              <div class="subj">EOB available for claim CLM-2026-04203</div>
+              <div class="preview">Your EOB for the cardiology consult on Apr 18 is now available in your Document Center…</div>
+            </div>
+
+            <div class="msg-item">
+              <div style="display:flex; justify-content:space-between; align-items: flex-start;">
+                <div class="from">Caitlin K. — Member Services</div>
+                <div class="when">Apr 18</div>
+              </div>
+              <div class="subj">Welcome to Northwind Health</div>
+              <div class="preview">Hi Julia — I'm Caitlin, your dedicated member services advocate. I'll be your first point of contact for any…</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail pane -->
+        <div class="msg-detail">
+          <div class="msg-detail-head">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <div style="display:flex; align-items:center; gap: 14px;">
+                <div class="provider-avatar" style="width:44px;height:44px; border-radius:12px;">CK</div>
+                <div>
+                  <div style="font-weight:700; font-size: 15px; color: var(--ink);">Caitlin K. — Member Services</div>
+                  <div class="small text-mute">Today, 1:42 PM · Replied to your Apr 30 message</div>
+                </div>
+              </div>
+              <div style="display:flex; gap: 6px;">
+                <button class="icon-btn" style="width:32px;height:32px;" aria-label="Print"><svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg></button>
+                <button class="icon-btn" style="width:32px;height:32px;" aria-label="More"><svg class="ico ico-sm" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
+              </div>
+            </div>
+            <div style="margin-top: 18px;">
+              <div class="serif" style="font-size: 22px; font-weight: 500; color: var(--ink);">Re: Prior authorization — MRI lumbar spine</div>
+              <div style="display:flex; gap: 8px; margin-top: 10px;">
+                <span class="chip chip-paper">Prior auth</span>
+                <span class="chip chip-paper">AUTH-2026-204</span>
+                <span class="chip chip-paper">2 attachments</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="msg-detail-body">
+            <p>Hi Julia,</p>
+            <p style="margin-top: 14px;">
+              Quick update on your authorization request: Dr. Park's request for the lumbar MRI (AUTH-2026-204) is now in medical review. Based on the documentation submitted, I expect we'll have a decision back within <b>3 business days</b> — likely by Monday, May 11.
+            </p>
+            <p style="margin-top: 14px;">
+              In the meantime, here are two things that may be helpful:
+            </p>
+            <ul style="margin: 12px 0 12px 22px; color: var(--ink-2);">
+              <li style="margin-bottom: 6px;">Lakeshore Imaging and Cascade Diagnostic are both in-network if you want to compare convenience or schedules.</li>
+              <li>If approved, your share of cost on the MRI will likely be 20% after deductible — your remaining deductible is $1,740.</li>
+            </ul>
+            <p style="margin-top: 14px;">
+              I've attached the original referral and the network coverage list for diagnostic imaging. Reply here if you have any questions, or feel free to call our member services line at <b>(800) 555-0142</b>, M–F 7am–7pm PT.
+            </p>
+            <p style="margin-top: 14px;">Best,<br><b>Caitlin Kowalski</b><br><span class="text-mute small">Member Services Advocate · Northwind Health</span></p>
+
+            <!-- Attachments -->
+            <div style="margin-top: 26px; display:flex; gap: 10px;">
+              <div style="flex:1; max-width: 240px; border: 1px solid var(--line); border-radius: 10px; padding: 12px; display:flex; gap:12px; align-items:center; background: var(--paper-2);">
+                <div class="doc-icon">PDF</div>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-weight:600; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Referral_DrPark_2026-04-30.pdf</div>
+                  <div class="small text-mute">142 KB</div>
+                </div>
+              </div>
+              <div style="flex:1; max-width: 240px; border: 1px solid var(--line); border-radius: 10px; padding: 12px; display:flex; gap:12px; align-items:center; background: var(--paper-2);">
+                <div class="doc-icon teal">PDF</div>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-weight:600; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">In-network imaging list.pdf</div>
+                  <div class="small text-mute">88 KB</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compose / reply -->
+          <div class="msg-compose">
+            <select style="background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; font: 600 12px 'Roboto';">
+              <option>Reply category: Prior Auth</option>
+              <option>General question</option>
+              <option>Claims</option>
+              <option>Benefits</option>
+            </select>
+            <input placeholder="Reply to Caitlin…">
+            <button class="icon-btn" aria-label="Attach file" title="Attach file"><svg class="ico" viewBox="0 0 24 24"><path d="m21 12-9.6 9.6a4 4 0 0 1-5.7-5.7L15 6.7a3 3 0 0 1 4.2 4.2L9.5 20.6"/></svg></button>
+            <button class="btn btn-primary btn-sm">
+              Send
+              <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="app-foot">
+      <div class="app-foot-inner">
+        <div><a href="#">FAQ &amp; Forms</a><a href="#">Accessibility</a><a href="#">Privacy / HIPAA</a><a href="#">Contact &amp; Help</a></div>
+        <div class="powered">© 2026 Northwind Health · Powered by <b>Wellframe Web</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN 8: ID CARD & MATERIALS · Feature #22                  -->
+<!-- ============================================================ -->
+<section class="screen" id="idcard">
+  <div class="app-shell">
+    <div class="alert-banner">
+      <span><b>Tip:</b> Add your digital ID card to Apple Wallet or Google Pay so it's always with you.</span>
+      <button class="btn btn-ghost btn-sm">Show me how</button>
+    </div>
+
+    <header class="topnav">
+      <div class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--gold)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88" fill="var(--gold)"/></svg></div>
+      <nav class="topnav-links">
+        <a href="#" onclick="show('dashboard')">Home</a>
+        <a href="#" onclick="show('benefits')">Benefits</a>
+        <a href="#" onclick="show('claims')">Claims</a>
+        <a href="#" onclick="show('providers')">Providers</a>
+        <a href="#" onclick="show('documents')">Documents</a>
+        <a href="#" onclick="show('messages')">Messages</a>
+        <a href="#" class="cur" onclick="show('idcard')">ID Card</a>
+      </nav>
+      <div class="topnav-right">
+        <button class="icon-btn" aria-label="Notifications"><svg class="ico" viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="dot-badge">2</span></button>
+        <div class="avatar">JM</div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <div class="page-head">
+        <div>
+          <div class="kicker">Member ID & materials</div>
+          <h1 class="page-title">Your <em>member ID card</em></h1>
+          <p class="page-sub">View, share, or request a new copy of your ID card and other plan materials.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-ghost btn-sm">
+            <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            Download PDF
+          </button>
+          <button class="btn btn-ghost btn-sm">
+            <svg class="ico ico-sm" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+            Print
+          </button>
+          <button class="btn btn-ghost btn-sm">
+            <svg class="ico ico-sm" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+            Email me
+          </button>
+          <button class="btn btn-primary btn-sm">
+            <svg class="ico ico-sm" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M12 17v.01"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Add to Wallet
+          </button>
+        </div>
+      </div>
+
+      <!-- ID card front + back display -->
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 36px;">
+        <!-- FRONT -->
+        <div>
+          <div class="kicker" style="margin-bottom:10px;">Front</div>
+          <div class="idcard idcard-lg">
+            <div class="idcard-top">
+              <div class="idcard-brand"><span class="brand-dot" style="background:#fff"></span><span>Northwind Health</span></div>
+              <span class="chip chip-paper">PPO Gold</span>
+            </div>
+            <div class="idcard-name">Julia Morales</div>
+            <div class="idcard-grid">
+              <div><div class="lbl">Member ID</div><div class="val mono">NWH-4471-208</div></div>
+              <div><div class="lbl">Group</div><div class="val mono">G-99021</div></div>
+              <div><div class="lbl">Plan</div><div class="val">Northwind PPO Gold</div></div>
+              <div><div class="lbl">Effective</div><div class="val mono">01/01/2026</div></div>
+              <div><div class="lbl">PCP</div><div class="val">Dr. Rachel Stone</div></div>
+              <div><div class="lbl">RxBIN</div><div class="val mono">610014</div></div>
+            </div>
+            <div class="idcard-foot">
+              <span class="mono">Issued 01/2026 · v3</span>
+              <span>RxPCN NWHRX</span>
+            </div>
+          </div>
+        </div>
+        <!-- BACK -->
+        <div>
+          <div class="kicker" style="margin-bottom:10px;">Back</div>
+          <div class="idcard idcard-lg idcard-back">
+            <div class="idcard-back-head">Important contact information</div>
+            <div class="idcard-back-grid">
+              <div><div class="lbl">Member services</div><div class="val mono">1-800-555-0142</div></div>
+              <div><div class="lbl">Nurse line (24/7)</div><div class="val mono">1-800-555-0188</div></div>
+              <div><div class="lbl">Mental health</div><div class="val mono">1-800-555-0177</div></div>
+              <div><div class="lbl">Pharmacy</div><div class="val mono">1-800-555-0163</div></div>
+              <div><div class="lbl">Claims address</div><div class="val">PO Box 8821, Boston MA 02114</div></div>
+              <div><div class="lbl">Provider services</div><div class="val mono">1-800-555-0155</div></div>
+            </div>
+            <div class="idcard-foot">
+              <span>For emergencies, call 911 or visit the nearest ER.</span>
+              <span class="mono">www.northwindhealth.com</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two columns: request form + history -->
+      <div class="two-col">
+        <!-- Request a new card -->
+        <div class="card">
+          <div class="card-head">
+            <h3>Request a new ID card</h3>
+            <span class="chip chip-teal">Free</span>
+          </div>
+          <div class="card-body">
+            <p class="muted-text" style="margin-bottom:18px;">Most cards arrive in 7–10 business days. Need it sooner? Choose expedited shipping below.</p>
+
+            <div class="form-row">
+              <label>Reason for request</label>
+              <select class="field">
+                <option>Lost</option>
+                <option>Stolen</option>
+                <option>Damaged</option>
+                <option>Name change</option>
+                <option>Address change</option>
+                <option>Additional copy for dependent</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <label>How many cards?</label>
+              <div class="qty-row">
+                <button class="qty-btn">−</button>
+                <span class="qty-num mono">2</span>
+                <button class="qty-btn">+</button>
+                <span class="muted-text" style="margin-left:8px; font-size:12px;">Includes Julia, Mark, Elena</span>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label>Mailing address</label>
+              <div class="addr-confirm">
+                <div>
+                  <div style="font-weight:600;">Julia Morales</div>
+                  <div class="muted-text mono" style="font-size:13px;">14 Linden Ave, Apt 3B</div>
+                  <div class="muted-text mono" style="font-size:13px;">Cambridge, MA 02139</div>
+                </div>
+                <a href="#" class="btn-link">Change address</a>
+              </div>
+            </div>
+
+            <div class="form-row" style="display:flex; align-items:center; justify-content:space-between; padding:14px; background:var(--cream); border-radius:10px;">
+              <div>
+                <div style="font-weight:600;">Expedited shipping</div>
+                <div class="muted-text" style="font-size:12px;">Arrives in 2–3 business days · $14.95</div>
+              </div>
+              <label class="toggle"><input type="checkbox"><span class="toggle-track"></span></label>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:18px;">
+              <button class="btn btn-primary">Submit request</button>
+              <button class="btn btn-ghost">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar: other materials -->
+        <aside class="sidebar">
+          <div class="card">
+            <div class="card-head"><h3>Other materials</h3></div>
+            <div class="card-body" style="padding:0;">
+              <a href="#" class="material-link">
+                <div>
+                  <div style="font-weight:600;">Welcome packet</div>
+                  <div class="muted-text" style="font-size:12px;">Plan summary, benefits at a glance</div>
+                </div>
+                <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+              </a>
+              <a href="#" class="material-link">
+                <div>
+                  <div style="font-weight:600;">Provider directory (print)</div>
+                  <div class="muted-text" style="font-size:12px;">For the Cambridge metro area</div>
+                </div>
+                <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+              </a>
+              <a href="#" class="material-link">
+                <div>
+                  <div style="font-weight:600;">Formulary booklet</div>
+                  <div class="muted-text" style="font-size:12px;">2026 covered drugs &amp; tiers</div>
+                </div>
+                <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+              </a>
+              <a href="#" class="material-link">
+                <div>
+                  <div style="font-weight:600;">Notice of Privacy Practices</div>
+                  <div class="muted-text" style="font-size:12px;">HIPAA disclosure</div>
+                </div>
+                <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+              </a>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Request history -->
+      <section style="margin-top:36px;">
+        <div class="page-head" style="margin-bottom:14px;">
+          <div>
+            <div class="kicker">Request history</div>
+            <h2 style="font: 700 22px 'Merriweather'; margin:4px 0 0;">Past material requests</h2>
+          </div>
+          <a href="#" class="btn-link">Export CSV</a>
+        </div>
+        <div class="card">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Item</th>
+                <th>Reason</th>
+                <th>Qty</th>
+                <th>Shipping</th>
+                <th>Status</th>
+                <th>Tracking</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="mono">Apr 18, 2026</td>
+                <td>ID card</td>
+                <td>Damaged</td>
+                <td class="mono">1</td>
+                <td>Standard</td>
+                <td><span class="chip chip-green">Delivered</span></td>
+                <td class="mono"><a href="#">9405-...-2718</a></td>
+              </tr>
+              <tr>
+                <td class="mono">Feb 02, 2026</td>
+                <td>Welcome packet</td>
+                <td>Initial enrollment</td>
+                <td class="mono">1</td>
+                <td>Standard</td>
+                <td><span class="chip chip-green">Delivered</span></td>
+                <td class="mono"><a href="#">9405-...-1102</a></td>
+              </tr>
+              <tr>
+                <td class="mono">Jan 14, 2026</td>
+                <td>ID card</td>
+                <td>New enrollment</td>
+                <td class="mono">3</td>
+                <td>Standard</td>
+                <td><span class="chip chip-green">Delivered</span></td>
+                <td class="mono"><a href="#">9405-...-0884</a></td>
+              </tr>
+              <tr>
+                <td class="mono">Nov 06, 2025</td>
+                <td>Provider directory</td>
+                <td>Member request</td>
+                <td class="mono">1</td>
+                <td>Standard</td>
+                <td><span class="chip chip-ink">Archived</span></td>
+                <td class="muted-text">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <div class="app-foot">
+      <div class="app-foot-inner">
+        <div><a href="#">FAQ &amp; Forms</a><a href="#">Accessibility</a><a href="#">Privacy / HIPAA</a><a href="#">Contact &amp; Help</a></div>
+        <div class="powered">© 2026 Northwind Health · Powered by <b>Wellframe Web</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- SCREEN 9: PROFILE & SETTINGS · #8 #17 #18 #20 #27            -->
+<!-- ============================================================ -->
+<section class="screen" id="settings">
+  <div class="app-shell">
+    <header class="topnav">
+      <div class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--gold)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88" fill="var(--gold)"/></svg></div>
+      <nav class="topnav-links">
+        <a href="#" onclick="show('dashboard')">Home</a>
+        <a href="#" onclick="show('benefits')">Benefits</a>
+        <a href="#" onclick="show('claims')">Claims</a>
+        <a href="#" onclick="show('providers')">Providers</a>
+        <a href="#" onclick="show('documents')">Documents</a>
+        <a href="#" onclick="show('messages')">Messages</a>
+        <a href="#" onclick="show('idcard')">ID Card</a>
+      </nav>
+      <div class="topnav-right">
+        <button class="icon-btn" aria-label="Notifications"><svg class="ico" viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="dot-badge">2</span></button>
+        <div class="avatar">JM</div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <div class="page-head">
+        <div>
+          <div class="kicker">Account</div>
+          <h1 class="page-title">Profile &amp; <em>settings</em></h1>
+          <p class="page-sub">Manage your account, who can see your info, and how we reach you.</p>
+        </div>
+      </div>
+
+      <div class="settings-layout">
+        <!-- Settings nav -->
+        <aside class="settings-nav">
+          <a href="#" class="set-link">Personal info</a>
+          <a href="#" class="set-link cur">Communication preferences</a>
+          <a href="#" class="set-link">Language &amp; accessibility</a>
+          <a href="#" class="set-link">Paperless settings</a>
+          <a href="#" class="set-link">HIPAA &amp; consent</a>
+          <a href="#" class="set-link">Dependents &amp; PHI</a>
+          <a href="#" class="set-link">Authorized representatives</a>
+          <a href="#" class="set-link">Connected apps &amp; SSO</a>
+          <a href="#" class="set-link">Security &amp; sign-in</a>
+        </aside>
+
+        <!-- Settings content -->
+        <div class="settings-content">
+          <!-- Personal info summary card -->
+          <div class="card">
+            <div class="card-head"><h3>Personal info</h3><a href="#" class="btn-link">Edit</a></div>
+            <div class="card-body">
+              <div class="profile-grid">
+                <div><div class="lbl">Legal name</div><div class="val">Julia A. Morales</div></div>
+                <div><div class="lbl">Date of birth</div><div class="val mono">06/14/1986</div></div>
+                <div><div class="lbl">Email</div><div class="val">julia.morales@example.com</div></div>
+                <div><div class="lbl">Phone</div><div class="val mono">(617) 555-0142</div></div>
+                <div><div class="lbl">Mailing address</div><div class="val">14 Linden Ave Apt 3B, Cambridge MA 02139</div></div>
+                <div><div class="lbl">Member ID</div><div class="val mono">NWH-4471-208</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Communication preferences -->
+          <div class="card">
+            <div class="card-head"><h3>Communication preferences</h3><span class="chip chip-paper">Per channel</span></div>
+            <div class="card-body" style="padding:0;">
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">Claims activity</div>
+                  <div class="muted-text" style="font-size:12px;">When a new claim posts or an EOB is ready</div>
+                </div>
+                <div class="setting-toggles">
+                  <span class="chip chip-teal">Email</span>
+                  <span class="chip chip-teal">Push</span>
+                  <span class="chip chip-paper">SMS off</span>
+                </div>
+                <a href="#" class="btn-link">Change</a>
+              </div>
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">Authorization &amp; referral updates</div>
+                  <div class="muted-text" style="font-size:12px;">Status changes on prior auths</div>
+                </div>
+                <div class="setting-toggles">
+                  <span class="chip chip-teal">Email</span>
+                  <span class="chip chip-teal">SMS</span>
+                  <span class="chip chip-teal">Push</span>
+                </div>
+                <a href="#" class="btn-link">Change</a>
+              </div>
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">Plan documents &amp; letters</div>
+                  <div class="muted-text" style="font-size:12px;">New documents in the Document Center</div>
+                </div>
+                <div class="setting-toggles">
+                  <span class="chip chip-teal">Email</span>
+                  <span class="chip chip-paper">Push off</span>
+                  <span class="chip chip-paper">SMS off</span>
+                </div>
+                <a href="#" class="btn-link">Change</a>
+              </div>
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">Wellness reminders</div>
+                  <div class="muted-text" style="font-size:12px;">Preventive screenings, vaccine reminders</div>
+                </div>
+                <div class="setting-toggles">
+                  <span class="chip chip-teal">Email</span>
+                  <span class="chip chip-paper">SMS off</span>
+                  <span class="chip chip-paper">Push off</span>
+                </div>
+                <a href="#" class="btn-link">Change</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Language & accessibility -->
+          <div class="card">
+            <div class="card-head"><h3>Language &amp; accessibility</h3></div>
+            <div class="card-body" style="padding:0;">
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">Display language</div>
+                  <div class="muted-text" style="font-size:12px;">Affects portal UI, emails, and letters</div>
+                </div>
+                <div class="setting-toggles">
+                  <button class="lang-pill cur">English</button>
+                  <button class="lang-pill">Español</button>
+                </div>
+                <span class="muted-text"></span>
+              </div>
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">Larger text</div>
+                  <div class="muted-text" style="font-size:12px;">Increases body type by 1 step</div>
+                </div>
+                <label class="toggle"><input type="checkbox"><span class="toggle-track"></span></label>
+                <span class="muted-text"></span>
+              </div>
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">High-contrast mode</div>
+                  <div class="muted-text" style="font-size:12px;">WCAG 2.1 AAA contrast</div>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="toggle-track"></span></label>
+                <span class="muted-text"></span>
+              </div>
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">Reduce motion</div>
+                  <div class="muted-text" style="font-size:12px;">Disables non-essential animation</div>
+                </div>
+                <label class="toggle"><input type="checkbox"><span class="toggle-track"></span></label>
+                <span class="muted-text"></span>
+              </div>
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">Screen reader optimized</div>
+                  <div class="muted-text" style="font-size:12px;">Verbose ARIA labels, skip links</div>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="toggle-track"></span></label>
+                <span class="muted-text"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paperless -->
+          <div class="card">
+            <div class="card-head"><h3>Paperless settings</h3><span class="chip chip-green">Eco</span></div>
+            <div class="card-body" style="padding:0;">
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">EOBs &amp; claims letters</div>
+                  <div class="muted-text" style="font-size:12px;">Receive electronically only</div>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="toggle-track"></span></label>
+                <a href="#" class="btn-link">Manage</a>
+              </div>
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">Plan documents</div>
+                  <div class="muted-text" style="font-size:12px;">SBC, formulary, notices</div>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="toggle-track"></span></label>
+                <a href="#" class="btn-link">Manage</a>
+              </div>
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">ID cards &amp; welcome materials</div>
+                  <div class="muted-text" style="font-size:12px;">Always send paper</div>
+                </div>
+                <label class="toggle"><input type="checkbox"><span class="toggle-track"></span></label>
+                <a href="#" class="btn-link">Manage</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dependents & PHI -->
+          <div class="card">
+            <div class="card-head"><h3>Dependents &amp; PHI access</h3><span class="chip chip-gold">Sensitive</span></div>
+            <div class="card-body">
+              <p class="muted-text" style="margin-bottom:18px; font-size:13px;">Control which dependents on your plan can see your claims and benefits, and whose information you can see. Changes apply within 24 hours.</p>
+              <div class="dep-row">
+                <div class="avatar avatar-md">MM</div>
+                <div class="dep-meta">
+                  <div style="font-weight:600;">Mark Morales</div>
+                  <div class="muted-text" style="font-size:12px;">Spouse · age 41 · NWH-4471-209</div>
+                </div>
+                <div class="setting-toggles">
+                  <span class="chip chip-teal">Can view your claims</span>
+                  <span class="chip chip-teal">Approved for PHI</span>
+                </div>
+                <a href="#" class="btn-link">Manage</a>
+              </div>
+              <div class="dep-row">
+                <div class="avatar avatar-md">EM</div>
+                <div class="dep-meta">
+                  <div style="font-weight:600;">Elena Morales</div>
+                  <div class="muted-text" style="font-size:12px;">Dependent · age 11 · NWH-4471-210</div>
+                </div>
+                <div class="setting-toggles">
+                  <span class="chip chip-paper">Minor · default access</span>
+                </div>
+                <a href="#" class="btn-link">Manage</a>
+              </div>
+              <div class="dep-row">
+                <div class="avatar avatar-md" style="background: var(--cream); color: var(--ink);">+</div>
+                <div class="dep-meta">
+                  <div style="font-weight:600;">Add a PHI approval</div>
+                  <div class="muted-text" style="font-size:12px;">Grant another adult on your plan limited access</div>
+                </div>
+                <div></div>
+                <button class="btn btn-ghost btn-sm">Add approval</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Authorized reps -->
+          <div class="card">
+            <div class="card-head"><h3>Authorized representatives</h3></div>
+            <div class="card-body">
+              <p class="muted-text" style="margin-bottom:18px; font-size:13px;">An authorized representative can act on your behalf — view claims, file appeals, request materials. They sign in with their own account.</p>
+              <div class="dep-row">
+                <div class="avatar avatar-md" style="background: var(--terra);">MM</div>
+                <div class="dep-meta">
+                  <div style="font-weight:600;">Mark Morales</div>
+                  <div class="muted-text" style="font-size:12px;">Spouse · approved Jan 12, 2026 · expires Jan 12, 2028</div>
+                </div>
+                <div class="setting-toggles">
+                  <span class="chip chip-green">Active</span>
+                  <span class="chip chip-paper">Full access</span>
+                </div>
+                <a href="#" class="btn-link">Revoke</a>
+              </div>
+              <div class="dep-row">
+                <div class="avatar avatar-md" style="background: var(--cream); color: var(--ink);">+</div>
+                <div class="dep-meta">
+                  <div style="font-weight:600;">Add a representative</div>
+                  <div class="muted-text" style="font-size:12px;">Caregiver, family member, or attorney</div>
+                </div>
+                <div></div>
+                <button class="btn btn-primary btn-sm">Add representative</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Connected apps & SSO -->
+          <div class="card">
+            <div class="card-head"><h3>Connected apps &amp; SSO</h3></div>
+            <div class="card-body">
+              <p class="muted-text" style="margin-bottom:18px; font-size:13px;">Use your Northwind Health account to sign in to partner services without re-entering credentials.</p>
+              <div class="app-grid">
+                <div class="app-tile">
+                  <div class="app-tile-ico" style="background:#1F7A8C;">Rx</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600;">Mail-order pharmacy</div>
+                    <div class="muted-text" style="font-size:12px;">Refill, track, transfer</div>
+                  </div>
+                  <span class="chip chip-green">Connected</span>
+                </div>
+                <div class="app-tile">
+                  <div class="app-tile-ico" style="background:#0E98BE;">Tx</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600;">Telehealth visits</div>
+                    <div class="muted-text" style="font-size:12px;">Powered by Teladoc</div>
+                  </div>
+                  <span class="chip chip-green">Connected</span>
+                </div>
+                <div class="app-tile">
+                  <div class="app-tile-ico" style="background:#5B7B6F;">Bx</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600;">Behavioral health portal</div>
+                    <div class="muted-text" style="font-size:12px;">Lyra Health</div>
+                  </div>
+                  <button class="btn btn-ghost btn-sm">Connect</button>
+                </div>
+                <div class="app-tile">
+                  <div class="app-tile-ico" style="background:#73BE5E; color:var(--ink);">Wn</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600;">Wellness rewards</div>
+                    <div class="muted-text" style="font-size:12px;">Virgin Pulse</div>
+                  </div>
+                  <button class="btn btn-ghost btn-sm">Connect</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security -->
+          <div class="card">
+            <div class="card-head"><h3>Security &amp; sign-in</h3></div>
+            <div class="card-body" style="padding:0;">
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">Password</div>
+                  <div class="muted-text" style="font-size:12px;">Last changed Mar 04, 2026</div>
+                </div>
+                <span></span>
+                <a href="#" class="btn-link">Change password</a>
+              </div>
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">Two-factor authentication</div>
+                  <div class="muted-text" style="font-size:12px;">SMS to (617) 555-0142</div>
+                </div>
+                <span class="chip chip-green">On</span>
+                <a href="#" class="btn-link">Manage</a>
+              </div>
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">Trusted devices</div>
+                  <div class="muted-text" style="font-size:12px;">2 devices · iPhone 15, MacBook Air</div>
+                </div>
+                <span></span>
+                <a href="#" class="btn-link">Review</a>
+              </div>
+              <div class="setting-row">
+                <div>
+                  <div style="font-weight:600;">Sign-in activity</div>
+                  <div class="muted-text" style="font-size:12px;">Last sign-in: Today · 8:42 AM · Cambridge MA</div>
+                </div>
+                <span></span>
+                <a href="#" class="btn-link">View history</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="app-foot">
+      <div class="app-foot-inner">
+        <div><a href="#">FAQ &amp; Forms</a><a href="#">Accessibility</a><a href="#">Privacy / HIPAA</a><a href="#">Contact &amp; Help</a></div>
+        <div class="powered">© 2026 Northwind Health · Powered by <b>Wellframe Web</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB SWITCHING SCRIPT                                          -->
+<!-- ============================================================ -->
+<script>
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.proto-tab').forEach(t => t.classList.remove('active'));
+    var target = document.getElementById(id);
+    if (target) target.classList.add('active');
+    var tab = document.querySelector('.proto-tab[data-tgt="' + id + '"]');
+    if (tab) tab.classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+  document.querySelectorAll('.proto-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() { show(tab.dataset.tgt); });
+  });
+  // Intercept in-app nav links so clicking inside a screen navigates between screens
+  document.querySelectorAll('.topnav-links a, .app-foot a').forEach(function(a) {
+    if (a.getAttribute('onclick')) return; // already wired
+  });
+</script>
+</body>
+</html>
