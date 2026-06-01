@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import { Icon } from '@/components/Icons'
 import contentCopy from '@/assets/content_copy.png'
 import checkIcon from '@/assets/check.png'
@@ -16,6 +17,7 @@ export interface Message {
   feedback?: 'up' | 'down' | null
   followUp?: string
   followUpQuery?: string
+  suggestedQuestions?: string[]
 }
 
 export interface ChatMessagesProps {
@@ -25,6 +27,7 @@ export interface ChatMessagesProps {
   /** Show animated thinking steps before response */
   thinkingSteps?: string[] | null
   onFeedback?: (id: string, value: 'up' | 'down') => void
+  onSuggest?: (question: string) => void
 }
 
 /* ── Thinking steps ── */
@@ -68,13 +71,37 @@ function TypingIndicator() {
   )
 }
 
+/* ── Suggested follow-up chips ── */
+function SuggestedQuestions({ questions, onSuggest }: { questions: string[]; onSuggest?: (q: string) => void }) {
+  return (
+    <div className={styles.suggestedList} role="list" aria-label="Suggested follow-up questions">
+      {questions.map((q) => (
+        <button
+          key={q}
+          type="button"
+          role="listitem"
+          className={styles.suggestedBtn}
+          onClick={() => onSuggest?.(q)}
+          aria-label={`Ask: ${q}`}
+        >
+          {q}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 /* ── Assistant message with actions ── */
 function AssistantMessage({
   msg,
   onFeedback,
+  suggestedQuestions,
+  onSuggest,
 }: {
   msg: Message
   onFeedback?: (id: string, value: 'up' | 'down') => void
+  suggestedQuestions?: string[]
+  onSuggest?: (question: string) => void
 }) {
   const [copied, setCopied] = useState(false)
 
@@ -101,11 +128,8 @@ function AssistantMessage({
   return (
     <div className={styles.assistantGroup}>
       <div className={styles.row}>
-        <div className={styles.assistantBubble}>{msg.content}</div>
+        <div className={styles.assistantBubble}><ReactMarkdown>{msg.content}</ReactMarkdown></div>
       </div>
-      {msg.followUp && (
-        <p className={styles.followUpText}>{msg.followUp}</p>
-      )}
       <div className={styles.actions}>
         <button
           className={`${styles.actionBtn} ${copied ? styles.actionBtnActive : ''}`}
@@ -137,21 +161,29 @@ function AssistantMessage({
           <img src={msg.feedback === 'down' ? thumbDownFill : thumbDown} width={16} height={16} alt="" aria-hidden="true" />
         </button>
       </div>
+      {suggestedQuestions && suggestedQuestions.length > 0 && (
+        <SuggestedQuestions questions={suggestedQuestions} onSuggest={onSuggest} />
+      )}
     </div>
   )
 }
 
 /* ── Main component ── */
-export function ChatMessages({ messages, loading, thinkingSteps, onFeedback }: ChatMessagesProps) {
+export function ChatMessages({ messages, loading, thinkingSteps, onFeedback, onSuggest }: ChatMessagesProps) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, loading, thinkingSteps])
 
+  const lastAssistantIdx = messages.reduceRight(
+    (found, m, i) => (found === -1 && m.role === 'assistant' ? i : found),
+    -1
+  )
+
   return (
     <div className={styles.list} aria-live="polite" aria-relevant="additions" aria-label="Chat messages">
-      {messages.map((msg) =>
+      {messages.map((msg, i) =>
         msg.role === 'user' ? (
           <div key={msg.id} className={styles.userRow}>
             <div className={styles.userBubble}>{msg.content}</div>
@@ -161,6 +193,8 @@ export function ChatMessages({ messages, loading, thinkingSteps, onFeedback }: C
             key={msg.id}
             msg={msg}
             onFeedback={onFeedback}
+            suggestedQuestions={!loading && !thinkingSteps && i === lastAssistantIdx ? msg.suggestedQuestions : undefined}
+            onSuggest={onSuggest}
           />
         )
       )}

@@ -7,7 +7,7 @@ import { ChatMessages, type Message } from './ChatMessages'
 import { AskHavenInput } from './AskHavenInput'
 import styles from './HavenWindow.module.css'
 import panelStyles from './HavenPanel.module.css'
-import { getMockReply, getFollowUp, getFollowUpQuery, getGuardrailMessage, getRecommendedActionsFromNote } from './mockReplies'
+import { getMockReply, getFollowUp, getFollowUpQuery, getGuardrailMessage, getRecommendedActionsFromNote, getSuggestedQuestions } from './mockReplies'
 import { HomeWelcome } from './HomeWelcome'
 import { MemberChatWindow } from './MemberChatWindow'
 import { SukiWindow } from './SukiWindow'
@@ -47,6 +47,8 @@ export interface HavenWindowProps {
   age?: string
   gender?: string
   dob?: string
+  /** True when a GC modal overlay is open — pushes the FAB behind the overlay */
+  modalOpen?: boolean
 }
 
 type WindowState = 'open' | 'minimized' | 'closed'
@@ -72,6 +74,7 @@ export function HavenWindow({
   age = '26',
   gender = 'Male',
   dob = '03/01/1989',
+  modalOpen = false,
 }: HavenWindowProps) {
   const [winState, setWinState] = useState<WindowState>('closed')
   const [menuOpen, setMenuOpen] = useState(false)
@@ -121,8 +124,8 @@ export function HavenWindow({
 
   useEffect(() => {
     setPos({
-      left: window.innerWidth - defaultRight - defaultWidth,
-      top: window.innerHeight - defaultBottom - defaultHeight,
+      left: Math.max(0, Math.min(window.innerWidth - defaultRight - defaultWidth, window.innerWidth - MIN_W)),
+      top: Math.max(0, Math.min(window.innerHeight - defaultBottom - defaultHeight, window.innerHeight - 28)),
     })
     setPosReady(true)
     // On unmount (member switch), cancel any in-flight response
@@ -152,13 +155,18 @@ export function HavenWindow({
     }
   }, [winState, hasData, memberName, switchConfirmation])
 
+  /* ── Close member chat when GC modal overlay opens ── */
+  useEffect(() => {
+    if (modalOpen) setMemberChatOpen(false)
+  }, [modalOpen])
+
   /* ── Learn more ── */
   const handleLearnMore = useCallback(() => {
     const userMsg: Message = { id: `u-${Date.now()}`, role: 'user', content: 'What does Haven have access to?' }
     const replyMsg: Message = {
       id: `a-${Date.now() + 1}`,
       role: 'assistant',
-      content: `Here's what I can and cannot help with:\n\nI don't have access to:\n• Clinical decisions or diagnosis\n• Systems outside this platform\n• Guaranteed accurate information — always verify yourself\n\nI have access to:\n• Member demographics\n• Clinical history\n• Care plan (goals, interventions)\n• Assessments\n• Eligibility\n• Care gaps\n• Claims data`,
+      content: `**I have access to:**\n• Member demographics\n• Clinical history\n• Care plan (goals, interventions)\n• Assessments\n• Eligibility\n• Care gaps\n• Claims data\n\n**I cannot help with:**\n• Clinical decisions or diagnosis\n• Systems outside this platform\n• Guaranteed accurate information, always verify yourself`,
     }
     setMessages(prev => [...prev, userMsg, replyMsg])
     setMenuOpen(false)
@@ -208,6 +216,7 @@ export function HavenWindow({
           content: reply,
           followUp: getFollowUp(resolvedText),
           followUpQuery: getFollowUpQuery(resolvedText),
+          suggestedQuestions: getSuggestedQuestions(resolvedText),
         }])
       } finally {
         if (!cancelledRef.current) setLoading(false)
@@ -224,31 +233,49 @@ export function HavenWindow({
       content: replyContent,
       followUp: guardrail ? undefined : getFollowUp(resolvedText),
       followUpQuery: guardrail ? undefined : getFollowUpQuery(resolvedText),
+      suggestedQuestions: guardrail ? undefined : getSuggestedQuestions(resolvedText),
     }])
     setMenuOpen(false)
     setLearnMoreOpen(false)
   }, [loading, hasData, memberName, mockMemberId, onSend, messages])
 
   /* ── Drag ── */
-  const dragState = useRef<{ startX: number; startY: number; startLeft: number; startTop: number } | null>(null)
+  const dragState = useRef<{ startX: number; startY: number; startLeft: number; startTop: number; currentLeft: number; currentTop: number } | null>(null)
 
   const onChromeMouseDown = useCallback((e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('button')) return
     e.preventDefault()
-    dragState.current = { startX: e.clientX, startY: e.clientY, startLeft: pos.left, startTop: pos.top }
+    dragState.current = { startX: e.clientX, startY: e.clientY, startLeft: pos.left, startTop: pos.top, currentLeft: pos.left, currentTop: pos.top }
+    document.body.style.cursor = 'grabbing'
+    document.body.style.userSelect = 'none'
   }, [pos])
 
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => {
-      if (!dragState.current) return
+      if (!dragState.current || !windowRef.current) return
       const dx = e.clientX - dragState.current.startX
       const dy = e.clientY - dragState.current.startY
-      setPos({
-        left: Math.max(0, Math.min(window.innerWidth - size.w, dragState.current.startLeft + dx)),
-        top: Math.max(0, Math.min(window.innerHeight - 28, dragState.current.startTop + dy)),
-      })
+      const newLeft = Math.max(0, Math.min(window.innerWidth - size.w, dragState.current.startLeft + dx))
+      const newTop = Math.max(0, Math.min(window.innerHeight - 28, dragState.current.startTop + dy))
+      dragState.current.currentLeft = newLeft
+      dragState.current.currentTop = newTop
+      // GPU-composited transform — no React re-render, no layout recalc
+      windowRef.current.style.transform = `translate(${newLeft - dragState.current.startLeft}px, ${newTop - dragState.current.startTop}px)`
     }
-    const onMouseUp = () => { dragState.current = null }
+    const onMouseUp = () => {
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+      if (!dragState.current) return
+      const { currentLeft, currentTop } = dragState.current
+      // Commit position before clearing transform so there is no visual jump
+      if (windowRef.current) {
+        windowRef.current.style.left = `${currentLeft}px`
+        windowRef.current.style.top = `${currentTop}px`
+        windowRef.current.style.transform = ''
+      }
+      setPos({ left: currentLeft, top: currentTop })
+      dragState.current = null
+    }
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('mouseup', onMouseUp)
     return () => { document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp) }
@@ -269,16 +296,32 @@ export function HavenWindow({
       const dx = e.clientX - r.startX
       const dy = e.clientY - r.startY
       let { startLeft: newLeft, startTop: newTop, startW: newW, startH: newH } = r
-      if (r.dir.includes('e')) newW = Math.max(MIN_W, r.startW + dx)
-      if (r.dir.includes('w')) { newW = Math.max(MIN_W, r.startW - dx); newLeft = r.startLeft + (r.startW - newW) }
-      if (r.dir.includes('s')) newH = Math.max(MIN_H, r.startH + dy)
-      if (r.dir.includes('n')) { newH = Math.max(MIN_H, r.startH - dy); newTop = r.startTop + (r.startH - newH) }
+      if (r.dir.includes('e')) newW = Math.max(MIN_W, Math.min(r.startW + dx, window.innerWidth - r.startLeft))
+      if (r.dir.includes('w')) { newW = Math.max(MIN_W, r.startW - dx); newLeft = Math.max(0, r.startLeft + (r.startW - newW)) }
+      if (r.dir.includes('s')) newH = Math.max(MIN_H, Math.min(r.startH + dy, window.innerHeight - r.startTop))
+      if (r.dir.includes('n')) { newH = Math.max(MIN_H, r.startH - dy); newTop = Math.max(0, r.startTop + (r.startH - newH)) }
       setSize({ w: newW, h: newH }); setPos({ left: newLeft, top: newTop })
     }
     const onMouseUp = () => { resizeState.current = null }
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('mouseup', onMouseUp)
     return () => { document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp) }
+  }, [])
+
+  /* ── Clamp position/size when the browser viewport is resized ── */
+  useEffect(() => {
+    const onViewportResize = () => {
+      setPos(prev => ({
+        left: Math.max(0, Math.min(prev.left, window.innerWidth - MIN_W)),
+        top: Math.max(0, Math.min(prev.top, window.innerHeight - 28)),
+      }))
+      setSize(prev => ({
+        w: Math.min(prev.w, window.innerWidth),
+        h: Math.min(prev.h, window.innerHeight),
+      }))
+    }
+    window.addEventListener('resize', onViewportResize)
+    return () => window.removeEventListener('resize', onViewportResize)
   }, [])
 
   /* ── Window controls ── */
@@ -292,7 +335,10 @@ export function HavenWindow({
   const handleMaximize = () => { if (winState === 'minimized') setWinState('open') }
 
   const openWindow = useCallback(() => {
-    setPos({ left: window.innerWidth - defaultRight - defaultWidth, top: window.innerHeight - defaultBottom - defaultHeight })
+    setPos({
+      left: Math.max(0, Math.min(window.innerWidth - defaultRight - defaultWidth, window.innerWidth - MIN_W)),
+      top: Math.max(0, Math.min(window.innerHeight - defaultBottom - defaultHeight, window.innerHeight - 28)),
+    })
     setPosReady(true)
     setWinState('open')
   }, [defaultRight, defaultWidth, defaultBottom, defaultHeight])
@@ -341,7 +387,6 @@ export function HavenWindow({
 
   // ── FAB — always rendered ──
   const fabStyle: React.CSSProperties = sukiOpen ? { zIndex: 800 } : {}
-
   const fab = isHome ? null : !fabExpanded ? (
     <button
       className={styles.fabMinimized}
@@ -475,7 +520,7 @@ export function HavenWindow({
                 />
               )}
               {hasMessages ? (
-                <ChatMessages messages={messages} loading={loading} />
+                <ChatMessages messages={messages} loading={loading} onSuggest={sendMessage} />
               ) : (
                 !sukiActionsReady && (
                   <div className={panelStyles.welcomeWrap}>
@@ -504,7 +549,7 @@ export function HavenWindow({
               <p className={panelStyles.disclaimer}>
                 Check your responses for accuracy.{' '}
                 <button type="button" className={panelStyles.disclaimerLink} onClick={handleLearnMore}>
-                  What this assistant can and cannot do
+                  What this assistant has access to
                 </button>
               </p>
             </div>
