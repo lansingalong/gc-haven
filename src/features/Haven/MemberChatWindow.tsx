@@ -75,14 +75,15 @@ export function MemberChatWindow({ memberName, memberKey, onClose, havenBottomY,
   const [pos, setPos] = useState({ left: 0, top: 0 })
   const [size, setSize] = useState({ w: DEFAULT_WIDTH, h: DEFAULT_HEIGHT })
   const [posReady, setPosReady] = useState(false)
-  const dragState = useRef<{ startX: number; startY: number; startLeft: number; startTop: number } | null>(null)
+  const windowRef = useRef<HTMLDivElement>(null)
+  const dragState = useRef<{ startX: number; startY: number; startLeft: number; startTop: number; currentLeft: number; currentTop: number } | null>(null)
   const resizeState = useRef<{ dir: ResizeDir; startX: number; startY: number; startLeft: number; startTop: number; startW: number; startH: number } | null>(null)
 
   useEffect(() => {
     const bottomY = havenBottomY ?? (window.innerHeight - 24)
     setPos({
-      left: window.innerWidth - DEFAULT_RIGHT - DEFAULT_WIDTH,
-      top: bottomY - DEFAULT_HEIGHT,
+      left: Math.max(0, Math.min(window.innerWidth - DEFAULT_RIGHT - DEFAULT_WIDTH, window.innerWidth - MIN_W)),
+      top: Math.max(0, Math.min(bottomY - DEFAULT_HEIGHT, window.innerHeight - 40)),
     })
     setPosReady(true)
   }, [havenBottomY])
@@ -94,20 +95,37 @@ export function MemberChatWindow({ memberName, memberKey, onClose, havenBottomY,
   const onChromeMouseDown = useCallback((e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('button')) return
     e.preventDefault()
-    dragState.current = { startX: e.clientX, startY: e.clientY, startLeft: pos.left, startTop: pos.top }
+    dragState.current = { startX: e.clientX, startY: e.clientY, startLeft: pos.left, startTop: pos.top, currentLeft: pos.left, currentTop: pos.top }
+    document.body.style.cursor = 'grabbing'
+    document.body.style.userSelect = 'none'
   }, [pos])
 
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => {
-      if (!dragState.current) return
+      if (!dragState.current || !windowRef.current) return
       const dx = e.clientX - dragState.current.startX
       const dy = e.clientY - dragState.current.startY
-      setPos({
-        left: Math.max(0, Math.min(window.innerWidth - size.w, dragState.current.startLeft + dx)),
-        top: Math.max(0, Math.min(window.innerHeight - 40, dragState.current.startTop + dy)),
-      })
+      const newLeft = Math.max(0, Math.min(window.innerWidth - size.w, dragState.current.startLeft + dx))
+      const newTop = Math.max(0, Math.min(window.innerHeight - 40, dragState.current.startTop + dy))
+      dragState.current.currentLeft = newLeft
+      dragState.current.currentTop = newTop
+      // GPU-composited transform — no React re-render, no layout recalc
+      windowRef.current.style.transform = `translate(${newLeft - dragState.current.startLeft}px, ${newTop - dragState.current.startTop}px)`
     }
-    const onMouseUp = () => { dragState.current = null }
+    const onMouseUp = () => {
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+      if (!dragState.current) return
+      const { currentLeft, currentTop } = dragState.current
+      // Commit position before clearing transform so there is no visual jump
+      if (windowRef.current) {
+        windowRef.current.style.left = `${currentLeft}px`
+        windowRef.current.style.top = `${currentTop}px`
+        windowRef.current.style.transform = ''
+      }
+      setPos({ left: currentLeft, top: currentTop })
+      dragState.current = null
+    }
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('mouseup', onMouseUp)
     return () => { document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp) }
@@ -125,16 +143,32 @@ export function MemberChatWindow({ memberName, memberKey, onClose, havenBottomY,
       const dx = e.clientX - r.startX
       const dy = e.clientY - r.startY
       let { startLeft: newLeft, startTop: newTop, startW: newW, startH: newH } = r
-      if (r.dir.includes('e')) newW = Math.max(MIN_W, r.startW + dx)
-      if (r.dir.includes('w')) { newW = Math.max(MIN_W, r.startW - dx); newLeft = r.startLeft + (r.startW - newW) }
-      if (r.dir.includes('s')) newH = Math.max(MIN_H, r.startH + dy)
-      if (r.dir.includes('n')) { newH = Math.max(MIN_H, r.startH - dy); newTop = r.startTop + (r.startH - newH) }
+      if (r.dir.includes('e')) newW = Math.max(MIN_W, Math.min(r.startW + dx, window.innerWidth - r.startLeft))
+      if (r.dir.includes('w')) { newW = Math.max(MIN_W, r.startW - dx); newLeft = Math.max(0, r.startLeft + (r.startW - newW)) }
+      if (r.dir.includes('s')) newH = Math.max(MIN_H, Math.min(r.startH + dy, window.innerHeight - r.startTop))
+      if (r.dir.includes('n')) { newH = Math.max(MIN_H, r.startH - dy); newTop = Math.max(0, r.startTop + (r.startH - newH)) }
       setSize({ w: newW, h: newH }); setPos({ left: newLeft, top: newTop })
     }
     const onMouseUp = () => { resizeState.current = null }
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('mouseup', onMouseUp)
     return () => { document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp) }
+  }, [])
+
+  /* ── Clamp position/size when the browser viewport is resized ── */
+  useEffect(() => {
+    const onViewportResize = () => {
+      setPos(prev => ({
+        left: Math.max(0, Math.min(prev.left, window.innerWidth - MIN_W)),
+        top: Math.max(0, Math.min(prev.top, window.innerHeight - 40)),
+      }))
+      setSize(prev => ({
+        w: Math.min(prev.w, window.innerWidth),
+        h: Math.min(prev.h, window.innerHeight),
+      }))
+    }
+    window.addEventListener('resize', onViewportResize)
+    return () => window.removeEventListener('resize', onViewportResize)
   }, [])
 
   const handleSend = () => {
@@ -158,7 +192,7 @@ export function MemberChatWindow({ memberName, memberKey, onClose, havenBottomY,
   }
 
   return (
-    <div className={styles.window} style={windowStyle} role="dialog" aria-label={`Chat with ${memberName}`}>
+    <div ref={windowRef} className={styles.window} style={windowStyle} role="dialog" aria-label={`Chat with ${memberName}`}>
 
       {/* Resize handles */}
       <div className={styles.resizeN}  onMouseDown={onResizeMouseDown('n')}  />

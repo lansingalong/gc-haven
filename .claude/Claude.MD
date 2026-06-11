@@ -1,6 +1,10 @@
-# Reference
+# Before Building Components
 
-Always read `design_system.md` before building or modifying any component.
+Always read these files before creating or editing any UI component:
+- `design_system.md`
+- `guidingcare-design-system.html`
+
+Use the tokens, patterns, and rules defined there. Do not invent new styles.
 
 # Design system rules
 

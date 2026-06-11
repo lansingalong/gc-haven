@@ -559,6 +559,40 @@ export function getFollowUpQuery(input: string): string {
   return FOLLOW_UP_MAP.find(m => matches(q, m.terms))?.query ?? DEFAULT_FOLLOW_UP.query
 }
 
+/* ─── Suggested follow-up questions (3 clickable chips) ─────────────────────── */
+
+const SUGGESTED_QUESTIONS_MAP: Array<{ terms: string[]; questions: string[] }> = [
+  { terms: RISK_TERMS,             questions: ["What are the member's last recorded health indicators?", "Are there any open care gaps?", "What programs is the member enrolled in?"] },
+  { terms: HEALTH_INDICATOR_TERMS, questions: ["What is the member's current risk level?", "What are the most recent lab results?", "What is the member's care plan?"] },
+  { terms: ALLERGY_TERMS,          questions: ["What medications is the member currently taking?", "Are there any open care gaps?", "What is the member's current risk level?"] },
+  { terms: VITAL_TERMS,            questions: ["What are the most recent lab results?", "What medications is the member on?", "Are there any open care gaps?"] },
+  { terms: LAB_TERMS,              questions: ["What are the current vitals?", "Are there open care gaps related to these values?", "What is the member's current risk level?"] },
+  { terms: MED_TERMS,              questions: ["Are there any known drug allergies?", "What are the open care gaps?", "What are the current vitals?"] },
+  { terms: BEHAVIORAL_HEALTH_TERMS,questions: ["What are the behavioral health goals in the care plan?", "What assessments have been completed?", "Are there any open care gaps?"] },
+  { terms: SDOH_TERMS,             questions: ["What programs is the member eligible for?", "What is the member's care plan?", "Are there any open care gaps?"] },
+  { terms: IMMUNIZATION_TERMS,     questions: ["What are the member's open care gaps?", "What are the most recent lab results?", "When was the member's last visit?"] },
+  { terms: CARE_GAP_TERMS,         questions: ["What is the current care plan?", "What programs is the member enrolled in?", "What are the most recent lab results?"] },
+  { terms: ASSESSMENT_TERMS,       questions: ["What are the open care gaps?", "What is the current care plan?", "What are the most recent lab results?"] },
+  { terms: CARE_PLAN_TERMS,        questions: ["What programs is the member enrolled in?", "Are there any open care gaps?", "What are the most recent lab results?"] },
+  { terms: PROGRAM_TERMS,          questions: ["What are the member's open care gaps?", "What is the current care plan?", "What services is the member eligible for?"] },
+  { terms: VISIT_TERMS,            questions: ["What is the member's active care plan?", "What are the most recent lab results?", "Are there any open care gaps?"] },
+  { terms: ELIGIBILITY_TERMS,      questions: ["What programs is the member eligible for?", "What is the member's current risk level?", "What are the member's open care gaps?"] },
+  { terms: CONTACT_TERMS,          questions: ["What is the member's eligibility?", "Are there any open care gaps?", "What is the member's current risk level?"] },
+  { terms: DIAGNOSIS_TERMS,        questions: ["What medications are prescribed for these conditions?", "What are the care plan goals?", "Are there open care gaps related to these diagnoses?"] },
+  { terms: MEMBER_DETAIL_TERMS,    questions: ["What is the member's insurance and eligibility?", "What is the member's current risk level?", "Are there any open care gaps?"] },
+]
+
+const DEFAULT_SUGGESTED_QUESTIONS = [
+  "What are the member's open care gaps?",
+  "What is the current care plan?",
+  "What are the most recent lab results?",
+]
+
+export function getSuggestedQuestions(input: string): string[] {
+  const q = input.toLowerCase()
+  return SUGGESTED_QUESTIONS_MAP.find(m => matches(q, m.terms))?.questions ?? DEFAULT_SUGGESTED_QUESTIONS
+}
+
 /* ─── General-purpose fallback ──────────────────────────────────────────────
    Handles anything that doesn't match a topic keyword: greetings, pleasantries,
    member summaries, call prep, PCP info, next steps, and open-ended questions.

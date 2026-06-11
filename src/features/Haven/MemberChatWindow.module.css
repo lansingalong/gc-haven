@@ -10,6 +10,11 @@
   border: 0.5px solid rgba(0, 0, 0, 0.14);
   overflow: hidden;
   background: var(--color-background);
+  min-width: 320px;
+  min-height: 300px;
+  max-width: calc(100vw - 8px);
+  max-height: calc(100vh - 8px);
+  will-change: transform;
 }
 
 /* ── Resize handles ── */
@@ -21,14 +26,14 @@
   z-index: 10;
 }
 
-.resizeN  { top: 0;    left: 8px;  right: 8px;  height: 4px; cursor: n-resize;  }
-.resizeS  { bottom: 0; left: 8px;  right: 8px;  height: 4px; cursor: s-resize;  }
-.resizeE  { right: 0;  top: 8px;   bottom: 8px; width: 4px;  cursor: e-resize;  }
-.resizeW  { left: 0;   top: 8px;   bottom: 8px; width: 4px;  cursor: w-resize;  }
-.resizeNE { top: 0;    right: 0;   width: 8px;  height: 8px; cursor: ne-resize; }
-.resizeNW { top: 0;    left: 0;    width: 8px;  height: 8px; cursor: nw-resize; }
-.resizeSE { bottom: 0; right: 0;   width: 8px;  height: 8px; cursor: se-resize; }
-.resizeSW { bottom: 0; left: 0;    width: 8px;  height: 8px; cursor: sw-resize; }
+.resizeN  { top: 0;    left: 10px; right: 10px; height: 6px; cursor: n-resize;  }
+.resizeS  { bottom: 0; left: 10px; right: 10px; height: 6px; cursor: s-resize;  }
+.resizeE  { right: 0;  top: 10px;  bottom: 10px; width: 6px; cursor: e-resize;  }
+.resizeW  { left: 0;   top: 10px;  bottom: 10px; width: 6px; cursor: w-resize;  }
+.resizeNE { top: 0;    right: 0;   width: 10px; height: 10px; cursor: ne-resize; }
+.resizeNW { top: 0;    left: 0;    width: 10px; height: 10px; cursor: nw-resize; }
+.resizeSE { bottom: 0; right: 0;   width: 10px; height: 10px; cursor: se-resize; }
+.resizeSW { bottom: 0; left: 0;    width: 10px; height: 10px; cursor: sw-resize; }
 
 /* ── Chrome bar ── */
 .chrome {
@@ -99,6 +104,9 @@
   color: var(--color-text-secondary);
   pointer-events: none;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 80px);
 }
 
 /* ── Dark teal header ── */
@@ -116,6 +124,10 @@
   font-size: 15px;
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-inverse);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .headerDob {
@@ -124,6 +136,7 @@
   color: var(--color-text-inverse);
   font-weight: var(--font-weight-regular);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .headerDob strong {
@@ -139,6 +152,8 @@
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: var(--spacing-1);
 }
 
 .subtitleLeft {
@@ -373,6 +388,12 @@
   font-family: var(--font-family-base);
   font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+  margin-right: var(--spacing-2);
 }
 
 .sendBtn {

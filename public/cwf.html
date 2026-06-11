@@ -4948,6 +4948,24 @@ function openScriptResponseModal() {
     document.getElementById('addNoteModal').classList.remove('open');
   };
 
+  // Notify parent Haven app when Add Note modal opens/closes so FAB can go behind overlay
+  (function() {
+    function watchAddNoteModal() {
+      var modal = document.getElementById('addNoteModal');
+      if (!modal) return;
+      var observer = new MutationObserver(function() {
+        var isOpen = modal.classList.contains('open');
+        window.parent.postMessage({ type: isOpen ? 'MODAL_OPEN' : 'MODAL_CLOSED' }, '*');
+      });
+      observer.observe(modal, { attributes: true, attributeFilter: ['class'] });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', watchAddNoteModal);
+    } else {
+      watchAddNoteModal();
+    }
+  })();
+
   // Listen for Suki note signal via postMessage (primary — from parent Haven React app)
   window.addEventListener('message', function(e) {
     if (e.data && e.data.type === 'SUKI_NOTE_READY' && window._gcOpenSukiNote) {

@@ -28,6 +28,7 @@ const DEFAULT_MEMBER: ActiveMember = {
 export default function App() {
   const [view, setView] = useState<'home' | 'member'>('home')
   const [member, setMember] = useState<ActiveMember>(DEFAULT_MEMBER)
+  const [modalOpen, setModalOpen] = useState(false)
   useEffect(() => {
     const handler = (e: MessageEvent) => {
       if (e.data?.type === 'VIEW_HOME') {
@@ -36,6 +37,10 @@ export default function App() {
         const { memberId, memberName, phone, pcp } = e.data
         setMember({ key: memberId, name: memberName, phone: phone ?? '', pcp: pcp ?? '' })
         setView('member')
+      } else if (e.data?.type === 'MODAL_OPEN') {
+        setModalOpen(true)
+      } else if (e.data?.type === 'MODAL_CLOSED') {
+        setModalOpen(false)
       }
     }
     window.addEventListener('message', handler)
@@ -48,9 +53,20 @@ export default function App() {
     <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <iframe
         src={`${import.meta.env.BASE_URL}cwf.html`}
-        style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+        style={{ width: '100%', height: '100%', border: 'none', display: 'block', position: 'relative', zIndex: modalOpen ? 1000 : 0 }}
         title="GuidingCare CWF"
       />
+      {modalOpen && (
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'fixed', inset: 0,
+            background: 'rgba(0,0,0,0.5)',
+            zIndex: 960,
+            pointerEvents: 'none',
+          }}
+        />
+      )}
       <HavenWindow
         key={havenKey}
         isHome={view === 'home'}
@@ -61,6 +77,7 @@ export default function App() {
         mockMemberId={MOCK_ID_MAP[member.key]}
         hasData={member.key in MOCK_ID_MAP}
         switchConfirmation={undefined}
+        modalOpen={modalOpen}
       />
     </div>
   )

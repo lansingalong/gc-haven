@@ -2,7 +2,7 @@
 
 .window {
   position: fixed;
-  z-index: 900;
+  z-index: 1100;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
