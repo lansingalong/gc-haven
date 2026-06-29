@@ -547,6 +547,7 @@ export function HavenWindow({
             <div className={panelStyles.bottom}>
               <AskHavenInput onSubmit={sendMessage} />
               <p className={panelStyles.disclaimer}>
+                Once closed, a chat can't be continued.{' '}
                 Check your responses for accuracy.{' '}
                 <button type="button" className={panelStyles.disclaimerLink} onClick={handleLearnMore}>
                   What this assistant has access to

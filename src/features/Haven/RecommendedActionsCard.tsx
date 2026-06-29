@@ -48,6 +48,18 @@ const ACTIONS: {
       scheduledDate: '',
     },
   },
+  {
+    label: 'Call Sarah to take assessment',
+    processingLabel: 'Scheduling assessment call...',
+    destination: 'activities',
+    destinationLabel: 'Outstanding Activities',
+    activity: {
+      title: 'Add Activity',
+      activityType: 'Call member',
+      contactType: 'Member - Phone',
+      scheduledDate: '',
+    },
+  },
 ]
 
 type AutoStatus = 'idle' | 'processing' | 'done'
